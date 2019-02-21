@@ -1,0 +1,51 @@
+
+body {
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+#nav-bar-search input {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.card .card-header {
+	background: rgb(0,150,136);
+	color: white;
+	font-size: 1.2rem;
+	text-align: center;
+}
+
+.outer-card {
+	text-align: center;
+}
+
+/*
+.inner-card {
+	color:green;
+}
+*/
+
+#footer {
+	background: rgb(0,150,136);
+	font-size: 20px;
+}
+#footer .item {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+#footer a {
+	color: white;
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: rgb(139,195,74);
+}
+.custom-toggler .navbar-toggler-icon {
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(139,195,74, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.custom-colour li a {
+    color: black;
+    text-align: center;
+}
+
