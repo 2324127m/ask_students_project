@@ -1,0 +1,4 @@
+# Ignore files from being comitted and pushed
+.DS_Store  # Mac
+thumbs.db  # Windows
+# db.sqlite3 # DB file
