@@ -1,6 +1,8 @@
 from djando.db import models
 from django.contrib.auth.models import User
 
+## Define all the entities, attributes, and relationships from our ER diagram
+
 class Category(models.Model):
 	name = models.CharField(max_length = 64, unique = True)
 	description = models.CharField(max_length = 512)
@@ -19,7 +21,7 @@ class UserProfile(models.Model):
 	dislikes = models.IntegerField(default = 0)
 	image = models.ImageField(upload_to='profile_images')
 
-	place_of_study = models.ForeignKey(placeOfStudy, on_delete = models.SET_NULL)
+	place_of_study = models.ForeignKey(PlaceOfStudy, on_delete = models.SET_NULL)
 	permission = models.ForeignKey(Permission, on_delete = models.set("student"))
 
 	def __str__(self):
@@ -27,7 +29,7 @@ class UserProfile(models.Model):
 
 class Question(models.Model):
 	name = models.CharField(max_length = 128)
-	test = models.CharField(max_length = 4096)
+	text = models.CharField(max_length = 4096)
 	anonymous = models.BooleanField()
 	posted = models.DateTimeField()
 	edited = models.DateTimeField()
@@ -53,7 +55,7 @@ class Answer(models.Model):
 	def __str__(self):
 		return self.text[30] + "..."
 
-class placeOfStudy(models.Model):
+class PlaceOfStudy(models.Model):
 	title = models.CharField(max_length = 256)
 
 	def __str__(self):
