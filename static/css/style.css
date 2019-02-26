@@ -3,7 +3,8 @@ body {
 	font-family: 'Source Sans Pro', sans-serif;
 }
 
-#nav-bar-search input {
+#nav-bar-search {
+	width: 50%;
 	margin-left: 10px;
 	margin-right: 10px;
 }
