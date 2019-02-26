@@ -1,12 +1,9 @@
 from django.shortcuts import render
-<<<<<<< HEAD
 from django.http import HttpResponse
 from ask_students.models import Category, Questions
 from ask_students.forms import AskQuestionForm
-=======
-from django.contrib.auth.decorators import login_required
->>>>>>> b68d109501d6559439714c61b62712192ede6a64
 
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     top_questions_list = Questions.objects.order_by('-views')[:10]
@@ -67,5 +64,14 @@ def show_question(request,question_name_slug):
 
 	try:
 		question = Question.objects.get(slug = question_name_slug)
-		answers_list = 
+		answers_list = Answer.objects.filter(question = question).order_by('-posted')
+
+		context_dict['question'] = question
+		context_dict['answers_list'] = answers_list
+
+	except Question.DoesNotExist:
+		context_dict['question'] = None
+		context_dict['answers_list'] = None
+
+	return render(request, 'ask_students/question.html', context_dict)
 
