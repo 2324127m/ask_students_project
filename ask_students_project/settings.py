@@ -32,6 +32,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+# Registration Settings
+REGISTRATION_OPEN = True  # Can users register
+ACCOUNT_ACTIVATION_DAYS = 7  # 7 day activation window
+REGISTRATION_AUTO_LOGIN = True  # auto login upon registration
+LOGIN_REDIRECT_URL = '/'  # land after login
+LOGIN_URL = '/accounts/login/'  # redirected if not logged in (login_required())
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,7 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ask_students',
+    'registration'
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
