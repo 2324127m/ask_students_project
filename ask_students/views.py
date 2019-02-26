@@ -1,7 +1,11 @@
 from django.shortcuts import render
+<<<<<<< HEAD
 from django.http import HttpResponse
 from ask_students.models import Category, Questions
 from ask_students.forms import AskQuestionForm
+=======
+from django.contrib.auth.decorators import login_required
+>>>>>>> b68d109501d6559439714c61b62712192ede6a64
 
 
 def index(request):
