@@ -79,7 +79,7 @@ class Answer(models.Model):
 
 class Question(models.Model):
 	name = models.CharField(max_length=128)
-	text = models.CharField(max_length=4096, default=None)
+	text = models.CharField(max_length=4096)
 	anonymous = models.BooleanField()
 	posted = models.DateTimeField()
 	edited = models.DateTimeField(default=None)

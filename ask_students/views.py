@@ -81,6 +81,8 @@ def show_question(request, question_id):
         # Earliest answer first
         answers_list = Answer.objects.filter(question=question).order_by('posted')
 
+        # return top answer
+
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
 
