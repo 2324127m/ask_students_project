@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load ask_students_templatetags %}
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -55,7 +56,10 @@
         <div class="card h-100 outer-card">
           <h4 class="card-header font-weight-normal">Categories</h4>
           <div class="card-body">
-            Categories here
+
+                {% block left_sidebar_block %}
+                    {% get_category_list %}
+                {% endblock %}
           </div>
         </div>
       </div>

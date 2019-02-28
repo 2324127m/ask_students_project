@@ -36,9 +36,11 @@ ALLOWED_HOSTS = []
 # Registration Settings
 REGISTRATION_OPEN = True  # Can users register
 ACCOUNT_ACTIVATION_DAYS = 7  # 7 day activation window
-REGISTRATION_AUTO_LOGIN = True  # auto login upon registration
+REGISTRATION_AUTO_LOGIN = True  # auto login upon activation
 LOGIN_REDIRECT_URL = '/'  # land after login
 LOGIN_URL = '/accounts/login/'  # redirected if not logged in (login_required())
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application definition
 
@@ -52,8 +54,6 @@ INSTALLED_APPS = [
     'ask_students',
     'registration'
 ]
-
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
