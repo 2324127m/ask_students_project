@@ -74,6 +74,8 @@ def show_question(request, question_name_slug):
         question = Question.objects.get(slug=question_name_slug)
         answers_list = Answer.objects.filter(question=question).order_by('-posted')
 
+        # return top answer
+
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
 
