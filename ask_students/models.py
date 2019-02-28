@@ -71,7 +71,7 @@ class Answer(models.Model):
 
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
-	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+	questiontop = models.ForeignKey("Question", on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.text[30] + "..."

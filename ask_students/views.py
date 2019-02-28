@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from ask_students.models import Category, Questions
-from ask_students.forms import AskQuestionForm
+from ask_students.models import Category, Question
+##from ask_students.forms import AskQuestionForm
 
 from django.contrib.auth.decorators import login_required
 
@@ -17,7 +17,7 @@ def index(request):
 
     return reponse
 
-## Need to add category_name_slug to category mode
+## Need to add category_name_slug to category model
 def category(request, category_name_slug):
 	context_dict = {}
 
@@ -38,7 +38,7 @@ def category(request, category_name_slug):
 def add_question(request):
 	context_dict = {}
 
-	form = AskQuestionForm()
+	"""form = AskQuestionForm()
 
 	if request.method == "POST":
 		form = AskQuestionForm(request.POST)
@@ -55,7 +55,7 @@ def add_question(request):
 			## Display errors if question cannot be added
 			print(form.errors)
 
-	context_dict['form'] = form
+	context_dict['form'] = form """
 
 	return render(request,'ask_students/add_question.html', context_dict)
 

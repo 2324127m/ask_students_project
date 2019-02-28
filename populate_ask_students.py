@@ -3,7 +3,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ask_students_project.settings')
 import django
 django.setup()
 
-from ask_students.modles import Category
+from ask_students.models import Category
 
 def populate():
 
@@ -19,6 +19,10 @@ def populate():
 		print("Adding {0}...".format(str(c)))
 
 def add_category(cat, description, approved):
-	c = Category.objects.get_or_create(name = cat, description = description, approved = approved, user = None)
+	c = Category.objects.get_or_create(name = cat, description = description, approved = approved, user = None)[0]
 	c.save()
 	return c
+
+if __name__ == '__main__':
+	print("Running ask_students population script...")
+	populate()	
