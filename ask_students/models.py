@@ -54,6 +54,7 @@ class UserProfile(models.Model):
 	likes = models.IntegerField(default=0)
 	dislikes = models.IntegerField(default=0)
 	image = models.ImageField(upload_to='profile_images', null=True)
+	slug = models.SlugField(unique=True)
 
 	place_of_study = models.ForeignKey(PlaceOfStudy, on_delete=models.SET_NULL, null=True)
 	permission = models.ForeignKey(Permission, on_delete=models.SET_DEFAULT, default=default_student)
@@ -67,9 +68,9 @@ class Answer(models.Model):
 	likes = models.IntegerField(default=0)
 	dislikes = models.IntegerField(default=0)
 	posted = models.DateTimeField()
-	edited = models.DateTimeField()
+	edited = models.DateTimeField(default=None)
 
-	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	questiontop = models.ForeignKey("Question", on_delete=models.CASCADE)
 
@@ -78,14 +79,14 @@ class Answer(models.Model):
 
 class Question(models.Model):
 	name = models.CharField(max_length=128)
-	test = models.CharField(max_length=4096)
+	text = models.CharField(max_length=4096, default=None)
 	anonymous = models.BooleanField()
 	posted = models.DateTimeField()
-	edited = models.DateTimeField()
+	edited = models.DateTimeField(default=None)
 	views = models.IntegerField(default=0)
-
-	answered = models.OneToOneField(Answer)
-	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+	
+	answered = models.OneToOneField(Answer, null=True)
+	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 	support_file = models.ImageField(upload_to='support_files', null=True)
