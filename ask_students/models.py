@@ -46,12 +46,14 @@ class Category(models.Model):
 
 
 class UserProfile(models.Model):
+	## UserProfile inherits from django User Model
+	## Has fields user.username, user.password (Optional user.firstname, user.lastname)
 	user = models.OneToOneField(User)
 
-	bio = models.CharField(max_length=4096)
+	bio = models.CharField(max_length=4096, null=True)
 	likes = models.IntegerField(default=0)
 	dislikes = models.IntegerField(default=0)
-	image = models.ImageField(upload_to='profile_images')
+	image = models.ImageField(upload_to='profile_images', null=True)
 
 	place_of_study = models.ForeignKey(PlaceOfStudy, on_delete=models.SET_NULL, null=True)
 	permission = models.ForeignKey(Permission, on_delete=models.SET_DEFAULT, default=default_student)
