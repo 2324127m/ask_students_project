@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 
 
 def default_student():
@@ -24,11 +25,11 @@ class Permission(models.Model):
 		return self.title
 
 
-## Define all the entities, attributes, and relationships from our ER diagram
+# Define all the entities, attributes, and relationships from our ER diagram
 
 class Category(models.Model):
 	name = models.CharField(max_length=64, unique=True)
-	description = models.CharField(max_length=512)
+	description = models.CharField(max_length=512, null=True)
 	approved = models.BooleanField(default=False)
 	slug = models.SlugField(unique=True)
 
@@ -46,14 +47,20 @@ class Category(models.Model):
 
 
 class UserProfile(models.Model):
-	## UserProfile inherits from django User Model
-	## Has fields user.username, user.password (Optional user.firstname, user.lastname)
+	# UserProfile inherits from django User Model
+	# Has fields user.username, user.password (Optional user.firstname, user.lastname)
 	user = models.OneToOneField(User)
 
 	bio = models.CharField(max_length=4096, null=True)
 	likes = models.IntegerField(default=0)
 	dislikes = models.IntegerField(default=0)
 	image = models.ImageField(upload_to='profile_images', null=True)
+
+	slug = models.SlugField(unique=True)
+
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.user.username)
+		super(UserProfile, self).save(*args, **kwargs)
 
 	place_of_study = models.ForeignKey(PlaceOfStudy, on_delete=models.SET_NULL, null=True)
 	permission = models.ForeignKey(Permission, on_delete=models.SET_DEFAULT, default=default_student)
@@ -66,8 +73,8 @@ class Answer(models.Model):
 	text = models.CharField(max_length=4096)
 	likes = models.IntegerField(default=0)
 	dislikes = models.IntegerField(default=0)
-	posted = models.DateTimeField()
-	edited = models.DateTimeField()
+	posted = models.DateTimeField(default=timezone.now)
+	edited = models.DateTimeField(default=None, null=True)
 
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -76,15 +83,20 @@ class Answer(models.Model):
 	def __str__(self):
 		return self.text[30] + "..."
 
+
+# A question MUST have the following:
+# 1) name
+# 2) posted
+# 2) category
 class Question(models.Model):
 	name = models.CharField(max_length=128)
-	test = models.CharField(max_length=4096)
-	anonymous = models.BooleanField()
-	posted = models.DateTimeField()
-	edited = models.DateTimeField()
+	text = models.CharField(max_length=4096, default="")
+	anonymous = models.BooleanField(default=False)
+	posted = models.DateTimeField(default=timezone.now)
+	edited = models.DateTimeField(default=None, null=True)
 	views = models.IntegerField(default=0)
-
-	answered = models.OneToOneField(Answer)
+	
+	answered = models.OneToOneField(Answer, null=True)
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
