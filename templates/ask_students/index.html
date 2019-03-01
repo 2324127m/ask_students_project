@@ -19,14 +19,14 @@
 	</ul>
 	<div class="tab-content" id="myTabContent">
 	  <div class="tab-pane fade show active" id="top" role="tabpanel" aria-labelledby="top-tab">
-		{% for question in top_question %}
+		{% for question in top_questions %}
 			<p>I'm a fabulous question!</p>
 		{% empty %}
 			<p>Sorry, there are no top questions.</p>
 		{% endfor %}
 	  </div>
 	  <div class="tab-pane fade" id="unanswered" role="tabpanel" aria-labelledby="unanswered-tab">
-		{% for question in unanswered_questions_list %}
+		{% for question in unanswered_questions %}
 			<p>I'm an unanswered question!</p>
 		{% empty %}
 			<p>Sorry, there are no unanswered questions.</p>
