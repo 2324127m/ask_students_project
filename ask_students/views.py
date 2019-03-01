@@ -8,6 +8,8 @@ from ask_students.models import Category, Question, Answer, UserProfile
 from django.contrib.auth.decorators import login_required
 from registration.backends.default.views import RegistrationView
 
+from datetime import timedelta
+
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
@@ -16,8 +18,13 @@ class MyRegistrationView(RegistrationView):
 
 def index(request):
     # Get top questions in past week
-    past_week = timezone.now() - datetime.timedelta(days=7)
-    top_questions_list = Question.objects.filter(posted < past_week).order_by('-views')[:10]
+    past_week = timezone.now() - timedelta(days=7)
+
+    # Filter doesn't work here, fix this - temp solution is to ignore datetime
+    # top_questions_list = Question.objects.filter(posted__lte=past_week).order_by('-views')[:10]
+    top_questions_list = Question.objects.order_by('-views')[:10]
+    test = Question.objects.all().order_by('-views')
+
     unanswered_questions_list = Question.objects.all()[:10]
 
     context_dict = {'top_questions': top_questions_list,
