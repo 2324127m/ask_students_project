@@ -1,4 +1,25 @@
-# Ignore files from being comitted and pushed
-.DS_Store  # Mac
-thumbs.db  # Windows
-# db.sqlite3 # DB file
+# Ignore files when adding to index
+# Do NOT comment inline, # will make ENTIRE LINE a comment.
+
+# OS Specific Utility Files
+
+**/.DS_Store
+**/thumbs.db
+
+
+# DB and Migration Files 
+
+ask_students/migrations/
+db.sqlite3
+
+
+# Local Cache Files
+
+**/__pycache__/
+**/*.pyc
+
+
+# IDE Specific Files
+# PyCharm
+
+.idea/

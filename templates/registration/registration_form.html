@@ -6,41 +6,85 @@
 {% endblock %}
 
 {% block body_block %}
-    <h2 class="form-signin-heading">Sign Up</h2>
-    <form role="form" method="post" action=".">
+    <form role="form" class="p-4 p-lg-5" method="post" action=".">
         {% csrf_token %}
-        <div class="form-group">
-            <p class="required"><label class="required" for="id_username">
-                Username:</label>
-                <input class="form-control" id="id_username" maxlength="30"
-                       name="username" type="text"/>
-                <span class="helptext">Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only. </span>
-            </p>
-            <p class="required"><label class="required" for="id_email">
-                E-mail:</label>
-                <input class="form-control" id="id_email" name="email"
-                       type="email"/>
-            </p>
-            <p class="required"><label class="required" for="id_password1">
-                Password:</label>
-                <input class="form-control" id="id_password1" name="password1"
-                       type="password"/>
-            </p>
-            <p class="required">
-                <label class="required" for="id_password2"> Password confirmation:</label>
-                <input class="form-control" id="id_password2" name="password2"
-                       type="password"/>
-                <span class="helptext">Enter the same password as before, for verification.</span>
-            </p>
 
-            {{ form.username.errors }}
-            {{ form.email.errors }}
-            {{ form.password1.errors }}
-            {{ form.password2.errors }}
-            <br>
-            {{form.non_field_errors}}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+                <strong> Warning! </strong> {{ error }} <br />
+            {% endfor %}
+            </div>
+        {% endif %}
 
+        <div class="form-group row pd-3">
+            <label for="username-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Username:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <input class="form-control {% if form.email.errors %} is-invalid {% endif %}"
+                       id="username-input" maxlength="30" name="username" type="text"
+                       aria-describedby="usernameHelpBlock" required />
+
+                <small id="usernameHelpBlock" class="form-text col-sm-12 text-muted px-3">
+                    How you will be identified on the site.
+                    Up to 30 characters, allowed: letters, digits and @/./+/-/_ only.
+                </small>
+                <div class="invalid-feedback">
+                    {{ form.email.errors }}
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <div class="form-group row pd-3">
+            <label for="email-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Email:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <input class="form-control {% if form.email.errors %} is-invalid {% endif %}"
+                       id="email-input" name="email" type="email"
+                       aria-describedby="emailHelpBlock" required />
+
+                <small id="emailHelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
+                    We will send an account activation email
+                    to this address, so make sure you can access it.
+                </small>
+                <div class="invalid-feedback">
+                    {{ form.email.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row pd-3">
+            <label for="password1-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Password:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <input class="form-control {% if form.password2.errors %} is-invalid {% endif %}"
+                       id="password1-input" name="password1" type="password"
+                       aria-describedby="password1HelpBlock" required />
+
+                <small id="password1HelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
+                    Password must be at least 9 characters, not similar to your username,
+                    and including numbers and letters.
+                </small>
+                <div class="invalid-feedback">
+                    {{ form.password2.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row pd-3">
+            <label for="password2-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Confirm:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <input class="form-control {% if form.password2.errors %} is-invalid {% endif %}"
+                       id="password2-input" name="password2" type="password"
+                       aria-describedby="password2HelpBlock" required /><br />
+
+                <small id="password2HelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
+                    Type in your password again to confirm it is correct.
+                </small>
+                <div class="invalid-feedback">
+
+                </div>
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-info col-12">Sign Up</button>
     </form>
 {% endblock %}
