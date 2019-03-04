@@ -1,13 +1,49 @@
-
+/*
+** Base Styling
+*/
 body {
 	font-family: 'Source Sans Pro', sans-serif;
 }
+
+/* Importance to ensure active displays over contextual background colour.*/
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+	color: #fff !important;
+	background-color: #28a745 !important;
+}
+
+.custom-colour li a {
+	color: black;
+	text-align: center;
+}
+
+/* Override Horizontal Column Padding */
+.container .row .main {
+	padding: 8px;
+}
+
+/*
+**
+**	Nav Bar Styles
+**
+*/
 
 #nav-bar-search {
 	width: 50%;
 	margin-left: 10px;
 	margin-right: 10px;
 }
+
+/* Nav Bar Toggle Styling */
+.custom-toggler.navbar-toggler {
+	border-color: rgb(139,195,74);
+}
+.custom-toggler .navbar-toggler-icon {
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(139,195,74, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+/*
+**	Content Card Style Generic
+*/
 
 .card .card-header {
 	background: rgb(0,150,136);
@@ -21,9 +57,53 @@ body {
 }
 
 /*
+**
+** Home Page Styles
+**
+*/
+
+#home-tab-content {
+	padding: 15px
+}
+
+#home-tab-control li a {
+	height: 100%;
+}
+
+/* Question Card Styles */
+
+.question-card {
+	border-radius: 0.5rem;
+}
+
+.question-card .card-body span {
+	padding: 3px 6px;
+	font-weight: lighter;
+	font-style: oblique;
+}
+
+.question-card .card-header {
+	border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.question-card .card-header span {
+	display: block;
+}
+
+.unanswered-label {
+	border-radius: 0.75rem;
+	font-size: 0.85rem;
+}
+
+
+/*
 .inner-card {
 	color:green;
 }
+*/
+
+/*
+**	Footer Styling
 */
 
 #footer {
@@ -37,16 +117,3 @@ body {
 #footer a {
 	color: white;
 }
-
-.custom-toggler.navbar-toggler {
-    border-color: rgb(139,195,74);
-}
-.custom-toggler .navbar-toggler-icon {
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(139,195,74, 0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
-}
-
-.custom-colour li a {
-    color: black;
-    text-align: center;
-}
-
