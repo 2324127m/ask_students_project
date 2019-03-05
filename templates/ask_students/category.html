@@ -1,0 +1,52 @@
+{% extends 'ask_students/base.html' %}
+
+{% block title %}
+    {{ category.name }}
+{% endblock %}
+
+{% block pagetitle %}
+    {{ category.name }}
+{% endblock %}
+
+{% block body_block %}
+	<ul class="nav nav-pills nav-fill nav-justified" id="home-tab-control" role="tablist">
+	  <li class="nav-item nav-link pr-1">
+		<a class="nav-link bg-light text-dark border active" id="top-tab" data-toggle="tab" href="#top" role="tab" aria-controls="top" aria-selected="true">Top Questions</a>
+	  </li>
+	  <li class="nav-item nav-link pl-1">
+		<a class="nav-link bg-light text-dark border" id="unanswered-tab" data-toggle="tab" href="#unanswered" role="tab" aria-controls="unanswered" aria-selected="false">Unanswered Questions</a>
+	  </li>
+	</ul>
+	<div class="tab-content" id="home-tab-content">
+	  <div class="tab-pane fade show active" id="top" role="tabpanel" aria-labelledby="top-tab">
+		  {% for question in questions %}
+		  <div class="card question-card mb-3">
+			  <a href="#">
+				  <div class="card-header py-2 bg-success d-flex justify-content-between flex-row flex-wrap">
+					  <span class="text-truncate mr-auto text-left">{{ question.name }}</span>
+					  {% if not question.answered %}
+					  <span class="unanswered-label text-truncate py-1 px-3 ml-auto font-weight-bold bg-warning">Unanswered</span>
+					  {% endif %}
+				  </div>
+			  </a>
+			  <div class="card-body py-2 d-flex flex-row flex-wrap">
+				  <span>Views: {{ question.views }}</span>
+				  <span>Answers: {{ question.answer_set.count }}</span>
+				  <span>Category: {{ question.category.name}}</span>
+				  <span class="ml-auto text-muted">Anonymous</span>
+
+				  {# TODO Implement Properly Once User Model Corrected #}
+				  {% if question.anonymous %}
+				  <span class="">Anonymous User</span>
+				  {% else %}
+				  <span>{{ question.user.user.username }}</span>
+				  {% endif %}
+
+			  </div>
+		  </div>
+		  {% empty %}
+		  <p>Sorry, there are no questions in this category.</p>
+		  {% endfor %}
+	  </div>
+	</div>
+{% endblock %}

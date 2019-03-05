@@ -2,8 +2,9 @@ import datetime
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse
+
 from ask_students.models import Category, Question, Answer, UserProfile, User
-from ask_students.forms import UserProfileForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm
 # from ask_students.forms import AskQuestionForm
 
 from django.contrib.auth.decorators import login_required
@@ -79,7 +80,7 @@ def add_question(request):
     return render(request, 'ask_students/add_question.html', context_dict)
 
 
-def show_question(request, question_id):
+def show_question(request, category_name_slug, question_id):
     context_dict = {}
 
     try:
@@ -126,6 +127,7 @@ def profile(request, username):
 def register_profile(request):
     form = UserProfileForm()
 
+<<<<<<< HEAD
     if request.method == 'POST':
         form = UserProfileForm(request.POST)
         if form.is_valid():
@@ -135,6 +137,23 @@ def register_profile(request):
             return render(request, 'registration/registration_complete.html', {})
         else:
             print(form.errors)
+=======
+def request_category(request):
+    form = RequestCategoryForm()
+
+    if request.method == 'POST':
+        form = RequestCategoryForm(request.POST)
+
+        if form.isvalid():
+            form.save(commit=True)
+            return index(request)
+        else:
+            print(form.errors)
+    return render(request, 'ask_students/request_category.html' , {'form' : form})
+    
+        
+
+>>>>>>> 4e5cdc039192abc9848ad3a1b8d8be5af23be2aa
 
     context_dict = {"form": form}
 
