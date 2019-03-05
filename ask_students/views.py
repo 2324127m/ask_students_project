@@ -123,11 +123,24 @@ def profile(request, username):
     return render(request, 'ask_students/profile.html', context_dict)
 
 
+def request_category(request):
+    form = RequestCategoryForm()
+
+    if request.method == 'POST':
+        form = RequestCategoryForm(request.POST)
+
+        if form.isvalid():
+            form.save(commit=True)
+            return reverse('index')
+        else:
+            print(form.errors)
+    return render(request, 'ask_students/request_category.html', {'form': form})
+
+
 @login_required
 def register_profile(request):
     form = UserProfileForm()
 
-<<<<<<< HEAD
     if request.method == 'POST':
         form = UserProfileForm(request.POST)
         if form.is_valid():
@@ -137,23 +150,6 @@ def register_profile(request):
             return render(request, 'registration/registration_complete.html', {})
         else:
             print(form.errors)
-=======
-def request_category(request):
-    form = RequestCategoryForm()
-
-    if request.method == 'POST':
-        form = RequestCategoryForm(request.POST)
-
-        if form.isvalid():
-            form.save(commit=True)
-            return index(request)
-        else:
-            print(form.errors)
-    return render(request, 'ask_students/request_category.html' , {'form' : form})
-    
-        
-
->>>>>>> 4e5cdc039192abc9848ad3a1b8d8be5af23be2aa
 
     context_dict = {"form": form}
 
