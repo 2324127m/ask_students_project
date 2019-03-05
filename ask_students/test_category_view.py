@@ -39,7 +39,7 @@ class IndexViewTests(TestCase):
         for question in questions:
             question.save()
 
-        # Get response from index view
+        # Get response from category view
         response = self.client.get(reverse('category', kwargs={'category_name_slug': new_category.slug}))
         response_questions = response.context['questions']
 
@@ -51,6 +51,12 @@ class IndexViewTests(TestCase):
             if question.posted > question_posted:
                 valid = False
             else:
-                question_view = question.views
+                question_posted = question.posted
 
         self.assertEqual(valid, True)
+
+    def test_if_category_does_not_exist(self):
+        # Get a repsonse when when the category does not exist
+        response = self.client.get(reverse('category', kwargs={'category_name_slug': "does-not-exist"}))
+
+        self.assertEqual(response.context['category'], None)

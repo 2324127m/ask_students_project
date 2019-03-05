@@ -78,7 +78,7 @@ def add_question(request):
     return render(request, 'ask_students/add_question.html', context_dict)
 
 
-def show_question(request, question_id):
+def show_question(request, category_name_slug, question_id):
     context_dict = {}
 
     try:
