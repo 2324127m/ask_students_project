@@ -76,7 +76,9 @@
         <div class="card h-100 outer-card">
           <h4 class="card-header">Latest Questions</h4>
           <div class="card-body">
-            Latest questions here
+                {% block right_sidebar_block %}
+                    {% get_latest_questions %}
+                {% endblock %}
           </div>
         </div>
       </div>

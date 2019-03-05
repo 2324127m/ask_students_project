@@ -1,0 +1,5 @@
+{% if latest_questions %}
+    {% for question in latest_questions %}
+        <p>{{ question.name }}</p>
+    {% endfor %}
+{% endif %}
