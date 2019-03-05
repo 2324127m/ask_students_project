@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.http import HttpResponse
 from ask_students.models import Category, Question, Answer, UserProfile
+from ask_students.forms import RequestCategoryForm
 # from ask_students.forms import AskQuestionForm
 
 from django.contrib.auth.decorators import login_required
@@ -118,6 +119,21 @@ def user_profile(request, username_slug):
         context_dict['user'] = None
 
     return render(request, 'ask_students/user.html', context_dict)
+
+def request_category(request):
+    form = RequestCategoryForm()
+
+    if request.method == 'POST':
+        form = RequestCategoryForm(request.POST)
+
+        if form.isvalid():
+            form.save(commit=True)
+            return index(request)
+        else:
+            print(form.errors)
+    return render(request, 'ask_students/request_category.html' , {'form' : form})
+    
+        
 
 
 
