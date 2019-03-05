@@ -21,11 +21,10 @@ def index(request):
     past_week = timezone.now() - timedelta(days=7)
 
     # Filter doesn't work here, fix this - temp solution is to ignore datetime
-    # top_questions_list = Question.objects.filter(posted__lte=past_week).order_by('-views')[:10]
-    top_questions_list = Question.objects.order_by('-views')[:10]
-    test = Question.objects.all().order_by('-views')
+    top_questions_list = Question.objects.filter(posted__gte=past_week).order_by('-views')[:10]
 
-    unanswered_questions_list = Question.objects.all()[:10]
+    # Oldest unanswered question first
+    unanswered_questions_list = Question.objects.filter(answered=None).order_by('posted')[:10]
 
     context_dict = {'top_questions': top_questions_list,
                     'unanswered_questions': unanswered_questions_list

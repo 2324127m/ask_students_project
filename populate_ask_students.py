@@ -10,29 +10,40 @@ from ask_students.models import Category, Question
 
 def populate():
     categories = {'General': {'description': 'Ask general questions about any topic you like',
-                              'approved': True, },
+                              'approved': True,
+                              'questions': [
+                                  {'name': "My First Question has 10 views", "description": "this works?", "views": 10},
+                                  {'name': "My Second Question has 30 views", "description": "yes it does!",
+                                   "views": 30}
+                              ]},
                   'Computing': {'description': 'Ask questions about Computing',
-                                'approved': True}}
+                                'approved': True,
+                                'questions': [
+                                    {'name': "My Third Question has 20 views", "description": "but does it really?",
+                                     "views": 20},
+                                    {'name': "My Fourth Question has 750 views", "description": "amazing!",
+                                     "views": 750}
+                                ]},
+                  'Mo Category': {'description': 'Ask questions about Mo',
+                                  'approved': True,
+                                  'questions': [
+                                      {'name': "My Third Question has 20 views", "description": "but does it really?",
+                                       "views": 20},
+                                      {'name': "My Fourth Question has 750 views", "description": "amazing!",
+                                       "views": 750}
+                                  ]}
+                  }
 
-    questions = [
-        {'name': "My First Question has 10 views", "description": "this works?", "views": 10},
-        {'name': "My Second Question has 30 views", "description": "yes it does!", "views": 30},
-        {'name': "My Third Question has 20 views", "description": "but does it really?", "views": 20},
-        {'name': "My Fourth Question has 750 views", "description": "amazing!", "views": 750}
-    ]
-
-    i = 0
     for cat, cat_data in categories.items():
         c = add_category(cat, cat_data['description'], cat_data['approved'])
-
-        # add two questions to each category (simple solution for now)
-        add_question(questions[i]['name'], questions[i]['description'], questions[i]['views'], c)
-        i += 1
-        add_question(questions[i]['name'], questions[i]['description'], questions[i]['views'], c)
-        i += 1
-
-    for c in Category.objects.all():
         print("Adding {0}...".format(str(c)))
+
+        i = 0
+        for question in cat_data['questions']:
+            add_question(question['name'], question['description'], question['views'], c)
+            i += 1
+
+        print("  Adding {0} questions to {1}...".format(str(i), str(c)))
 
 
 def add_category(cat, description, approved):

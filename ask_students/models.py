@@ -95,8 +95,8 @@ class Question(models.Model):
 	posted = models.DateTimeField(default=timezone.now)
 	edited = models.DateTimeField(default=None, null=True)
 	views = models.IntegerField(default=0)
-	
-	answered = models.OneToOneField(Answer, null=True)
+
+	answered = models.ForeignKey(Answer, on_delete=models.SET_NULL, null=True, default=None)
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

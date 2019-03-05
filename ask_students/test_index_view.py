@@ -18,7 +18,7 @@ def test_fixture1(category):
     new_question_7 = Question(name="Q7 has 70 views", category=category, views=70)
     new_question_8 = Question(name="Q8 has 80 views", category=category, views=80)
     new_question_9 = Question(name="Q9 has 9000 views", category=category, views=9000)
-    new_question_10 = Question(name="Q10 has 100 views", category=category, views=00)
+    new_question_10 = Question(name="Q10 has 100 views", category=category, views=100)
 
     questions = (new_question_1, new_question_2, new_question_3, new_question_4, new_question_5, new_question_6,
                  new_question_7, new_question_8, new_question_9, new_question_10)
@@ -89,6 +89,8 @@ class IndexViewTests(TestCase):
         for question in response_questions[1:]:
             if question.views > question_view:
                 return False
+            else:
+                question_view = question.views
 
         self.assertQuerysetEqual(response.context['top_questions'], top_questions_list, transform=lambda x: x)
 
@@ -100,8 +102,8 @@ class IndexViewTests(TestCase):
         # Create ten questions for that category
         questions = test_fixture1(new_category)
 
-        last_week = timezone.now() - timedelta(days=7)
-        some_old_question = Question(name="old question 1", category=new_category, views=100000, posted=last_week)
+        eight_days_ago = timezone.now() - timedelta(days=8)
+        some_old_question = Question(name="old question 1", category=new_category, views=100000, posted=eight_days_ago)
         some_old_question.save()
 
         # Save the questions
@@ -112,12 +114,12 @@ class IndexViewTests(TestCase):
         response = self.client.get(reverse('index'))
         response_questions = response.context['top_questions']
 
-        last_2_days = timezone.now() - timedelta(days=2)
+        last_week = timezone.now() - timedelta(days=7)
 
         valid = True
         # Check if they are returned in order
         for question in response_questions:
-            if question.posted < last_2_days:
+            if question.posted < last_week:
                 valid = False
 
         self.assertEqual(valid, True)
