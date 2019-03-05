@@ -1,19 +1,20 @@
 import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse
-from ask_students.models import Category, Question, Answer, UserProfile
+from ask_students.models import Category, Question, Answer, UserProfile, User
+from ask_students.forms import UserProfileForm
 # from ask_students.forms import AskQuestionForm
 
 from django.contrib.auth.decorators import login_required
-from registration.backends.default.views import RegistrationView
+from registration.backends.simple.views import RegistrationView
 
 from datetime import timedelta
 
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
-        return '/'
+        return reverse('register_profile')
 
 
 def index(request):
@@ -101,23 +102,40 @@ def show_question(request, question_id):
 
     return render(request, 'ask_students/question.html', context_dict)
 
-def user_profile(request, username_slug):
-    context_dict = {}
 
+def profile(request, username):
+    # Get user, if doesn't exist -> redirect to home page
     try:
-        user = UserProfile.objects.get(slug=username_slug)
+        user = User.objects.get(username=username)
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
-        number_of_answers = all_answers.length()
+        number_of_answers = len(all_answers)
 
-        context_dict['user'] = user
-        context_dict['answers'] = number_of_answers
-        context_dict['most_liked_answers'] = most_liked_answers
+    except User.DoesNotExist:
+        return redirect('index')
 
-    except UserProfile.DoesNotExist:
-        context_dict['user'] = None
+    # select user's profile instance or create a blank one
+    # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
-    return render(request, 'ask_students/user.html', context_dict)
+    context_dict = {'user': user, 'top_five_answers': most_liked_answers, 'number_of_answers': number_of_answers}
+
+    return render(request, 'ask_students/profile.html', context_dict)
 
 
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
 
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST)
+        if form.is_valid():
+            users_profile = form.save(commit=False)
+            users_profile.user = request.user
+            users_profile.save()
+            return render(request, 'registration/registration_complete.html', {})
+        else:
+            print(form.errors)
+
+    context_dict = {"form": form}
+
+    return render(request, 'ask_students/profile_registration.html', context_dict)

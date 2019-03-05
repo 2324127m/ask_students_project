@@ -91,6 +91,9 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
 
+PROFILE_IMAGES_URL = '/media/profile_images/'
+
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 

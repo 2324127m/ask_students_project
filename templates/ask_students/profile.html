@@ -1,0 +1,16 @@
+{% extends 'ask_students/base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+{% block body_block %}
+
+    <h1>{{ user.username }}</h1>
+
+    <div>
+        <strong>Username: </strong>{{ user.username }}
+    </div>
+
+{% endblock %}

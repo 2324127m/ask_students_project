@@ -6,8 +6,6 @@ from django.utils import timezone
 
 def default_student():
 	student_id = Permission.objects.filter(title="Student")[0].pk
-	if student_id is not int:
-		student_id = Permission.objects.filter(title="student")[0].pk
 	return student_id
 
 
