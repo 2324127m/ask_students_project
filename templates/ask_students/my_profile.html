@@ -2,7 +2,11 @@
 {% load staticfiles %}
 
 {% block title %}
-    {{ user.username }}
+    My Profile
+{% endblock %}
+
+{% block pagetitle %}
+    My Profile
 {% endblock %}
 
 {% block body_block %}
@@ -11,8 +15,7 @@
 
     <div>
         <strong>Username: </strong>{{ user.username }}
-        <br/>
-        <strong>Answers: </strong>{{ number_of_answers }}
+        <p>add lots of functionality here, need forms here to allow user to change password and profile pic</p>
     </div>
 
 {% endblock %}

@@ -104,6 +104,20 @@ def show_question(request, category_name_slug, question_id):
     return render(request, 'ask_students/question.html', context_dict)
 
 
+def request_category(request):
+    form = RequestCategoryForm()
+
+    if request.method == 'POST':
+        form = RequestCategoryForm(request.POST)
+
+        if form.isvalid():
+            form.save(commit=True)
+            return reverse('index')
+        else:
+            print(form.errors)
+    return render(request, 'ask_students/request_category.html', {'form': form})
+
+
 def profile(request, username):
     # Get user, if doesn't exist -> redirect to home page
     try:
@@ -123,18 +137,13 @@ def profile(request, username):
     return render(request, 'ask_students/profile.html', context_dict)
 
 
-def request_category(request):
-    form = RequestCategoryForm()
+@login_required
+def my_profile(request):
+    user = User.objects.get(username=request.user)
 
-    if request.method == 'POST':
-        form = RequestCategoryForm(request.POST)
+    context_dict = {'user': user}
 
-        if form.isvalid():
-            form.save(commit=True)
-            return reverse('index')
-        else:
-            print(form.errors)
-    return render(request, 'ask_students/request_category.html', {'form': form})
+    return render(request, 'ask_students/my_profile.html', context_dict)
 
 
 @login_required
