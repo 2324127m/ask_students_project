@@ -1,9 +1,27 @@
-% extends 'ask_students/base.html' %}
+{% extends 'ask_students/base.html' %}
 
 {% block title %}
    Frequently Asked Questions
 {% endblock %}
 
 {% block body_block %}
-
+	<div>
+		<h1> Is this assessment going to get an A? </h1>
+		<br/>
+		<h2> Hopefully! - Lab3TeamB </h2>
+		<br/>
+		<h1> How do I create a new category? </h1>
+		<br/>
+		<h2> On the <a href="{% url 'category' %}">Category Page,</a>, 
+		you can <a href="{% url 'request_category' %}">request a new category. </a> - Lab3TeamB </h2>
+		<br/>
+		<h1> What happens when I like/dislike other accounts? </h1>
+		<br/>
+		<h2> By rating other members, you can determine which answers will be the best for you 
+		- kind of like the 'Uber' rating system! </h2>
+		<br/>
+		<h1> What happens when I click 'Yes' for anonymous when asking questions? </h1>
+		<br/>
+		<h2> Your questions will appear without your account details attached to it... anonymously... </h2>
+	</div>
 {% endblock %}

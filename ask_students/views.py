@@ -84,10 +84,10 @@ def show_question(request, category_name_slug, question_id):
     context_dict = {}
 
     try:
-    	# 
         question = Question.objects.get(pk=question_id)
         # Earliest answer first
-        answers_list = Answer.objects.filter(question=question).order_by('posted')
+
+        answers_list = Answer.objects.filter(questiontop=question).order_by('posted')
 
         # return top answer
 
@@ -100,6 +100,8 @@ def show_question(request, category_name_slug, question_id):
     except Question.DoesNotExist:
         context_dict['question'] = None
         context_dict['answers_list'] = None
+
+    print(context_dict['answers_list'])
 
     return render(request, 'ask_students/question.html', context_dict)
 
@@ -164,13 +166,16 @@ def register_profile(request):
 
     return render(request, 'ask_students/profile_registration.html', context_dict)
 
+
 def faq(request):
     context_dict = {}
     return render(request, 'ask_students/faq.html',context_dict)
 
+
 def about_us(request):
     context_dict = {}
     return render(request, 'ask_students/about_us.html',context_dict)
+
 
 def contact_us(request):
     context_dict = {}
