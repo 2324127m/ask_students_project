@@ -56,7 +56,7 @@ def category(request, category_name_slug):
 def add_question(request):
     context_dict = {}
 
-    """form = AskQuestionForm()
+    form = AskQuestionForm()
 
     if request.method == "POST":
         form = AskQuestionForm(request.POST)
@@ -75,7 +75,7 @@ def add_question(request):
             ## Display errors if question cannot be added
             print(form.errors)
 
-    context_dict['form'] = form """
+    context_dict['form'] = form 
 
     return render(request, 'ask_students/add_question.html', context_dict)
 
@@ -166,15 +166,12 @@ def register_profile(request):
 
 
 def faq(request):
-    context_dict = {}
-    return render(request, 'ask_students/faq.html',context_dict)
+    return render(request, 'ask_students/faq.html', {})
 
 
 def about_us(request):
-    context_dict = {}
-    return render(request, 'ask_students/about_us.html',context_dict)
+    return render(request, 'ask_students/about_us.html', {})
 
 
 def contact_us(request):
-    context_dict = {}
-    return render(request, 'ask_students/contact_us.html',context_dict)
+    return render(request, 'ask_students/contact_us.html', {})

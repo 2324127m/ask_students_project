@@ -4,24 +4,29 @@
    Frequently Asked Questions
 {% endblock %}
 
+{% block pagetitle %}
+    Frequently Asked Questions
+{% endblock %}
+
 {% block body_block %}
 	<div>
-		<h1> Is this assessment going to get an A? </h1>
+        <br/>
+		<h4> 1. Is this assessment going to get an A? </h4>
 		<br/>
-		<h2> Hopefully! - Lab3TeamB </h2>
+		<h6> Hopefully! - Lab3TeamB </h6>
 		<br/>
-		<h1> How do I create a new category? </h1>
+		<h4> 2. How do I create a new category? </h4>
 		<br/>
-		<h2> On the <a href="{% url 'category' %}">Category Page,</a>, 
-		you can <a href="{% url 'request_category' %}">request a new category. </a> - Lab3TeamB </h2>
+		<p> On the <a href="{% url 'index'  %}">Ask a Question Page, #### FIX LINK</a>,
+		you can <a href="{% url 'request_category' %}">request a new category. </a> - Lab3TeamB </p>
 		<br/>
-		<h1> What happens when I like/dislike other accounts? </h1>
+		<h4> 3. What happens when I like/dislike other accounts? </h4>
 		<br/>
-		<h2> By rating other members, you can determine which answers will be the best for you 
-		- kind of like the 'Uber' rating system! </h2>
+		<p> By rating other members, you can determine which answers will be the best for you
+		- kind of like the 'Uber' rating system! </p>
 		<br/>
-		<h1> What happens when I click 'Yes' for anonymous when asking questions? </h1>
+		<h4> 4. What happens when I click 'Yes' for anonymous when asking questions? </h4>
 		<br/>
-		<h2> Your questions will appear without your account details attached to it... anonymously... </h2>
+		<p> Your questions will appear without your account details attached to it... anonymously... </p>
 	</div>
 {% endblock %}
