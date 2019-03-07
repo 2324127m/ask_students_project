@@ -1,5 +1,5 @@
 from django import forms
-from ask_students.models import UserProfile, Category
+from ask_students.models import UserProfile, Category, Question
 
 
 class UserProfileForm(forms.ModelForm):
