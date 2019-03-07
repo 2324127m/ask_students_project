@@ -163,3 +163,15 @@ def register_profile(request):
     context_dict = {"form": form}
 
     return render(request, 'ask_students/profile_registration.html', context_dict)
+
+def faq(request):
+    context_dict = {}
+    return render(request, 'ask_students/faq.html',context_dict)
+
+def about_us(request):
+    context_dict = {}
+    return render(request, 'ask_students/about_us.html',context_dict)
+
+def contact_us(request):
+    context_dict = {}
+    return render(request, 'ask_students/contact_us.html',context_dict)
