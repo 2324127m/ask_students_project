@@ -10,9 +10,9 @@ urlpatterns = [
     url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name="profile"),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/$', views.category, name='category'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<question_id>[1-9]\d*)/$', views.show_question, name='show_question'),
-    url(r'^contact_us/$', views.contact_us, name="contact_us"),
-    url(r'^about_us/$', views.about_us, name="about_us"),
-    url(r'^faq/$', views.faq, name="faq"),
     url(r'^request_category/$', views.request_category, name="request_category"),
-
+    url(r'^category/(?P<category_name_slug>[\w\-]+)/ask_question/$', views.add_question, name='ask_question'),
+    url(r'^about_us/$', views.about_us, name="about_us"),
+    url(r'^contact_us/$', views.contact_us, name="contact_us"),
+    url(r'^faq/$', views.faq, name="faq"),
 ]
