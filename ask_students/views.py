@@ -129,7 +129,10 @@ def profile(request, username):
         number_of_answers = len(all_answers)
         
         user_permission = user.permission
-        role = Permission.objects.filter(pk=user_permission).title
+        if user_permission == None:
+            role = "Student"
+        else:
+            Permission.objects.filter(pk=user_permission).title
 
     except User.DoesNotExist:
         return redirect('index')
@@ -138,7 +141,7 @@ def profile(request, username):
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'user': user, 'top_five_answers': most_liked_answers,
-                    'number_of_answers': number_of_answers, 'role' : role, }
+                    'number_of_answers': number_of_answers, 'role' : role }
 
     return render(request, 'ask_students/profile.html', context_dict)
 
