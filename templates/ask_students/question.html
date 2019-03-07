@@ -4,10 +4,13 @@
     {{ question.name }}
 {% endblock %}
 
+{% block pagetitle %}
+    {{ question.name }}
+{% endblock %}
+
 {% block body_block %}
 
-    <p>{{ answers_list }}</p>
     {% for answer in answers_list %}
-        <p>{{ answer.text }}</p>
+        <p>Answer: {{ answer.text }}</p>
     {% endfor %}
 {% endblock %}

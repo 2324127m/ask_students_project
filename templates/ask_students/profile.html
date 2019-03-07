@@ -5,6 +5,10 @@
    Profile - {{ user.username }}
 {% endblock %}
 
+{% block pagetitle %}
+    {{ user.username }}
+{% endblock %}
+
 {% block body_block %}
 
     <h1>{{ user.username }}</h1>

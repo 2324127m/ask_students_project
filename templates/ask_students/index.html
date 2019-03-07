@@ -4,6 +4,10 @@
     Home
 {% endblock %}
 
+{% block pagetitle %}
+    Home
+{% endblock %}
+
 {% block body_block %}
 	<ul class="nav nav-pills nav-fill nav-justified" id="home-tab-control" role="tablist">
 	  <li class="nav-item nav-link pr-1">
@@ -17,8 +21,8 @@
 	  <div class="tab-pane fade show active" id="top" role="tabpanel" aria-labelledby="top-tab">
 		  {% for question in top_questions %}
 		  <div class="card question-card mb-3">
-			  <a href="#">
-				  <div class="card-header py-2 bg-success d-flex justify-content-between flex-row flex-wrap">
+			  <a href="{% url 'show_question' question.category.slug question.id %}">
+				  <div class="card-header py-2 d-flex justify-content-between flex-row flex-wrap">
 					  <span class="text-truncate mr-auto text-left">{{ question.name }}</span>
 					  {% if not question.answered %}
 					  <span class="unanswered-label text-truncate py-1 px-3 ml-auto font-weight-bold bg-warning">Unanswered</span>
