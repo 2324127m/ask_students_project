@@ -25,7 +25,7 @@ def test_fixture1(category):
     return questions
 
 
-class IndexViewTests(TestCase):
+class CategoryViewTests(TestCase):
 
     def test_if_categry_questions_are_returned_in_order_latest_first(self):
         # Create a new category
@@ -54,6 +54,7 @@ class IndexViewTests(TestCase):
                 question_posted = question.posted
 
         self.assertEqual(valid, True)
+
 
     def test_if_category_does_not_exist(self):
         # Get a repsonse when when the category does not exist

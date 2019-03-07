@@ -36,34 +36,6 @@ class IndexViewTests(TestCase):
         # Check slug was generated correctly
         self.assertEquals(new_category.slug, "test-category-1")
 
-    """
-    EXAMPLE OF A BAD TEST, THIS WILL ALWAYS PASS!
-    SEE CORRECT TEST BELOW
-    
-    def test_if_top_questions_are_returned_in_order_by_views(self):
-        # Create a new category
-        new_category = Category(name="Test Category 1")
-        new_category.save()
-
-        # Create three questions for that category
-        questions = test_fixture1(new_category)
-
-        # Save the questions
-        for question in questions:
-            question.save()
-
-        # Get top ten questions in order by views
-        top_questions = Question.objects.order_by('-views')[:10]
-
-        # Check if they are returned in order
-        valid = True
-        question_view = top_questions[0].views
-        for question in top_questions[1:]:
-            if question.views > question_view:
-                valid = False
-
-        self.assertTrue(valid, msg="FAILED")
-    """
 
     def test_if_top_questions_are_returned_in_order_by_views(self):
         # Create a new category
@@ -91,6 +63,7 @@ class IndexViewTests(TestCase):
                 question_view = question.views
 
         self.assertEqual(valid, True)
+
 
     def test_if_an_old_question_appears_in_top_questions(self):
         # Create a new category
@@ -122,6 +95,7 @@ class IndexViewTests(TestCase):
 
         self.assertEqual(valid, True)
 
+
     def test_if_unaswered_questions_are_actually_unaswered(self):
         # Create a new category
         new_category = Category(name="Test Category 1")
@@ -145,6 +119,7 @@ class IndexViewTests(TestCase):
                 valid = False
 
         self.assertEqual(valid, True)
+
 
     def test_if_unanswered_questions_are_returned_in_order_of_posted(self):
         # Create a new category

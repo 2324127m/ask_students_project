@@ -95,13 +95,11 @@ def show_question(request, category_name_slug, question_id):
         context_dict['answers_list'] = answers_list
 
         if question.answered != None:
-            context_dict['answer'] = question.answer
+            context_dict['answer'] = question.answered
 
     except Question.DoesNotExist:
         context_dict['question'] = None
         context_dict['answers_list'] = None
-
-    print(context_dict['answers_list'])
 
     return render(request, 'ask_students/question.html', context_dict)
 
