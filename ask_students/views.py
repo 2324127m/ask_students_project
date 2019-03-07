@@ -4,8 +4,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 
 from ask_students.models import Category, Question, Answer, UserProfile, User
-from ask_students.forms import UserProfileForm, RequestCategoryForm
-# from ask_students.forms import AskQuestionForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm
 
 from django.contrib.auth.decorators import login_required
 from registration.backends.simple.views import RegistrationView
