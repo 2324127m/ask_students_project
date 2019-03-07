@@ -11,37 +11,37 @@ from ask_students.models import Category, Question, User, Answer, UserProfile
 def populate():
 
     # Changed from list of dictionary to nested dictionary
-    users = {'YellowPony123': {'username': 'YellowPony123', 'first_name': 'Abe', 'last_name': 'MacCabe',
+    users = [{'username': 'YellowPony123', 'first_name': 'Abe', 'last_name': 'MacCabe',
                                'password': 'pigsdontfly', 'bio':'Lover of ponies and the colour yellow',
                                'likes' : 438, 'dislikes': 51},
-             'AngryTelephonePole87': {'username': 'AngryTelephonePole87', 'first_name': 'Belle', 'last_name': 'MacKell',
+             {'username': 'AngryTelephonePole87', 'first_name': 'Belle', 'last_name': 'MacKell',
                                       'password': 'BigF4TW1ndowL3dge', 'bio':'Hate the world and I resonate with telephone poles :)',
                                       'likes' : 331, 'dislikes': 29},
-             'ooeeooahahtingtang': {'username': 'ooeeooahahtingtang', 'first_name': 'Charlie', 'last_name': 'MacFarley',
+             {'username': 'ooeeooahahtingtang', 'first_name': 'Charlie', 'last_name': 'MacFarley',
                                     'password': 'wallawallabingbang', 'bio':'Oo ee oo ah ah ting tang walla walla bing bang',
                                     'likes' : 4, 'dislikes': 20},
-             'DampSeatOnTheBus': {'username': 'DampSeatOnTheBus', 'first_name': 'Doris', 'last_name': 'MacBoris',
+             {'username': 'DampSeatOnTheBus', 'first_name': 'Doris', 'last_name': 'MacBoris',
                                   'password': 's4ndp4p3r', 'bio':'Sitting on a damp seat on the bus could really ruin your day',
                                   'likes' : 27, 'dislikes': 2},
-             'SweetEdna': {'username': 'SweetEdna', 'first_name': 'Edna', 'last_name': 'MacScedna',
+             {'username': 'SweetEdna', 'first_name': 'Edna', 'last_name': 'MacScedna',
                            'password': 'Edna', 'bio':'Born 1942. Love to party.',
                            'likes' : 3, 'dislikes': 43},
-             'SeriousFred': {'username': 'SeriousFred', 'first_name': 'Fred', 'last_name': 'MacSuede',
+             {'username': 'SeriousFred', 'first_name': 'Fred', 'last_name': 'MacSuede',
                              'password': '18gsa35ds68', 'bio':'Get real.',
                              'likes' : 754, 'dislikes': 40},
-             'GustySeagull1942': {'username': 'GustySeagull1942', 'first_name':'Gill', 'last_name':'MacMill',
+             {'username': 'GustySeagull1942', 'first_name':'Gill', 'last_name':'MacMill',
                                   'password': 'TROONBEACH', 'bio':'Seagulls and seaweed is all that this gal needs',
                                   'likes' : 3, 'dislikes': 85},
-             'HealthyLivingForAHealthyBeing': {'username': 'HealthyLivingForAHealthyBeing', 'first_name':'Harriot',
+             {'username': 'HealthyLivingForAHealthyBeing', 'first_name':'Harriot',
                                                 'last_name': 'MacTarrot', 'password': 'carrot', 'bio':'#fitlife',
                                                'likes' : 70, 'dislikes': 61},
-             'AintGotNoMoney': {'username': 'AintGotNoMoney', 'first_name': 'Isabelle',
+             {'username': 'AintGotNoMoney', 'first_name': 'Isabelle',
                                 'last_name' : 'MacDinnerBell', 'password': 'hahaha', 'bio':'I only play the games that I win at',
                                 'likes' : 3, 'dislikes': 0},
-             }
+             ]
 
-    for user in users.values():
-        u=add_user(user['username'], user['first_name'], user['last_name'], user['password'])
+    for user in users:
+        u = add_user(user['username'], user['first_name'], user['last_name'], user['password'])
         add_user_profile(u, user['bio'], user['likes'], user['dislikes'])
 
     categories = {
@@ -138,12 +138,13 @@ def populate():
 
         i = 0
         for question in cat_data['questions']:
-            add_question(question['name'], question['description'], question['views'], c)
+            q = add_question(question['name'], question['description'], question['views'], c)
             i += 1
             for answer in question['answers']:
-                add_answer(answer['answer'], answer['likes'], answer['dislikes'], answer['posted'],
-                           answer['edited'], UserProfile.objects.get(username=answer['user']))
-                #^might be a bit sketch but a general idea of what needs to happen
+                username = answer['user']
+                u = User.objects.get(username=username)
+                up = UserProfile.objects.get(user=u)
+                add_answer(cat, answer['answer'], answer['likes'], answer['dislikes'], up, q)
 
         print("  Adding {0} questions to {1}...".format(str(i), str(c)))
 
@@ -165,15 +166,18 @@ def add_user(username, first_name, last_name, password):
     u.save()
     return u
 
+
 def add_user_profile(user, bio, likes, dislikes):
-    up = UserProfile.objects.get_or_create(user=user, bio=bio, likes=likes, dislikes=dislikes)
+    up = UserProfile.objects.get_or_create(user=user, bio=bio, likes=likes, dislikes=dislikes)[0]
     up.save()
     return up
 
-def add_answer(answer, likes, dislikes, posted, edited, user):
-    user = User.objects.get(username=username)
-    a = Answer.objects.get_or_create(text=answer, likes=likes, dislikes=dislikes, posted=posted,
-                                     edited=edited, user=user)
+
+# takes a user profile
+def add_answer(cat, answer, likes, dislikes, user, questiontop):
+    c_id = Category.objects.get(name=cat)
+    a = Answer.objects.get_or_create(category=c_id, text=answer, likes=likes, dislikes=dislikes, user=user
+                                     , questiontop=questiontop)[0]
     a.save()
     return a
 

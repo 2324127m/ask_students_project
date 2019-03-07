@@ -4,11 +4,6 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 
 
-def default_student():
-	student_id = Permission.objects.filter(title="Student")[0].pk
-	return student_id
-
-
 class PlaceOfStudy(models.Model):
 	title = models.CharField(max_length=256)
 
@@ -61,7 +56,7 @@ class UserProfile(models.Model):
 		super(UserProfile, self).save(*args, **kwargs)
 
 	place_of_study = models.ForeignKey(PlaceOfStudy, on_delete=models.SET_NULL, null=True)
-	permission = models.ForeignKey(Permission, on_delete=models.SET_DEFAULT, default=default_student)
+	permission = models.ForeignKey(Permission, on_delete=models.SET_NULL, default=None, null=True)
 
 	def __str__(self):
 		return self.user.username
@@ -79,7 +74,7 @@ class Answer(models.Model):
 	questiontop = models.ForeignKey("Question", on_delete=models.CASCADE)
 
 	def __str__(self):
-		return self.text[30] + "..."
+		return self.text
 
 
 # A question MUST have the following:

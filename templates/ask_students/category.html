@@ -4,10 +4,6 @@
     {{ category.name }}
 {% endblock %}
 
-{% block pagetitle %}
-    {{ category.name }}
-{% endblock %}
-
 {% block body_block %}
     <div class="tab-content" id="home-tab-content">
         <div class="tab-pane fade show active" id="top" role="tabpanel" aria-labelledby="top-tab">
@@ -15,7 +11,7 @@
                 <div class="card question-card mb-3">
                     <a href="#">
                         <div class="card-header py-2 bg-success d-flex justify-content-between flex-row flex-wrap">
-                            <span class="text-truncate mr-auto text-left">{{ question.name }}</span>
+                            <span class="text-truncate mr-auto text-left"><a href="{% url 'show_question' category.slug question.id %}">{{ question.name }}</a></span>
                             {% if not question.answered %}
                                 <span class="unanswered-label text-truncate py-1 px-3 ml-auto font-weight-bold bg-warning">Unanswered</span>
                             {% endif %}
@@ -26,6 +22,7 @@
                         <span>Answers: {{ question.answer_set.count }}</span>
                         <span>Category: {{ question.category.name }}</span>
                         <span class="ml-auto text-muted">Anonymous</span>
+
 
                         {# TODO Implement Properly Once User Model Corrected #}
                         {% if question.anonymous %}
