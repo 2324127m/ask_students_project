@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block title %}
-    {{ user.username }}
+   Profile - {{ user.username }}
 {% endblock %}
 
 {% block body_block %}
@@ -12,6 +12,11 @@
     <div>
         <strong>Username: </strong>{{ user.username }}
         <br/>
+		<h4>Role: </h4> {{ user.permission.title }}
+		<br/>
+		<h4>University: </h4> {{ user.place_of_study }}
+		<br/>
+		<h4>Email: </h4> {{ user.user.email }}
         <strong>Answers: </strong>{{ number_of_answers }}
     </div>
 

@@ -125,6 +125,9 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
+        
+        user_permission = user.permission
+        role = Permission.objects.filter(pk=user_permission).title
 
     except User.DoesNotExist:
         return redirect('index')
@@ -132,7 +135,8 @@ def profile(request, username):
     # select user's profile instance or create a blank one
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
-    context_dict = {'user': user, 'top_five_answers': most_liked_answers, 'number_of_answers': number_of_answers}
+    context_dict = {'user': user, 'top_five_answers': most_liked_answers,
+                    'number_of_answers': number_of_answers, 'role' : role, }
 
     return render(request, 'ask_students/profile.html', context_dict)
 
