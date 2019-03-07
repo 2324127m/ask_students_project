@@ -101,8 +101,6 @@ def show_question(request, category_name_slug, question_id):
         context_dict['question'] = None
         context_dict['answers_list'] = None
 
-    print(context_dict['answers_list'])
-
     return render(request, 'ask_students/question.html', context_dict)
 
 
@@ -168,15 +166,12 @@ def register_profile(request):
 
 
 def faq(request):
-    context_dict = {}
-    return render(request, 'ask_students/faq.html',context_dict)
+    return render(request, 'ask_students/faq.html', {})
 
 
 def about_us(request):
-    context_dict = {}
-    return render(request, 'ask_students/about_us.html',context_dict)
+    return render(request, 'ask_students/about_us.html', {})
 
 
 def contact_us(request):
-    context_dict = {}
-    return render(request, 'ask_students/contact_us.html',context_dict)
+    return render(request, 'ask_students/contact_us.html', {})
