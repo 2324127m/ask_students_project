@@ -13,3 +13,11 @@ def get_category_list():
 # def get_latest_questions(question=None):
 def get_latest_questions():
 	return {'latest_questions': Question.objects.order_by('-posted')[:10]}
+
+
+@register.inclusion_tag('ask_students/question_card.html')
+def show_question(question):
+	if not isinstance(question, Question):
+		return None
+	else:
+		return {'question': question}
