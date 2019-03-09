@@ -67,11 +67,10 @@ def add_question(request):
             if 'support_file' in request.FILES:
                 question.support_file = request.FILES['support_file']
 
-
             return show_question(request)
 
         else:
-            ## Display errors if question cannot be added
+            # Display errors if question cannot be added
             print(form.errors)
 
     context_dict['form'] = form 
@@ -181,3 +180,18 @@ def about_us(request):
 
 def contact_us(request):
     return render(request, 'ask_students/contact_us.html', {})
+
+
+def search(request):
+
+    search_query = request.GET.get('q')
+    context_dict = {}
+
+    if search_query:
+        search_terms = search_query.split()
+        result = Question.objects.filter(name__contains=search_terms[0])
+        for term in search_terms[1:]:
+            result = result | Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
+        context_dict['search_results'] = result
+
+    return render(request, 'ask_students/search.html', context_dict)

@@ -19,8 +19,11 @@
     <div class="container">
       <a href="{% url 'index' %}"><img class="navbar-brand" height="52" width="46" src="{% static 'images/home.png' %}"></a>
 
-      <form class="order-lg-2" id="nav-bar-search" name="nav-bar-search">
-        <input aria-label="Search" class="form-control" placeholder="Search" type="text">
+      <form class="order-lg-2 form-inline" id="nav-bar-search" name="nav-bar-search"
+            action="{% url 'search' %}" method="GET" >
+
+        <input aria-label="Search" name="q" class="form-control" placeholder="Search" type="text">
+        <button type="submit" class="btn btn-info">?</button>
       </form>
 
       <button aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right custom-toggler" data-target="#navbar-response-left, #navbar-response-right" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
@@ -35,7 +38,7 @@
       <div class="collapse navbar-collapse order-lg-3" id="navbar-response-right">
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
-                <li ccass="nav-item"><a class="nav-link" href="{% url 'my_profile' %}">Welcome {{ user.username }}!</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'my_profile' %}">Welcome {{ user.username }}!</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/">Logout</a></li>
             {% else %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>

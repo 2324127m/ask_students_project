@@ -34,6 +34,18 @@ body {
 	margin-right: 10px;
 }
 
+#nav-bar-search button {
+	width: auto;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+
+#nav-bar-search input{
+	width: 70%;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
 /* Nav Bar Toggle Styling */
 .custom-toggler.navbar-toggler {
 	border-color: rgb(139,195,74);
