@@ -34,6 +34,10 @@ body {
 	margin-right: 10px;
 }
 
+.ui-autocomplete {
+	z-index: 1030;
+}
+
 #nav-bar-search button {
 	width: auto;
 	border-bottom-left-radius: 0;

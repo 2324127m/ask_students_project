@@ -3,6 +3,10 @@ from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse
 
+import json
+from django.forms.models import model_to_dict
+from django.core import serializers
+
 from ask_students.models import Category, Question, Answer, UserProfile, User
 from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm
 
@@ -184,14 +188,31 @@ def contact_us(request):
 
 def search(request):
 
-    search_query = request.GET.get('q')
-    context_dict = {}
+    if request.is_ajax():
+        query = request.GET.get('term', '')
+        queryset = Question.objects.filter(name__istartswith=query)
+        results = []
 
-    if search_query:
-        search_terms = search_query.split()
-        result = Question.objects.filter(name__contains=search_terms[0])
-        for term in search_terms[1:]:
-            result = result | Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
-        context_dict['search_results'] = result
+        print("Search for " + query)
 
-    return render(request, 'ask_students/search.html', context_dict)
+        for result in queryset:
+            print(result.name)
+            results.append(result.name)
+
+        data = json.dumps(results)
+        mt = 'application/json'
+
+        return HttpResponse(data, mt)
+
+    else:
+        search_query = request.GET.get('q')
+        context_dict = {}
+
+        if search_query:
+            search_terms = search_query.split()
+            result = Question.objects.filter(name__contains=search_terms[0])
+            for term in search_terms[1:]:
+                result = result | Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
+            context_dict['search_results'] = result
+
+        return render(request, 'ask_students/search.html', context_dict)
