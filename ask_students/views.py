@@ -2,6 +2,9 @@ import datetime
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse
+import sys
+
+from django.core.paginator import Paginator, InvalidPage
 
 from ask_students.models import Category, Question, Answer, UserProfile, User
 from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm
@@ -39,14 +42,28 @@ def category(request, category_name_slug):
 
     try:
         category_obj = Category.objects.get(slug=category_name_slug)
+        context_dict['category'] = category_obj
 
         question_list = Question.objects.filter(category=category_obj).order_by('-posted')
+        question_paginator = Paginator(question_list, 10)  # Where second argument is max questions per page.
 
-        context_dict['category'] = category_obj
-        context_dict['questions'] = question_list
+        # Get ?page=xxx from request and return that page in the context_dict
+        requested_page = request.GET.get('page')
+
+        # If request does not specify a page, choose first page.
+        if requested_page is None:
+            requested_page = 1
+
+        question_page = question_paginator.page(requested_page)  # Throws InvalidPage if no valid questions to display.
+
+        context_dict['questions'] = question_page
 
     except Category.DoesNotExist:
         context_dict['category'] = None
+        context_dict['questions'] = None
+
+    # If there's no valid page, return null, we'll handle in template.
+    except InvalidPage:
         context_dict['questions'] = None
 
     return render(request, 'ask_students/category.html', context_dict)
