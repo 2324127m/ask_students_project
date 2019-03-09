@@ -162,7 +162,8 @@ def add_question(name, description, views, cat):
 
 
 def add_user(username, first_name, last_name, password):
-    u = User.objects.get_or_create(username=username, first_name=first_name, last_name=last_name, password=password)[0]
+    u = User.objects.get_or_create(username=username, first_name=first_name, last_name=last_name)[0]
+    u.set_password(password)
     u.save()
     return u
 
