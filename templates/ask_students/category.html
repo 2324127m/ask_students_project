@@ -1,4 +1,5 @@
 {% extends 'ask_students/base.html' %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     {% if category.name == None %}
@@ -18,32 +19,7 @@
 
 {% block body_block %}
             {% for question in questions %}
-                <div class="card question-card m-2">
-                      <a href="{% url 'show_question' category.slug question.id %}">
-                          <div class="card-header py-2 d-flex justify-content-between flex-row flex-wrap">
-                              <span class="text-truncate mr-auto text-left">{{ question.name }}</span>
-                              {% if not question.answered %}
-                              <span class="unanswered-label text-truncate py-1 px-3 ml-auto font-weight-bold bg-warning">Unanswered</span>
-                              {% endif %}
-                          </div>
-                      </a>
-                    <div class="card-body py-2 d-flex flex-row flex-wrap">
-                        <span>Views: {{ question.views }}</span>
-                        <span>Answers: {{ question.answer_set.count }}</span>
-                        <span>Category: {{ question.category.name }}</span>
-                        <span class="ml-auto text-muted">Anonymous</span>
-
-
-
-                        {# TODO Implement Properly Once User Model Corrected #}
-                        {% if question.anonymous %}
-                            <span class="">Anonymous User</span>
-                        {% else %}
-                            <span>{{ question.user.user.username }}</span>
-                        {% endif %}
-
-                    </div>
-                </div>
+                {% show_question question %}
             {% empty %}
                 <p>Sorry, there are no questions to display.</p>
             {% endfor %}
