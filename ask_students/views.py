@@ -120,6 +120,10 @@ def show_question(request, category_name_slug, question_id):
         context_dict['question'] = None
         context_dict['answers_list'] = None
 
+    if request.method == 'GET':
+        question.views += 1
+        question.save()
+
     return render(request, 'ask_students/question.html', context_dict)
 
 
@@ -230,7 +234,7 @@ def search(request):
             search_terms = search_query.split()
             result = Question.objects.filter(name__contains=search_terms[0])
             for term in search_terms[1:]:
-                result = result | Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
+                result = result & Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
             context_dict['search_results'] = result
 
         return render(request, 'ask_students/search.html', context_dict)
