@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 
 from ask_students.models import Category, Question, Answer, UserProfile, User
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm
 
 from django.contrib.auth.decorators import login_required
 from registration.backends.simple.views import RegistrationView
@@ -108,13 +108,32 @@ def show_question(request, category_name_slug, question_id):
 
         answers_list = Answer.objects.filter(questiontop=question).order_by('posted')
 
-        # return top answer
+        # Return top answer
 
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
 
         if question.answered != None:
             context_dict['answer'] = question.answered
+
+        form = AnswerForm
+        # If method of the request is POST, then a user posting an answer to the question
+        if request.method == 'POST':
+            form = AnswerForm(request.POST)
+
+            if form.is_valid():
+                answer = form.save(commit=True)
+                answer.category = Category.objects.get(slug=category_name_slug)
+                answer.question = question
+                # answer needs a user
+                # answer.user = user
+
+            else:
+                print(form.errors)
+
+            # Add the form to context dictionary
+            context_dict['form'] = form
+
 
     except Question.DoesNotExist:
         context_dict['question'] = None
