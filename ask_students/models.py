@@ -45,8 +45,8 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 
 	bio = models.CharField(max_length=4096, null=True)
-	likes = models.IntegerField(default=0)
-	dislikes = models.IntegerField(default=0)
+	likes = models.PositiveIntegerField(default=0)
+	dislikes = models.PositiveIntegerField(default=0)
 	image = models.ImageField(upload_to='profile_images', null=True)
 
 	slug = models.SlugField(unique=True)
@@ -64,8 +64,8 @@ class UserProfile(models.Model):
 
 class Answer(models.Model):
 	text = models.CharField(max_length=4096)
-	likes = models.IntegerField(default=0)
-	dislikes = models.IntegerField(default=0)
+	likes = models.PositiveIntegerField(default=0)
+	dislikes = models.PositiveIntegerField(default=0)
 	posted = models.DateTimeField(default=timezone.now)
 	edited = models.DateTimeField(default=None, null=True)
 

@@ -1,5 +1,5 @@
 from django import forms
-from ask_students.models import UserProfile, Category, Question
+from ask_students.models import UserProfile, Category, Question, Answer
 
 
 class UserProfileForm(forms.ModelForm):
@@ -33,3 +33,10 @@ class AskQuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         exclude = ('posted', 'user', 'category',)
+
+class AnswerForm(forms.ModelForm):
+	text = forms.CharField(max_length=4096, help_text="Enter you answer here", required=True)
+	
+	class Meta:
+		model = Answer
+		fields = ('text',)
