@@ -163,8 +163,9 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
-        
-        user_permission = user.permission
+        userprofile = UserProfile.objects.get(user=user)
+        user_permission = userprofile.permission
+        #user_permission = user.permission
         if user_permission == None:
             role = "Student"
         else:
@@ -177,7 +178,7 @@ def profile(request, username):
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'user': user, 'top_five_answers': most_liked_answers,
-                    'number_of_answers': number_of_answers, 'role' : role }
+                    'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile }
 
     return render(request, 'ask_students/profile.html', context_dict)
 
