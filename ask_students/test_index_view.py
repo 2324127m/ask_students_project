@@ -96,7 +96,7 @@ class IndexViewTests(TestCase):
         self.assertEqual(valid, True)
 
 
-    def test_if_unaswered_questions_are_actually_unaswered(self):
+    def test_if_unanswered_questions_are_actually_unanswered(self):
         # Create a new category
         new_category = Category(name="Test Category 1")
         new_category.save()
