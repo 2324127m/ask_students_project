@@ -6,6 +6,10 @@ import sys
 
 from django.core.paginator import Paginator, InvalidPage
 
+import json
+from django.forms.models import model_to_dict
+from django.core import serializers
+
 from ask_students.models import Category, Question, Answer, UserProfile, User
 from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm
 
@@ -84,11 +88,10 @@ def add_question(request):
             if 'support_file' in request.FILES:
                 question.support_file = request.FILES['support_file']
 
-
             return show_question(request)
 
         else:
-            ## Display errors if question cannot be added
+            # Display errors if question cannot be added
             print(form.errors)
 
     context_dict['form'] = form 
@@ -198,3 +201,35 @@ def about_us(request):
 
 def contact_us(request):
     return render(request, 'ask_students/contact_us.html', {})
+
+
+def search(request):
+
+    if request.is_ajax():
+        query = request.GET.get('term', '')
+        queryset = Question.objects.filter(name__istartswith=query)
+        results = []
+
+        print("Search for " + query)
+
+        for result in queryset:
+            print(result.name)
+            results.append(result.name)
+
+        data = json.dumps(results)
+        mt = 'application/json'
+
+        return HttpResponse(data, mt)
+
+    else:
+        search_query = request.GET.get('q')
+        context_dict = {}
+
+        if search_query:
+            search_terms = search_query.split()
+            result = Question.objects.filter(name__contains=search_terms[0])
+            for term in search_terms[1:]:
+                result = result | Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
+            context_dict['search_results'] = result
+
+        return render(request, 'ask_students/search.html', context_dict)

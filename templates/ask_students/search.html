@@ -1,0 +1,16 @@
+{% extends 'ask_students/base.html' %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block pagetitle %}
+    Search Results
+{% endblock %}
+
+{% block body_block %}
+
+    {% for result in search_results %}
+        <p>{{ result.name }}</p>
+    {% endfor %}
+{% endblock %}
