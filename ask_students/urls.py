@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^contact_us/$', views.contact_us, name="contact_us"),
     url(r'^faq/$', views.faq, name="faq"),
     url(r'^search/$', views.search, name='search'),
+    url(r'^ask/$', views.add_question, name='ask'),
 
 
     # AJAX REQUESTS
