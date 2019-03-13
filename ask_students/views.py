@@ -2,9 +2,16 @@ import datetime
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse
+import sys
+
+from django.core.paginator import Paginator, InvalidPage
+
+import json
+from django.forms.models import model_to_dict
+from django.core import serializers
 
 from ask_students.models import Category, Question, Answer, UserProfile, User
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm
 
 from django.contrib.auth.decorators import login_required
 from registration.backends.simple.views import RegistrationView
@@ -39,14 +46,28 @@ def category(request, category_name_slug):
 
     try:
         category_obj = Category.objects.get(slug=category_name_slug)
+        context_dict['category'] = category_obj
 
         question_list = Question.objects.filter(category=category_obj).order_by('-posted')
+        question_paginator = Paginator(question_list, 10)  # Where second argument is max questions per page.
 
-        context_dict['category'] = category_obj
-        context_dict['questions'] = question_list
+        # Get ?page=xxx from request and return that page in the context_dict
+        requested_page = request.GET.get('page')
+
+        # If request does not specify a page, choose first page.
+        if requested_page is None:
+            requested_page = 1
+
+        question_page = question_paginator.page(requested_page)  # Throws InvalidPage if no valid questions to display.
+
+        context_dict['questions'] = question_page
 
     except Category.DoesNotExist:
         context_dict['category'] = None
+        context_dict['questions'] = None
+
+    # If there's no valid page, return null, we'll handle in template.
+    except InvalidPage:
         context_dict['questions'] = None
 
     return render(request, 'ask_students/category.html', context_dict)
@@ -67,11 +88,10 @@ def add_question(request):
             if 'support_file' in request.FILES:
                 question.support_file = request.FILES['support_file']
 
-
             return show_question(request)
 
         else:
-            ## Display errors if question cannot be added
+            # Display errors if question cannot be added
             print(form.errors)
 
     context_dict['form'] = form 
@@ -88,7 +108,7 @@ def show_question(request, category_name_slug, question_id):
 
         answers_list = Answer.objects.filter(questiontop=question).order_by('posted')
 
-        # return top answer
+        # Return top answer
 
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
@@ -96,9 +116,32 @@ def show_question(request, category_name_slug, question_id):
         if question.answered != None:
             context_dict['answer'] = question.answered
 
+        form = AnswerForm
+        # If method of the request is POST, then a user posting an answer to the question
+        if request.method == 'POST':
+            form = AnswerForm(request.POST)
+
+            if form.is_valid():
+                answer = form.save(commit=True)
+                answer.category = Category.objects.get(slug=category_name_slug)
+                answer.question = question
+                # answer needs a user
+                # answer.user = user
+
+            else:
+                print(form.errors)
+
+            # Add the form to context dictionary
+            context_dict['form'] = form
+
+
     except Question.DoesNotExist:
         context_dict['question'] = None
         context_dict['answers_list'] = None
+
+    if request.method == 'GET':
+        question.views += 1
+        question.save()
 
     return render(request, 'ask_students/question.html', context_dict)
 
@@ -124,8 +167,9 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
-        
-        user_permission = user.permission
+        userprofile = UserProfile.objects.get(user=user)
+        user_permission = userprofile.permission
+        #user_permission = user.permission
         if user_permission == None:
             role = "Student"
         else:
@@ -138,7 +182,7 @@ def profile(request, username):
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'user': user, 'top_five_answers': most_liked_answers,
-                    'number_of_answers': number_of_answers, 'role' : role }
+                    'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile }
 
     return render(request, 'ask_students/profile.html', context_dict)
 
@@ -181,3 +225,35 @@ def about_us(request):
 
 def contact_us(request):
     return render(request, 'ask_students/contact_us.html', {})
+
+
+def search(request):
+
+    if request.is_ajax():
+        query = request.GET.get('term', '')
+        queryset = Question.objects.filter(name__istartswith=query)
+        results = []
+
+        print("Search for " + query)
+
+        for result in queryset:
+            print(result.name)
+            results.append(result.name)
+
+        data = json.dumps(results)
+        mt = 'application/json'
+
+        return HttpResponse(data, mt)
+
+    else:
+        search_query = request.GET.get('q')
+        context_dict = {}
+
+        if search_query:
+            search_terms = search_query.split()
+            result = Question.objects.filter(name__contains=search_terms[0])
+            for term in search_terms[1:]:
+                result = result & Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
+            context_dict['search_results'] = result
+
+        return render(request, 'ask_students/search.html', context_dict)

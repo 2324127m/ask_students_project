@@ -1,0 +1,18 @@
+{% extends 'ask_students/base.html' %}
+{% load ask_students_templatetags %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block pagetitle %}
+    Search Results
+{% endblock %}
+
+{% block body_block %}
+
+    {% for question in search_results %}
+        {% show_question question %}
+    {% endfor %}
+	
+{% endblock %}

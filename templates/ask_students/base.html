@@ -10,6 +10,7 @@
   <title>Ask Students - {% block title %}CHANGETHIS1{% endblock %}</title>
     <!-- Bootstrap core CSS from Bootstrap -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"><!-- Custom styles for this template -->
+  <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   {% block head_block %}  {% endblock %}
@@ -20,8 +21,13 @@
     <div class="container">
       <a href="{% url 'index' %}"><img class="navbar-brand" height="52" width="46" src="{% static 'images/home.png' %}"></a>
 
-      <form class="order-lg-2" id="nav-bar-search" name="nav-bar-search">
-        <input aria-label="Search" class="form-control" placeholder="Search" type="text">
+      <form class="order-lg-2 form-inline mx-0" id="nav-bar-search" name="nav-bar-search"
+            action="{% url 'search' %}" method="GET" >
+
+          {% csrf_token %}
+          <input aria-label="Search" name="q" id="nav-search-input" class="form-control autocomplete" placeholder="Search" type="text">
+          <button type="submit" class="btn btn-info">?</button>
+
       </form>
 
       <button aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right custom-toggler" data-target="#navbar-response-left, #navbar-response-right" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
@@ -36,7 +42,7 @@
       <div class="collapse navbar-collapse order-lg-3" id="navbar-response-right">
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
-                <li ccass="nav-item"><a class="nav-link" href="{% url 'my_profile' %}">Welcome {{ user.username }}!</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'my_profile' %}">Welcome {{ user.username }}!</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/">Logout</a></li>
             {% else %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
@@ -97,10 +103,18 @@
   </footer>
 
   <!-- Bootstrap core JavaScript from Bootstrap -->
-
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js">
+  </script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
   </script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
   </script>
+
+  <script   src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+
+  <!-- Application JS -->
+  <script src="{% static "js/search_ajax.js" %}"></script>
 </body>
 </html>

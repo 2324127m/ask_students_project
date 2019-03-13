@@ -1,45 +1,58 @@
 {% extends 'ask_students/base.html' %}
+{% load ask_students_templatetags %}
 
 {% block title %}
-    {{ category.name }}
+    {% if category.name == None %}
+        Category Not Found!
+    {% else %}
+        {{ category.name }}
+    {% endif %}
 {% endblock %}
 
 {% block pagetitle %}
-    {{ category.name }}
+    {% if category.name == None %}
+        Category Not Found!
+    {% else %}
+        {{ category.name }}
+    {% endif %}
 {% endblock %}
 
 {% block body_block %}
-    <div class="tab-content" id="home-tab-content">
-        <div class="tab-pane fade show active" id="top" role="tabpanel" aria-labelledby="top-tab">
             {% for question in questions %}
-                <div class="card question-card mb-3">
-                      <a href="{% url 'show_question' category.slug question.id %}">
-                          <div class="card-header py-2 d-flex justify-content-between flex-row flex-wrap">
-                              <span class="text-truncate mr-auto text-left">{{ question.name }}</span>
-                              {% if not question.answered %}
-                              <span class="unanswered-label text-truncate py-1 px-3 ml-auto font-weight-bold bg-warning">Unanswered</span>
-                              {% endif %}
-                          </div>
-                      </a>
-                    <div class="card-body py-2 d-flex flex-row flex-wrap">
-                        <span>Views: {{ question.views }}</span>
-                        <span>Answers: {{ question.answer_set.count }}</span>
-                        <span>Category: {{ question.category.name }}</span>
-                        <span class="ml-auto text-muted">Anonymous</span>
-
-
-                        {# TODO Implement Properly Once User Model Corrected #}
-                        {% if question.anonymous %}
-                            <span class="">Anonymous User</span>
-                        {% else %}
-                            <span>{{ question.user.user.username }}</span>
-                        {% endif %}
-
-                    </div>
-                </div>
+                {% show_question question %}
             {% empty %}
-                <p>Sorry, there are no questions in this category.</p>
+                <p>Sorry, there are no questions to display.</p>
             {% endfor %}
-        </div>
-    </div>
+            {% if questions.has_other_pages %}
+            <nav id="CategoryQuestionPaginator" aria-label="Navigate Categories Question Pages">
+                <ul class="pagination justify-content-center">
+                    {% if questions.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ questions.previous_page_number }}">
+                                {{ questions.previous_page_number }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ questions.number }}">{{ questions.number }}</a>
+                    </li>
+                    {% if questions.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ questions.next_page_number }}">
+                                {{ questions.next_page_number }}
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ questions.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <span class="justify-content-end w-100">
+                 <p class="text-muted text-justify text-md-right px-3">{{ questions.paginator.count }} questions over {{ questions.paginator.num_pages }} pages</p>
+            </span>
+            {% endif %}
 {% endblock %}
