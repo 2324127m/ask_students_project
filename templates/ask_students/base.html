@@ -12,6 +12,7 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"><!-- Custom styles for this template -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+  {% block head_block %}  {% endblock %}
 </head>
 <body>
   <!-- Navigation Bar -->
@@ -96,10 +97,9 @@
   </footer>
 
   <!-- Bootstrap core JavaScript from Bootstrap -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js">
-  </script> 
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
-  </script> 
+  </script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
   </script>
 </body>

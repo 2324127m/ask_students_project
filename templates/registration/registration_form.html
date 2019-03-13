@@ -1,12 +1,18 @@
 {% extends "ask_students/base.html" %}
-{% block title %}Sign Up{% endblock %}
+{% load static %}
 
-{% block pagetitle %}
-    Sign Up - Step 1
+{% block title %}Sign Up - Step 1{% endblock %}
+{% block pagetitle %}Sign Up - Step 1{% endblock %}
+
+{% block head_block %}
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+  <script src="{% static 'js/signup-form.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
-    <form role="form" class="p-4 p-lg-5" method="post" action=".">
+    <form id="register-form" role="form" class="p-4 p-lg-5" method="post" action=".">
         {% csrf_token %}
 
         {% if form.non_field_errors %}
@@ -18,70 +24,31 @@
         {% endif %}
 
         <div class="form-group row pd-3">
-            <label for="username-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Username:</label>
+            <label for="username" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Username:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <input class="form-control {% if form.email.errors %} is-invalid {% endif %}"
-                       id="username-input" maxlength="30" name="username" type="text"
-                       aria-describedby="usernameHelpBlock" required />
+                <input class="form-control" id="username" name="username" type="text"/>
 
-                <small id="usernameHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    How you will be identified on the site.
-                    Up to 30 characters, allowed: letters, digits and @/./+/-/_ only.
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.email.errors }}
-                </div>
             </div>
         </div>
 
         <div class="form-group row pd-3">
-            <label for="email-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Email:</label>
+            <label for="email" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Email:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <input class="form-control {% if form.email.errors %} is-invalid {% endif %}"
-                       id="email-input" name="email" type="email"
-                       aria-describedby="emailHelpBlock" required />
-
-                <small id="emailHelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
-                    We will send an account activation email
-                    to this address, so make sure you can access it.
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.email.errors }}
-                </div>
+                <input class="form-control" id="email" name="email" type="email"/>
             </div>
         </div>
 
         <div class="form-group row pd-3">
-            <label for="password1-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Password:</label>
+            <label for="password" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Password:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <input class="form-control {% if form.password2.errors %} is-invalid {% endif %}"
-                       id="password1-input" name="password1" type="password"
-                       aria-describedby="password1HelpBlock" required />
-
-                <small id="password1HelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
-                    Password must be at least 9 characters, not similar to your username,
-                    and including numbers and letters.
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.password2.errors }}
-                </div>
+                <input class="form-control" id="password" name="password1" type="password"/>
             </div>
         </div>
 
         <div class="form-group row pd-3">
-            <label for="password2-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Confirm:</label>
+            <label for="confirm_password" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Confirm:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <input class="form-control {% if form.password2.errors %} is-invalid {% endif %}"
-                       id="password2-input" name="password2" type="password"
-                       aria-describedby="password2HelpBlock" required /><br />
-
-                <small id="password2HelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
-                    Type in your password again to confirm it is correct.
-                </small>
-                <div class="invalid-feedback">
-
-                </div>
-
+                <input class="form-control" id="confirm_password" name="password2" type="password"/><br />
             </div>
         </div>
 
