@@ -106,7 +106,7 @@ def show_question(request, category_name_slug, question_id):
         question = Question.objects.get(pk=question_id)
         # Earliest answer first
 
-        answers_list = Answer.objects.filter(questiontop=question).order_by('posted')
+        answers_list = Answer.objects.filter(questiontop=question).order_by('-likes')
 
         # Return top answer
 

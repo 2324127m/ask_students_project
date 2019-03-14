@@ -5,7 +5,7 @@ import django
 
 django.setup()
 
-from ask_students.models import Category, Question, User, Answer, UserProfile, PlaceOfStudy
+from ask_students.models import Category, Question, User, Answer, UserProfile
 
 
 def populate():
@@ -43,14 +43,6 @@ def populate():
     for user in users:
         u = add_user(user['username'], user['first_name'], user['last_name'], user['password'])
         add_user_profile(u, user['bio'], user['likes'], user['dislikes'])
-
-    place_of_study = ['University of St Andrews', 'University of Glasgow', 'University of Aberdeen', 'University of Edinburgh',
-                      'University of Strathclyde', 'Heriot-Watt University', 'University of Dundee', 'Univeristy of Stirling',
-                      'Edinburgh Napier University', 'Robert Gordon University','Glasgow Caledonian University', 'Queen Margaret University',
-                      'Univesity of the West of Scotland', 'University of the Highlands and Islands']
-            
-    for place in place_of_study:
-        add_place_of_study(place)
 
     categories = {
         'General':
@@ -169,13 +161,6 @@ def populate():
                 add_answer(cat, answer['answer'], answer['likes'], answer['dislikes'], up, q)
 
         print("  Adding {0} questions to {1}...".format(str(i), str(c)))
-
-    
-
-def add_place_of_study(title):
-    p = PlaceOfStudy.objects.get_or_create(title = title)[0]
-    p.save()
-    return p
 
 
 def add_category(cat, description, approved):
