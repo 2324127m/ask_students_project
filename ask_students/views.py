@@ -10,7 +10,7 @@ import json
 from django.forms.models import model_to_dict
 from django.core import serializers
 
-from ask_students.models import Category, Question, Answer, UserProfile, User
+from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
 from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm
 
 from django.contrib.auth.decorators import login_required
@@ -113,20 +113,27 @@ def show_question(request, category_name_slug, question_id):
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
 
-        if question.answered != None:
+        if question.answered is not None:
             context_dict['answer'] = question.answered
 
         form = AnswerForm
+
+        if request.method == 'GET':
+            question.views += 1
+            question.save()
+
         # If method of the request is POST, then a user posting an answer to the question
         if request.method == 'POST':
             form = AnswerForm(request.POST)
 
             if form.is_valid():
-                answer = form.save(commit=True)
+                answer = form.save(commit=False)
                 answer.category = Category.objects.get(slug=category_name_slug)
-                answer.question = question
+                answer.questiontop = question
                 # answer needs a user
                 # answer.user = user
+                answer.user = request.user
+                answer.save()
 
             else:
                 print(form.errors)
@@ -134,14 +141,10 @@ def show_question(request, category_name_slug, question_id):
             # Add the form to context dictionary
             context_dict['form'] = form
 
-
     except Question.DoesNotExist:
         context_dict['question'] = None
         context_dict['answers_list'] = None
 
-    if request.method == 'GET':
-        question.views += 1
-        question.save()
 
     return render(request, 'ask_students/question.html', context_dict)
 
@@ -167,6 +170,7 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
+
         userprofile = UserProfile.objects.get(user=user)
         user_permission = userprofile.permission
         #user_permission = user.permission

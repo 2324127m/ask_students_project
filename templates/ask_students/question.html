@@ -6,13 +6,13 @@
 {% endblock %}
 
 {% block pagetitle %}
-    {{ question.name }}
+    {{ question.category }} - {{ question.name }}
 {% endblock %}
 
 {% block body_block %}
 
-
     {% for answer in answers_list %}
         {% show_answer answer %}
     {% endfor %}
+
 {% endblock %}
