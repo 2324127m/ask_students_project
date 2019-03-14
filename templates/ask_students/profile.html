@@ -10,22 +10,22 @@
 {% endblock %}
 
 {% block body_block %}
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
 
-    <h1>{{ user.username }}</h1>
+    <h1 id="username">{{ user.username }}</h1>
 
     <div>
-        <strong>Username: </strong>{{ user.username }}
-        <br/>
-		<h4>Role: </h4> {{ role }}
+		<strong class="user-info-title">Role :</strong> <strong class="user-info">{{ role }}</strong>
 		<br/>
-		<h4>University: </h4> {{ user.place_of_study }}
+		<strong class="user-info-title">University :</strong> <strong class="user-info">{{ user.place_of_study }}</strong>
 		<br/>
-		<h4>Email: </h4> {{ user.user.email }}
+		<strong class="user-info-title">Email :</strong> <strong class="user-info">{{ user.user.email }}</strong>
+		<br/><br/>
+        <strong class="user-stats-title"> Answers: </strong> <strong id="answers">{{ number_of_answers }}</strong>
+		<strong class="user-stats-title"> Likes: </strong> <strong id="likes">{{ likes }}</strong>
+		<strong class="user-stats-title"> Dislikes: </strong> <strong id="dislikes">{{ dislikes }} </strong>
 		<br/>
-        <strong>Answers: </strong>{{ number_of_answers }}
-		<strong> Likes: </strong> {{ user.likes }}
-		<strong> Dislikes: </strong> {{ user.dislikes }} 
-		<br/>
+        <div id="pagebreak"></div>
 		<strong> Most Liked Answers </strong> {{ top_five_answers }} 
 		
 	</div>

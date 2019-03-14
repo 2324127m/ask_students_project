@@ -172,11 +172,15 @@ def profile(request, username):
         number_of_answers = len(all_answers)
         userprofile = UserProfile.objects.get(user=user)
         user_permission = userprofile.permission
+        likes = userprofile.likes
+        dislikes = userprofile.dislikes
         #user_permission = user.permission
         if user_permission == None:
             role = "Student"
         else:
-            Permission.objects.filter(pk=user_permission).title
+            # Adding a permission via admin interface causes error here
+            # Permission.objects.filter(pk=user_permission)
+            role = user_permission.title
 
     except User.DoesNotExist:
         return redirect('index')
@@ -184,7 +188,7 @@ def profile(request, username):
     # select user's profile instance or create a blank one
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
-    context_dict = {'user': user, 'top_five_answers': most_liked_answers,
+    context_dict = {'user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
                     'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile }
 
     return render(request, 'ask_students/profile.html', context_dict)
