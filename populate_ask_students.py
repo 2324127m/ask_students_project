@@ -5,7 +5,7 @@ import django
 
 django.setup()
 
-from ask_students.models import Category, Question, User, Answer, UserProfile, PlaceOfStudy
+from ask_students.models import Category, Question, User, Answer, UserProfile
 
 
 def populate():
@@ -44,14 +44,6 @@ def populate():
         u = add_user(user['username'], user['first_name'], user['last_name'], user['password'])
         add_user_profile(u, user['bio'], user['likes'], user['dislikes'])
 
-    place_of_study = ['University of St Andrews', 'University of Glasgow', 'University of Aberdeen', 'University of Edinburgh',
-                      'University of Strathclyde', 'Heriot-Watt University', 'University of Dundee', 'Univeristy of Stirling',
-                      'Edinburgh Napier University', 'Robert Gordon University','Glasgow Caledonian University', 'Queen Margaret University',
-                      'Univesity of the West of Scotland', 'University of the Highlands and Islands']
-            
-    for place in place_of_study:
-        add_place_of_study(place)
-
     categories = {
         'General':
             {'description': 'Ask general questions about any topic you like',
@@ -61,6 +53,7 @@ def populate():
                      {'name': "Who let the dogs out?",
                       "description": "who?",
                       "views": 10,
+                      "user": "YellowPony123",
                       "answers":
                          [
                              {'answer': 'who?! who?! who?!', 'likes': 5, 'dislikes': 3,
@@ -69,7 +62,11 @@ def populate():
                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
                          ]
                       },
-                     {'name': "What's brown and sticky?", "description": "serious answers only please.", "views": 30, "answers":
+                     {'name': "What's brown and sticky?",
+                      "description": "serious answers only please.",
+                      "views": 30,
+                      "user": "AngryTelephonePole87",
+                      "answers":
                          [
                              {'answer':'A brown sticker', 'likes':4, 'dislikes':20,
                               'posted': None, 'edited': None, 'user': 'ooeeooahahtingtang'},
@@ -90,6 +87,7 @@ def populate():
                      {'name': "What is the first index in an array",
                       "description": "I am trying to learn but no one is taking this question seriously",
                       "views": 120,
+                      "user": "DampSeatOnTheBus",
                       "answers":
                           [
                               {'answer':'0', 'likes': 70, 'dislikes':15, 'posted': None, 'edited': None, 'user': 'SeriousFred'},
@@ -99,6 +97,7 @@ def populate():
                      {'name': "How to fix wifi not working",
                       "description": "how to fix wifi not working",
                       "views": 750,
+                      "user": "YellowPony123",
                       'answers':
                          [
                              {'answer':'turn it off and turn it back on again', 'likes': 433, 'dislikes': 48, 'posted': None, 'edited': None, 'user': 'YellowPony123'},
@@ -120,6 +119,7 @@ def populate():
                      {'name': "Where is a good place to eat out in Glasgow",
                       "description": "Looking for healthy organic food",
                       "views": 654,
+                      "user": "SeriousFred",
                       'answers':
                          [
                              {'answer':'McDonalds', 'likes': 70, 'dislikes' : 61,
@@ -128,7 +128,10 @@ def populate():
                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
                          ]},
                      {'name': "Best non-alcoholic drink for students",
-                      "description": "amazing!", "views": 12, 'answers':
+                      "description": "amazing!",
+                      "views": 12,
+                      "user": "AintGotNoMoney",
+                      'answers':
                           [
                               {'answer':' Water', 'likes': 3, 'dislikes':0,
                                'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
@@ -146,7 +149,10 @@ def populate():
 
         i = 0
         for question in cat_data['questions']:
-            q = add_question(question['name'], question['description'], question['views'], c)
+            username = question['user']
+            u = User.objects.get(username=username)
+            up = UserProfile.objects.get(user=u)
+            q = add_question(question['name'], question['description'], question['views'], c, up)
             i += 1
             for answer in question['answers']:
                 username = answer['user']
@@ -156,13 +162,6 @@ def populate():
 
         print("  Adding {0} questions to {1}...".format(str(i), str(c)))
 
-    
-
-def add_place_of_study(title):
-    p = PlaceOfStudy.objects.get_or_create(title = title)[0]
-    p.save()
-    return p
-
 
 def add_category(cat, description, approved):
     c = Category.objects.get_or_create(name=cat, description=description, approved=approved, user=None)[0]
@@ -170,8 +169,8 @@ def add_category(cat, description, approved):
     return c
 
 
-def add_question(name, description, views, cat):
-    q = Question.objects.get_or_create(name=name, text=description, category=cat, views=views)[0]
+def add_question(name, description, views, cat, user):
+    q = Question.objects.get_or_create(name=name, text=description, category=cat, views=views, user=user)[0]
     q.save()
     return q
 

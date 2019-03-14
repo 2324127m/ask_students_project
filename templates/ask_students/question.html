@@ -1,4 +1,5 @@
 {% extends 'ask_students/base.html' %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     {{ question.name }}
@@ -10,16 +11,47 @@
 
 {% block body_block %}
 
+<<<<<<< HEAD
     <!-- Show Question Title-->
-    {{ question.name }}
+    <h3>{{ question.name }}</h3>
 
     <!-- Show Question Text in a box-->
-    {{ question.text }}
+    <p class="question-text">{{ question.text }}</p>
 
     <!-- Ride side, show name, views and answers -->
 
+
+    <p class="right-section">
+        <!-- User profile -->
+        {% if user.image %}
+            <img width="25px" height="25px"
+                 src="{{ MEDIA_URL }}{{ user.image }}"
+                 alt="{{ user.user.username }} profile image"/>
+        {% endif %}
+        {{ user.user.username }}
+    </p>
+    <p class="right-section">View{{ question.views|pluralize }}: {{ question.views }}</p>
+    <p class="right-section">Answers: {{ number_of_answers }}</p>
+
+
+
+
+    <!-- Supporting file -->
+
+    {% if question.support_file %}
+        <img width="25px" height="25px"
+             src="{{ MEDIA_URL }}{{ question.support_file }}"
+             alt="Support image"/>
+    {% endif %}
+
+    <!-- Posted date -->
+
+
+    <hr>
+
     {% for answer in answers_list %}
-        <p>Answer: {{ answer.text }}</p>
+        {% show_answer answer %}
     {% endfor %}
+
 
 {% endblock %}
