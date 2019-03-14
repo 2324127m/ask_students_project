@@ -52,7 +52,7 @@ $(document).ready(function () {
                 required: "Please enter a username",
                 minlength: "Your username must consist of at least 2 characters",
             },
-            password1: {
+            password: {
                 required: "Please provide a password",
                 minlength: "Your password must be at least 8 characters long",
             },
