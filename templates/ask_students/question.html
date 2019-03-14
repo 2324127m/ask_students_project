@@ -5,10 +5,18 @@
 {% endblock %}
 
 {% block pagetitle %}
-    {{ question.name }}
+    {{ question.category }} - {{ question.name }}
 {% endblock %}
 
 {% block body_block %}
+
+    <!-- Show Question Title-->
+    {{ question.name }}
+
+    <!-- Show Question Text in a box-->
+    {{ question.text }}
+
+    <!-- Ride side, show name, views and answers -->
 
     {% for answer in answers_list %}
         <p>Answer: {{ answer.text }}</p>
