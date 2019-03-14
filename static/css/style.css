@@ -121,6 +121,12 @@ body {
 	color: black;
 }
 
+.latest-question-category {
+	color: #808080;
+	line-height: 0;
+	padding-bottom: 25px;
+}
+
 /*
 .inner-card {
 	color:green;

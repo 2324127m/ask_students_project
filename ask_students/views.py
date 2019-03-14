@@ -170,6 +170,7 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
+
         userprofile = UserProfile.objects.get(user=user)
         user_permission = userprofile.permission
         #user_permission = user.permission
