@@ -1,5 +1,5 @@
 from django import template
-from ask_students.models import Category, Question
+from ask_students.models import Category, Question, Answer
 
 register = template.Library()
 
@@ -21,3 +21,17 @@ def show_question(question):
 		return None
 	else:
 		return {'question': question}
+
+@register.inclusion_tag('ask_students/full_question_card.html')
+def show_full_question(question):
+        if not isinstance(question, Question):
+                return None
+        else:
+                return {'question': question}
+
+@register.inclusion_tag('ask_students/answer_card.html')
+def show_answer(answer):
+        if not isinstance(answer, Answer):
+                return None
+        else:
+                return {'answer':answer}
