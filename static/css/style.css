@@ -146,6 +146,15 @@ QUESTION.HTML
 
 }
 
+.pagebreak {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  margin-left: 15px;
+  margin-right: 15px;
+  border-style: solid;
+  height: 0;
+}
+
 /*
 **	Footer Styling
 */

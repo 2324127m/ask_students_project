@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% extends 'ask_students/base.html' %}
 {% load staticfiles %}
 
@@ -26,12 +27,15 @@
 		<strong class="user-stats-title"> Dislikes: </strong> <strong id="dislikes">{{ dislikes }} </strong>
 		<br/>
     </div>
-    <div id="pagebreak"></div>
-    <strong class="user-stats-title"> Most Liked Answers </strong><br/><br/>
+    
+    <div id="pagebreak-profile"></div>
+    <strong class="user-stats-title"> Most Liked Answers </strong><br/>
+    
     <div>
         {% for answer in top_five_answers %}
-            <p class="question-title"></p>{{ forloop.counter }} )  {{ answer.questiontop }}</p>
-            <p class= "answer-title">{{ answer }}      <strong class="answer-likes">Likes: {{ answer.likes }}<strong></strong></p>
+            <p class="question-title"></p>{{ forloop.counter }}) Question: 
+            <a href="{% url 'show_question' answer.questiontop.category.slug answer.questiontop.id %}">{{ answer.questiontop }}</a></p>
+            <strong class= "answer-title">Answer: {{ answer }}</strong><strong class="answer-likes">Likes: {{ answer.likes }}</strong>
 		{% endfor %}
 	</div>
 {% endblock %}
