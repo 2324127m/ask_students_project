@@ -11,28 +11,32 @@
 
 {% block body_block %}
 
-<<<<<<< HEAD
     <!-- Show Question Title-->
     <h3>{{ question.name }}</h3>
 
-    <!-- Show Question Text in a box-->
-    <p class="question-text">{{ question.text }}</p>
+    <div class="row question-info">
+        <div class="card question-card col-lg-8">
+            <!-- Show Question Text in a box-->
+            <p class="question-text">{{ question.text }}</p>
+        </div>
 
-    <!-- Ride side, show name, views and answers -->
+        <!-- Right side, show name, views and answers -->
 
 
-    <p class="right-section">
-        <!-- User profile -->
-        {% if user.image %}
-            <img width="25px" height="25px"
-                 src="{{ MEDIA_URL }}{{ user.image }}"
-                 alt="{{ user.user.username }} profile image"/>
-        {% endif %}
-        {{ user.user.username }}
-    </p>
-    <p class="right-section">View{{ question.views|pluralize }}: {{ question.views }}</p>
-    <p class="right-section">Answers: {{ number_of_answers }}</p>
-
+        <div class="right-section col-lg-4">
+            <p>
+                <!-- User profile -->
+                {% if user_profile.image %}
+                    <a href="{% url 'profile' user_profile.user.username %}"><img width="25px" height="25px"
+                         src="{{ MEDIA_URL }}{{ user_profile.image }}"
+                         alt="{{ user.user_profile.username }} profile image"/></a>
+                {% endif %}
+                {{ user_profile.user.username }}
+            </p>
+            <p class="right-section">View{{ question.views|pluralize }}: {{ question.views }}</p>
+            <p class="right-section">Answers: {{ number_of_answers }}</p>
+        </div>
+    </div>
 
 
 
@@ -47,7 +51,7 @@
     <!-- Posted date -->
 
 
-    <hr>
+    <div class="page-break"></div>
 
     {% for answer in answers_list %}
         {% show_answer answer %}

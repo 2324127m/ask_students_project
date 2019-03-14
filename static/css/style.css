@@ -137,13 +137,22 @@ body {
 /*
 QUESTION.HTML
  */
+
+.question-info {
+	margin-top: 15px;
+}
 .question-text {
 	padding:10px;
 }
 
 .right-section {
 	line-height: 2px;
+	text-align: left;
+}
 
+.page-break {
+	margin: 25px 15px 25px 15px;
+	border: 1px solid #808080;
 }
 
 /*

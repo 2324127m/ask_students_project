@@ -31,7 +31,7 @@
     <div>
         {% for answer in top_five_answers %}
             <p class="question-title"></p>{{ forloop.counter }} )  {{ answer.questiontop }}</p>
-            <p class= "answer-title">{{ answer }}      <strong class="answer-likes">Likes: {{ answer.likes }}<strong></strong></p>
+            <p class= "answer-title">{{ answer }}      <strong class="answer-likes">Likes: {{ answer.likes }}</strong></p>
 		{% endfor %}
 	</div>
 {% endblock %}

@@ -115,7 +115,7 @@ def show_question(request, category_name_slug, question_id):
         context_dict['number_of_answers'] = len(answers_list)
 
         user_profile = UserProfile.objects.get(pk=question.user.pk)
-        context_dict['user'] = user_profile
+        context_dict['user_profile'] = user_profile
 
 
         if question.answered is not None:
