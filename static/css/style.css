@@ -79,12 +79,13 @@ body {
 **
 */
 
-#home-tab-content {
-	padding: 15px
-}
-
 #home-tab-control li a {
 	height: 100%;
+}
+
+#home-tab-control {
+
+	margin-bottom: 20px;
 }
 
 /* Question Card Styles */
@@ -132,6 +133,18 @@ body {
 	color:green;
 }
 */
+
+/*
+QUESTION.HTML
+ */
+.question-text {
+	padding:10px;
+}
+
+.right-section {
+	line-height: 2px;
+
+}
 
 /*
 **	Footer Styling

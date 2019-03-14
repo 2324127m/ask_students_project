@@ -112,6 +112,11 @@ def show_question(request, category_name_slug, question_id):
 
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
+        context_dict['number_of_answers'] = len(answers_list)
+
+        user_profile = UserProfile.objects.get(pk=question.user.pk)
+        context_dict['user'] = user_profile
+
 
         if question.answered is not None:
             context_dict['answer'] = question.answered
@@ -144,7 +149,6 @@ def show_question(request, category_name_slug, question_id):
     except Question.DoesNotExist:
         context_dict['question'] = None
         context_dict['answers_list'] = None
-
 
     return render(request, 'ask_students/question.html', context_dict)
 

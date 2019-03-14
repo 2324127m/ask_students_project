@@ -61,6 +61,7 @@ def populate():
                      {'name': "Who let the dogs out?",
                       "description": "who?",
                       "views": 10,
+                      "user": "YellowPony123",
                       "answers":
                          [
                              {'answer': 'who?! who?! who?!', 'likes': 5, 'dislikes': 3,
@@ -69,7 +70,11 @@ def populate():
                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
                          ]
                       },
-                     {'name': "What's brown and sticky?", "description": "serious answers only please.", "views": 30, "answers":
+                     {'name': "What's brown and sticky?",
+                      "description": "serious answers only please.",
+                      "views": 30,
+                      "user": "AngryTelephonePole87",
+                      "answers":
                          [
                              {'answer':'A brown sticker', 'likes':4, 'dislikes':20,
                               'posted': None, 'edited': None, 'user': 'ooeeooahahtingtang'},
@@ -90,6 +95,7 @@ def populate():
                      {'name': "What is the first index in an array",
                       "description": "I am trying to learn but no one is taking this question seriously",
                       "views": 120,
+                      "user": "DampSeatOnTheBus",
                       "answers":
                           [
                               {'answer':'0', 'likes': 70, 'dislikes':15, 'posted': None, 'edited': None, 'user': 'SeriousFred'},
@@ -99,6 +105,7 @@ def populate():
                      {'name': "How to fix wifi not working",
                       "description": "how to fix wifi not working",
                       "views": 750,
+                      "user": "YellowPony123",
                       'answers':
                          [
                              {'answer':'turn it off and turn it back on again', 'likes': 433, 'dislikes': 48, 'posted': None, 'edited': None, 'user': 'YellowPony123'},
@@ -120,6 +127,7 @@ def populate():
                      {'name': "Where is a good place to eat out in Glasgow",
                       "description": "Looking for healthy organic food",
                       "views": 654,
+                      "user": "SeriousFred",
                       'answers':
                          [
                              {'answer':'McDonalds', 'likes': 70, 'dislikes' : 61,
@@ -128,7 +136,10 @@ def populate():
                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
                          ]},
                      {'name': "Best non-alcoholic drink for students",
-                      "description": "amazing!", "views": 12, 'answers':
+                      "description": "amazing!",
+                      "views": 12,
+                      "user": "AintGotNoMoney",
+                      'answers':
                           [
                               {'answer':' Water', 'likes': 3, 'dislikes':0,
                                'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
@@ -146,7 +157,10 @@ def populate():
 
         i = 0
         for question in cat_data['questions']:
-            q = add_question(question['name'], question['description'], question['views'], c)
+            username = question['user']
+            u = User.objects.get(username=username)
+            up = UserProfile.objects.get(user=u)
+            q = add_question(question['name'], question['description'], question['views'], c, up)
             i += 1
             for answer in question['answers']:
                 username = answer['user']
@@ -170,8 +184,8 @@ def add_category(cat, description, approved):
     return c
 
 
-def add_question(name, description, views, cat):
-    q = Question.objects.get_or_create(name=name, text=description, category=cat, views=views)[0]
+def add_question(name, description, views, cat, user):
+    q = Question.objects.get_or_create(name=name, text=description, category=cat, views=views, user=user)[0]
     q.save()
     return q
 
