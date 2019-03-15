@@ -11,7 +11,9 @@
 {% endblock %}
 
 {% block body_block %}
-    <form id="register-form" role="form" class="p-4 p-lg-5" method="post" action=".">
+
+
+    <form id="register-form" role="form" class="p-3 p-lg-3" method="post" action=".">
         {% csrf_token %}
 
         {% if form.non_field_errors %}
@@ -26,7 +28,11 @@
             <label for="username" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Username:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
                 <input class="form-control" id="username" name="username" type="text"/>
+                <small id="usernameHelpBlock" class="form-text col-sm-12 text-muted px-3">
+                    How you will be identified on the site.
+                </small>
 
+                <small id="errors_username" class="form-text col-sm-12 px-3"></small>
             </div>
         </div>
 
@@ -34,6 +40,13 @@
             <label for="email" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Email:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
                 <input class="form-control" id="email" name="email" type="email"/>
+                <small id="emailHelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
+                    We will send an account activation email
+                    to this address, so make sure you can access it.
+                </small>
+
+                <small id="errors_email" class="form-text col-sm-12 px-3"></small>
+
             </div>
         </div>
 
@@ -41,6 +54,8 @@
             <label for="password1" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Password:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
                 <input class="form-control" id="password1" name="password1" type="password"/>
+                <small id="errors_password1" class="form-text col-sm-12 px-3"></small>
+
             </div>
         </div>
 
@@ -48,6 +63,7 @@
             <label for="password2" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Confirm:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
                 <input class="form-control" id="password2" name="password2" type="password"/><br />
+                <small id="errors_password2" class="form-text col-sm-12 px-3"></small>
             </div>
         </div>
 

@@ -1,29 +1,3 @@
-/*
-
-
-                <small id="usernameHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    How you will be identified on the site.
-                    Up to 30 characters, allowed: letters, digits and @/./+/-/_ only.
-                </small>
-
-
-                <small id="emailHelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
-                    We will send an account activation email
-                    to this address, so make sure you can access it.
-                </small>
-
-
-                <small id="password1HelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
-                    Password must be at least 9 characters, not similar to your username,
-                    and including numbers and letters.
-                </small>
-
-
-                <small id="password2HelpBlock" class="form-text col-sm-12 text-muted ml-auto px-3">
-                    Type in your password again to confirm it is correct.
-                </small>
- */
-
 $(document).ready(function () {
 
     // validate signup form on keyup and submit
@@ -31,7 +5,7 @@ $(document).ready(function () {
         rules: {
             username: {
                 required: true,
-                minlength: 2,
+                rangelength: [2, 30]
             },
             email: {
                 required: true,
@@ -49,19 +23,22 @@ $(document).ready(function () {
         },
         messages: {
             username: {
-                required: "Please enter a username",
-                minlength: "Your username must consist of at least 2 characters",
+                required: "Please enter a username.",
             },
-            password: {
-                required: "Please provide a password",
-                minlength: "Your password must be at least 8 characters long",
+            password1: {
+                required: "Please provide a password.",
             },
             password2: {
-                required: "Please provide a password",
-                minlength: "Your password must be at least 8 characters long",
-                equalTo: "Please enter the same password as above",
+                required: "Please provide a password.",
+                equalTo: "Please enter the same password as above.",
             },
-            email: "Please enter a valid email address",
+        },
+        errorPlacement: function (error, element) {
+            var name = element.attr("name");
+
+            $("#errors_" + name).append(error);
+            $("#errors_" +name).addClass("custom-error-style");
+
         }
     });
 

@@ -155,15 +155,6 @@ QUESTION.HTML
 	border: 1px solid #808080;
 }
 
-.pagebreak {
-  margin-top: 25px;
-  margin-bottom: 25px;
-  margin-left: 15px;
-  margin-right: 15px;
-  border-style: solid;
-  height: 0;
-}
-
 /*
 **	Footer Styling
 */
@@ -178,4 +169,13 @@ QUESTION.HTML
 }
 #footer a {
 	color: white;
+}
+
+/*
+**	Register
+ */
+
+.custom-error-style {
+	color: red;
+	font-style: italic;
 }
