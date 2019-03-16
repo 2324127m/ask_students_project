@@ -1,4 +1,4 @@
-import os
+import os, subprocess, platform
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ask_students_project.settings')
 import django
@@ -215,13 +215,19 @@ def add_answer(cat, answer, likes, dislikes, user, questiontop):
     return a
 
 
-if __name__ == '__main__':
-    print("Running ask_students population script...")
+def clean_db():
+    if platform.system() == "Windows":
+        subprocess.check_call(['del', 'db.sqlite3'])
+    else:
+        subprocess.check_call(['rm', 'db.sqlite3'])
 
-    import subprocess
-
-    subprocess.check_call(['rm', 'db.sqlite3'])
     subprocess.check_call(['python', 'manage.py', 'makemigrations', 'ask_students'])
     subprocess.check_call(['python', 'manage.py', 'migrate'])
 
+
+if __name__ == '__main__':
+    print("\nCleaning old database...\n")
+    clean_db()
+
+    print("\nPopulating database...\n")
     populate()
