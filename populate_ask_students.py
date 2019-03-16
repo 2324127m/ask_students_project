@@ -217,7 +217,7 @@ def add_answer(cat, answer, likes, dislikes, user, questiontop):
 
 def clean_db():
     if platform.system() == "Windows":
-        subprocess.check_call(['del', 'db.sqlite3'])
+        subprocess.call(['del', 'db.sqlite3'], shell=True)
     else:
         subprocess.check_call(['rm', 'db.sqlite3'])
 
