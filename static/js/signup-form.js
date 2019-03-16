@@ -35,10 +35,8 @@ $(document).ready(function () {
         },
         errorPlacement: function (error, element) {
             var name = element.attr("name");
-
             $("#errors_" + name).append(error);
-            $("#errors_" +name).addClass("custom-error-style");
-
+            $("#errors_" + name).addClass("custom-error-style");
         }
     });
 

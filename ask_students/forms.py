@@ -1,10 +1,12 @@
 from django import forms
-from ask_students.models import UserProfile, Category, Question, Answer
+from ask_students.models import UserProfile, Category, Question, Answer, PlaceOfStudy, Permission
 
 
 class UserProfileForm(forms.ModelForm):
     bio = forms.CharField(required=False)
     image = forms.ImageField(required=False)
+    place_of_study = forms.ModelChoiceField(required=True, queryset=PlaceOfStudy.objects.all())
+    permission = forms.ModelChoiceField(required=True, queryset=Permission.objects.all())
 
     class Meta:
         model = UserProfile

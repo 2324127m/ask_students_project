@@ -179,3 +179,8 @@ QUESTION.HTML
 	color: red;
 	font-style: italic;
 }
+
+.image-preview-dim {
+	height: 200px;
+	width: auto;
+}

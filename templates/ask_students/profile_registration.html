@@ -9,16 +9,77 @@
     Sign Up - Step 2
 {% endblock %}
 
+{% block head_block %}
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('image-preview');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.classList.add('image-preview-dim');
+        };
+    </script>
+{% endblock %}
+
 {% block body_block %}
 
-    <form role="form" id="page_form" method="post" action="{% url 'register_profile' %}"
+    <form role="form" id="register-form-step2" method="post" class="p-3 p-lg-3" action="{% url 'register_profile' %}"
           enctype="multipart/form-data">
-
-        <h2 class="form-signin-heading">Sign Up - Step 2</h2>
         {% csrf_token %}
-        {{ form.as_p }}
 
-        <button class="btn btn-primary" type="submit" name="submit">Sign Up</button>
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+                <strong> Warning! </strong> {{ error }} <br />
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-group row pd-3">
+            <label for="id_bio" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Bio:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <textarea rows="4" cols="50" class="form-control" id="id_bio" name="id_bio" form="register-form-step2"
+                          placeholder="Describe yourself here...">
+                </textarea>
+            </div>
+        </div>
+
+        <div class="form-group row pd-3">
+            <label for="id_image" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Image:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <input id="id_image" name="image" type="file" onchange="loadFile(event)"/>
+                <img id="image-preview"/>
+            </div>
+        </div>
+
+        <div class="form-group row pd-3">
+            <label for="id_place_of_study" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Place of study:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <select class="form-control" name="place_of_study" id="id_place_of_study">
+                  <option value="" selected>----</option>
+                  {% for choice in form.place_of_study.field.queryset %}
+                      <option value="{{ forloop.counter }}">{{ choice.title }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row pd-3">
+            <label for="id_permission" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Permission:</label>
+            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
+                <select class="form-control" name="permission" id="id_permission">
+                    <option value="" selected>----</option>
+                    {% for choice in form.permission.field.queryset %}
+                        {% if choice.title|lower != "student" %}
+                            <option value="{{ forloop.counter }}">{{ choice.title }}</option>
+                        {% else %}
+                            <option value="{{ forloop.counter }}" selected >Student</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-info col-12">Sign Up</button>
     </form>
 {% endblock %}
 
