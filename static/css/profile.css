@@ -1,11 +1,11 @@
 .one {
   width: 75%;
   float: left;
-  height:200px;
+  height:160px;
 }
 .two {
   margin-left: 75%;
-  height: 200px;
+  height: 160px;
 }
 
 .proflie-pic {
@@ -15,6 +15,7 @@
 
 #username {
   padding: 0px 0px 15px 20px;
+  font-size: 26px;
 }
 
 .user-info-title {
@@ -32,6 +33,11 @@
 .user-stats-title {
   padding: 15px 0px 0px 20px;
   font-size: 21px;
+}
+
+#bio {
+  padding: 10px 0px 5px 10px;
+  font-size: 16px;
 }
 
 #answers {

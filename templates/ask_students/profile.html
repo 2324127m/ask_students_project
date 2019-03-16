@@ -20,7 +20,7 @@
 		<strong class="user-info-title">University :</strong> <strong class="user-info">{{ userprofile.place_of_study }}</strong>
 		<br/>
 		<strong class="user-info-title">Email :</strong> <strong class="user-info">{{ user.email }}</strong>
-		<br/><br/>
+		<br/>
     </div>
     
     <div class="two">
@@ -34,7 +34,9 @@
             alt="{{ user.username }} profile image"/>
         {% endif %}
     </div>
-    
+    <strong class="user-info-title">Bio</strong>
+    <p id="bio">{{ userprofile.bio }}</p>
+    <br/>
     <div>        
         <strong class="user-stats-title"> Answers: </strong> <strong id="answers">{{ number_of_answers }}</strong>
 		<strong class="user-stats-title"> Likes: </strong> <strong id="likes">{{ likes }}</strong>
