@@ -9,48 +9,16 @@ from ask_students.models import Category, Question, User, Answer, UserProfile, P
 
 
 def populate():
-    # Changed from list of dictionary to nested dictionary
-    users = [{'username': 'YellowPony123', 'first_name': 'Abe', 'last_name': 'MacCabe',
-              'password': 'pigsdontfly', 'bio': 'Lover of ponies and the colour yellow',
-              'likes': 438, 'dislikes': 51},
-             {'username': 'AngryTelephonePole87', 'first_name': 'Belle', 'last_name': 'MacKell',
-              'password': 'BigF4TW1ndowL3dge', 'bio': 'Hate the world and I resonate with telephone poles :)',
-              'likes': 331, 'dislikes': 29},
-             {'username': 'ooeeooahahtingtang', 'first_name': 'Charlie', 'last_name': 'MacFarley',
-              'password': 'wallawallabingbang', 'bio': 'Oo ee oo ah ah ting tang walla walla bing bang',
-              'likes': 4, 'dislikes': 20},
-             {'username': 'DampSeatOnTheBus', 'first_name': 'Doris', 'last_name': 'MacBoris',
-              'password': 's4ndp4p3r', 'bio': 'Sitting on a damp seat on the bus could really ruin your day',
-              'likes': 27, 'dislikes': 2},
-             {'username': 'SweetEdna', 'first_name': 'Edna', 'last_name': 'MacScedna',
-              'password': 'Edna', 'bio': 'Born 1942. Love to party.',
-              'likes': 3, 'dislikes': 43},
-             {'username': 'SeriousFred', 'first_name': 'Fred', 'last_name': 'MacSuede',
-              'password': '18gsa35ds68', 'bio': 'Get real.',
-              'likes': 754, 'dislikes': 40},
-             {'username': 'GustySeagull1942', 'first_name': 'Gill', 'last_name': 'MacMill',
-              'password': 'TROONBEACH', 'bio': 'Seagulls and seaweed is all that this gal needs',
-              'likes': 3, 'dislikes': 85},
-             {'username': 'HealthyLivingForAHealthyBeing', 'first_name': 'Harriot',
-              'last_name': 'MacTarrot', 'password': 'carrot', 'bio': '#fitlife',
-              'likes': 70, 'dislikes': 61},
-             {'username': 'AintGotNoMoney', 'first_name': 'Isabelle',
-              'last_name': 'MacDinnerBell', 'password': 'hahaha', 'bio': 'I only play the games that I win at',
-              'likes': 3, 'dislikes': 0},
-             ]
-
-    for user in users:
-        u = add_user(user['username'], user['first_name'], user['last_name'], user['password'])
-        add_user_profile(u, user['bio'], user['likes'], user['dislikes'])
-
+    # Populate place of study with all universities in Scotland
     place_of_study = ['University of St Andrews', 'University of Glasgow', 'University of Aberdeen',
                       'University of Edinburgh',
                       'University of Strathclyde', 'Heriot-Watt University', 'University of Dundee',
                       'Univeristy of Stirling',
                       'Edinburgh Napier University', 'Robert Gordon University', 'Glasgow Caledonian University',
                       'Queen Margaret University',
-                      'Univesity of the West of Scotland', 'University of the Highlands and Islands']
+                      'University of the West of Scotland', 'University of the Highlands and Islands']
 
+    # Populate permissions with different roles a user can have
     permission = ['Student', 'Undergraduate', 'Postgraduate']
 
     for place in place_of_study:
@@ -58,6 +26,45 @@ def populate():
 
     for perm in permission:
         add_permission(perm)
+
+    # Populate users with 9 sample users
+    users = [{'username': 'YellowPony123', 'first_name': 'Abe', 'last_name': 'MacCabe', 'email': 'yellowpony123@gmail.com',
+              'password': 'pigsdontfly', 'bio': 'Lover of ponies and the colour yellow', 'image': 'profile_images/YellowPony123.jpg',
+              'likes': 598, 'dislikes': 82, 'permission': 'Student', 'place_of_study': "University of Glasgow"},
+             {'username': 'AngryTelephonePole87', 'first_name': 'Belle', 'last_name': 'MacKell', 'email': 'angry@theworld.com',
+              'password': 'BigF4TW1ndowL3dge', 'bio': 'Hate the world and I resonate with telephone poles :)', 'image': 'profile_images/AngryTelephonePole87.jpg',
+              'likes': 379, 'dislikes': 41, 'permission': 'Student', 'place_of_study': 'University of Glasgow'},
+             {'username': 'ooeeooahahtingtang', 'first_name': 'Charlie', 'last_name': 'MacFarley', 'email': 'qwertyuip@yahoo.co.uk',
+              'password': 'wallawallabingbang', 'bio': 'Oo ee oo ah ah ting tang walla walla bing bang',
+              'likes': 91, 'dislikes': 37, 'permission': 'Undergraduate', 'place_of_study': 'Glasgow Caledonian University'},
+             {'username': 'DampSeatOnTheBus', 'first_name': 'Doris', 'last_name': 'MacBoris', 'email': 'doris.macboris@gmail.com',
+              'password': 's4ndp4p3r', 'bio': 'Sitting on a damp seat on the bus could really ruin your day',
+              'likes': 47, 'dislikes': 5, 'permission': 'Postgraduate', 'place_of_study': 'Univeristy of Stirling'},
+             {'username': 'SweetEdna', 'first_name': 'Edna', 'last_name': 'MacScedna', 'email': 'edna@aol.com',
+              'password': 'Edna', 'bio': 'Born 1942. Love to party.',
+              'likes': 20, 'dislikes': 44, 'permission': 'Postgraduate', 'place_of_study': 'University of the Highlands and Islands'},
+             {'username': 'SeriousFred', 'first_name': 'Fred', 'last_name': 'MacSuede', 'email': 'fred_mascsuede@hotmail.com',
+              'password': '18gsa35ds68', 'bio': 'Get real.',
+              'likes': 830, 'dislikes': 66, 'permission': 'Student', 'place_of_study': 'Edinburgh Napier University'},
+             {'username': 'GustySeagull1942', 'first_name': 'Gill', 'last_name': 'MacMill', 'email': 'mrsmacmill@gmail.com',
+              'password': 'TROONBEACH', 'bio': 'Seagulls and seaweed is all that this gal needs', 'image': 'profile_images/GustySeagull1942.jpg',
+              'likes': 111, 'dislikes': 105, 'permission': 'Undergraduate', 'place_of_study': 'Robert Gordon University'},
+             {'username': 'HealthyLivingForAHealthyBeing', 'first_name': 'Harriot', 'last_name': 'MacTarrot', 'email': 'harriot_mactarrot@yahoo.co.uk',
+              'password': 'carrot', 'bio': '#fitlife',
+              'likes': 176, 'dislikes': 86, 'permission': 'Student', 'place_of_study': 'University of Glasgow'},
+             {'username': 'AintGotNoMoney', 'first_name': 'Isabelle', 'last_name': 'MacDinnerBell', 'email': 'dinner_bell@gmail.com',
+              'password': 'hahaha', 'bio': 'I only play the games that I win at', 'image': 'profile_images/AintGotNoMoney.png',
+              'likes': 119, 'dislikes': 26, 'permission': 'Undergraduate', 'place_of_study': 'University of the West of Scotland'},
+             ]
+
+    for user in users:
+        u = add_user(user['username'], user['first_name'], user['last_name'], user['password'], user['email'])
+        if len(user) == 11:
+            add_user_profile(u, user['bio'], user['likes'], user['dislikes'], user['permission'], user['place_of_study'], user['image'])
+        else:
+            add_user_profile(u, user['bio'], user['likes'], user['dislikes'], user['permission'], user['place_of_study'])
+
+    
     categories = {
         'General':
             {'description': 'Ask general questions about any topic you like',
@@ -74,6 +81,8 @@ def populate():
                               'posted': None, 'edited': None, 'user': 'YellowPony123'},
                              {'answer': 'Baha Men', 'likes': 10, 'dislikes': 0,
                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
+                             {'answer': 'I did', 'likes': 8, 'dislikes': 5,
+                              'posted': None, 'edited': None, 'user': 'GustySeagull1942'},
                          ]
                       },
                      {'name': "What's brown and sticky?",
@@ -89,7 +98,68 @@ def populate():
                              {'answer':'How do I upload pictures to Facebook', 'likes':0, 'dislikes': 23,
                               'posted': None, 'edited': None, 'user' : 'SweetEdna'},
                          ]
-                      }
+                      },
+                     {'name': "Help!?",
+                      "description": "I really need ideas on what to have for dinner",
+                      "views": 123,
+                      "user": "ooeeooahahtingtang",
+                      "answers":
+                         [
+                             {'answer': 'Ravioli', 'likes': 5, 'dislikes': 3,
+                              'posted': None, 'edited': None, 'user': 'DampSeatOnTheBus'},
+                             {'answer': 'Order a Chinese', 'likes': 40, 'dislikes': 7,
+                              'posted': None, 'edited': None, 'user': 'YellowPony123'},
+                             {'answer': 'Roast Beef', 'likes': 12, 'dislikes': 3,
+                              'posted': None, 'edited': None, 'user': 'GustySeagull1942'},
+                             {'answer': 'Got to be pizza', 'likes': 19, 'dislikes': 2,
+                              'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
+                         ]
+                      },
+                      {'name': "Who wrote Around the World in 80 Days?",
+                      "description": "I need to know for an essay I'm writing",
+                      "views": 40,
+                      "user": "GustySeagull1942",
+                      "answers":
+                         [
+                             {'answer':'Jules Verne', 'likes':12, 'dislikes':0,
+                              'posted': None, 'edited': None, 'user': 'SeriousFred'},
+                             {'answer':'Why didn\'t you just google this?' , 'likes':35, 'dislikes':1,
+                              'posted': None, 'edited': None, 'user': 'YellowPony123' },
+                        ]
+                    },
+                     {'name': "What is this website all about?",
+                      "description": "I'm seriously confused",
+                      "views": 60,
+                      "user": "SweetEdna",
+                      "answers":
+                         [
+                             {'answer': 'Just click about on the bar at the bottom of the page', 'likes': 13, 'dislikes': 3,
+                              'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                             {'answer': 'Its for students to ask questions, obviously', 'likes':22, 'dislikes': 7,
+                              'posted': None, 'edited': None, 'user': 'YellowPony123'},
+                             {'answer': 'Nobody knows for sure', 'likes': 10, 'dislikes': 10,
+                              'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
+                         ]
+                      },
+                     {'name': "Where is everyone from",
+                      "description": "Just interested",
+                      "views": 463,
+                      "user": "SeriousFred",
+                      "answers":
+                         [
+                             {'answer': 'SCOTLAND', 'likes': 88, 'dislikes': 12,
+                              'posted': None, 'edited': None, 'user': 'GustySeagull1942'},
+                             {'answer': 'Im from Glasgow', 'likes': 44, 'dislikes': 15,
+                              'posted': None, 'edited': None, 'user': 'YellowPony123'},
+                             {'answer': 'I was born in Oban, moved to Edinburgh, and now stay in Inverness', 'likes': 12, 'dislikes': 0,
+                              'posted': None, 'edited': None, 'user': 'SweetEdna'},
+                             {'answer': 'Bosnia', 'likes': 19, 'dislikes': 2,
+                              'posted': None, 'edited': None, 'user': 'ooeeooahahtingtang'},
+                             {'answer': 'A wee town in Ayrshire', 'likes': 38, 'dislikes': 2,
+                              'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
+                         ]
+                      },
+
                  ]
              },
 
@@ -122,7 +192,33 @@ def populate():
                               'edited': None, 'user':'SeriousFred'}
                          ]
                       },
-                 ]
+                     {'name': "Whats your favourite programming language",
+                      "description": "Personally I like python",
+                      "views": 253,
+                      "user": "DampSeatOnTheBus",
+                      "answers":
+                         [
+                             {'answer': 'I prefer C', 'likes': 50, 'dislikes': 13,
+                              'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                             {'answer': 'Java', 'likes':31, 'dislikes': 15,
+                              'posted': None, 'edited': None, 'user': 'SeriousFred'},
+                             {'answer': 'I agree, python is best', 'likes': 68, 'dislikes': 15,
+                              'posted': None, 'edited': None, 'user': 'ooeeooahahtingtang'},
+                             {'answer': 'Haskell 4 life', 'likes': 4, 'dislikes': 1,
+                              'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
+                        ]
+                    },
+                     {'name': "Can someone help me with python",
+                      "description": "I need to know how to loop through a list in python, but I only know C style for loops. Help!",
+                      "views": 42,
+                      "user": "HealthyLivingForAHealthyBeing",
+                      "answers":
+                         [
+                             {'answer': 'Do for item in list: Simple as that ', 'likes': 15, 'dislikes': 0,
+                              'posted': None, 'edited': None, 'user': 'DampSeatOnTheBus'},
+                        ]
+                    }
+                ]
              },
 
         'Student Living General':
@@ -152,7 +248,35 @@ def populate():
                               {'answer': 'J20', 'likes': 1, 'dislikes': 1,
                                'posted': None, 'edited': None, 'user': 'SeriousFred'},
                           ]
-                      }
+                      },
+                     {'name': "How do you study",
+                      "description": "I just can't do it... I always get distracted",
+                      "views": 380,
+                      "user": "GustySeagull1942",
+                      'answers':
+                          [
+                              {'answer':'You need to come up with a study plan, then follow that plan every day. Dont be lazy.', 'likes': 33, 'dislikes':11,
+                               'posted': None, 'edited': None, 'user': 'SeriousFred'},
+                              {'answer': 'Keep yourself focused by turning off your phone', 'likes': 43, 'dislikes': 9,
+                               'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                              {'answer': 'Dont worry about it too much. Stress doesnt help anything', 'likes': 80, 'dislikes': 21,
+                               'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
+                              {'answer': 'I also find it difficult. Maybe we should request a new category to be made call "Study Tips"?', 'likes': 19, 'dislikes': 1,
+                               'posted': None, 'edited': None, 'user': 'YellowPony123'},
+                          ]
+                      },
+                     {'name': "What city has the best nightlife in Scotland",
+                      "description": "I need to know",
+                      "views": 22,
+                      "user": "DampSeatOnTheBus",
+                      'answers':
+                          [
+                              {'answer':' Glasgow 100%', 'likes': 13, 'dislikes':2,
+                               'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
+                              {'answer': 'Dundee', 'likes': 5, 'dislikes': 1,
+                               'posted': None, 'edited': None, 'user': 'SweetEdna'},
+                          ]
+                      },
                  ]
              }
     }
@@ -201,15 +325,19 @@ def add_question(name, description, views, cat, user):
     return q
 
 
-def add_user(username, first_name, last_name, password):
-    u = User.objects.get_or_create(username=username, first_name=first_name, last_name=last_name)[0]
+def add_user(username, first_name, last_name, password, email):
+    u = User.objects.get_or_create(username=username, first_name=first_name, last_name=last_name, email=email)[0]
     u.set_password(password)
     u.save()
     return u
 
 
-def add_user_profile(user, bio, likes, dislikes):
-    up = UserProfile.objects.get_or_create(user=user, bio=bio, likes=likes, dislikes=dislikes)[0]
+def add_user_profile(user, bio, likes, dislikes, permission, place_of_study, image=None):
+    p = Permission.objects.get(title=permission)
+    pos = PlaceOfStudy.objects.get(title=place_of_study)
+    up = UserProfile.objects.get_or_create(user=user, bio=bio, likes=likes, dislikes=dislikes, permission=p, place_of_study=pos)[0]
+    if image:
+        up.image=image
     up.save()
     return up
 
