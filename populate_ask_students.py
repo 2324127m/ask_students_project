@@ -58,7 +58,6 @@ def populate():
 
     for perm in permission:
         add_permission(perm)
-
     categories = {
         'General':
             {'description': 'Ask general questions about any topic you like',
@@ -68,24 +67,28 @@ def populate():
                      {'name': "Who let the dogs out?",
                       "description": "who?",
                       "views": 10,
+                      "user": "YellowPony123",
                       "answers":
-                          [
-                              {'answer': 'who?! who?! who?!', 'likes': 5, 'dislikes': 3,
-                               'posted': None, 'edited': None, 'user': 'YellowPony123'},
-                              {'answer': 'Baha Men', 'likes': 10, 'dislikes': 0,
-                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
-                          ]
+                         [
+                             {'answer': 'who?! who?! who?!', 'likes': 5, 'dislikes': 3,
+                              'posted': None, 'edited': None, 'user': 'YellowPony123'},
+                             {'answer': 'Baha Men', 'likes': 10, 'dislikes': 0,
+                              'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
+                         ]
                       },
-                     {'name': "What's brown and sticky?", "description": "serious answers only please.", "views": 30,
+                     {'name': "What's brown and sticky?",
+                      "description": "serious answers only please.",
+                      "views": 30,
+                      "user": "AngryTelephonePole87",
                       "answers":
-                          [
-                              {'answer': 'A brown sticker', 'likes': 4, 'dislikes': 20,
-                               'posted': None, 'edited': None, 'user': 'ooeeooahahtingtang'},
-                              {'answer': 'A stick', 'likes': 27, 'dislikes': 2,
-                               'posted': None, 'edited': None, 'user': 'DampSeatOnTheBus'},
-                              {'answer': 'How do I upload pictures to Facebook', 'likes': 0, 'dislikes': 23,
-                               'posted': None, 'edited': None, 'user': 'SweetEdna'},
-                          ]
+                         [
+                             {'answer':'A brown sticker', 'likes':4, 'dislikes':20,
+                              'posted': None, 'edited': None, 'user': 'ooeeooahahtingtang'},
+                             {'answer':'A stick', 'likes':27, 'dislikes':2,
+                              'posted': None, 'edited': None, 'user': 'DampSeatOnTheBus' },
+                             {'answer':'How do I upload pictures to Facebook', 'likes':0, 'dislikes': 23,
+                              'posted': None, 'edited': None, 'user' : 'SweetEdna'},
+                         ]
                       }
                  ]
              },
@@ -98,28 +101,26 @@ def populate():
                      {'name': "What is the first index in an array",
                       "description": "I am trying to learn but no one is taking this question seriously",
                       "views": 120,
+                      "user": "DampSeatOnTheBus",
                       "answers":
                           [
-                              {'answer': '0', 'likes': 70, 'dislikes': 15, 'posted': None, 'edited': None,
-                               'user': 'SeriousFred'},
-                              {'answer': '1', 'likes': 3, 'dislikes': 85, 'posted': None, 'edited': None,
-                               'user': 'GustySeagull1942'},
+                              {'answer':'0', 'likes': 70, 'dislikes':15, 'posted': None, 'edited': None, 'user': 'SeriousFred'},
+                              {'answer':'1', 'likes':3, 'dislikes': 85, 'posted': None, 'edited': None, 'user': 'GustySeagull1942'},
                           ]
                       },
                      {'name': "How to fix wifi not working",
                       "description": "how to fix wifi not working",
                       "views": 750,
+                      "user": "YellowPony123",
                       'answers':
-                          [
-                              {'answer': 'turn it off and turn it back on again', 'likes': 433, 'dislikes': 48,
-                               'posted': None, 'edited': None, 'user': 'YellowPony123'},
-                              {'answer': 'How to fix wifi not working', 'likes': 3, 'dislikes': 20, 'posted': None,
-                               'edited': None, 'user': 'SweetEdna'},
-                              {'answer': "This isn't really the right place to ask this question, "
-                                         "try finding a better suited category or create one yourself.",
-                               'likes': 683, 'dislikes': 24, 'posted': None,
-                               'edited': None, 'user': 'SeriousFred'}
-                          ]
+                         [
+                             {'answer':'turn it off and turn it back on again', 'likes': 433, 'dislikes': 48, 'posted': None, 'edited': None, 'user': 'YellowPony123'},
+                             {'answer':'How to fix wifi not working', 'likes': 3, 'dislikes': 20, 'posted': None, 'edited': None, 'user': 'SweetEdna'},
+                             {'answer':"This isn't really the right place to ask this question, "
+                                       "try finding a better suited category or create one yourself.",
+                              'likes':683, 'dislikes':24, 'posted': None,
+                              'edited': None, 'user':'SeriousFred'}
+                         ]
                       },
                  ]
              },
@@ -132,17 +133,21 @@ def populate():
                      {'name': "Where is a good place to eat out in Glasgow",
                       "description": "Looking for healthy organic food",
                       "views": 654,
+                      "user": "SeriousFred",
+                      'answers':
+                         [
+                             {'answer':'McDonalds', 'likes': 70, 'dislikes' : 61,
+                              'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                             {'answer':'BlueLagoon', 'likes':321, 'dislikes': 29,
+                              'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
+                         ]},
+                     {'name': "Best non-alcoholic drink for students",
+                      "description": "amazing!",
+                      "views": 12,
+                      "user": "AintGotNoMoney",
                       'answers':
                           [
-                              {'answer': 'McDonalds', 'likes': 70, 'dislikes': 61,
-                               'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
-                              {'answer': 'BlueLagoon', 'likes': 321, 'dislikes': 29,
-                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
-                          ]},
-                     {'name': "Best non-alcoholic drink for students",
-                      "description": "amazing!", "views": 12, 'answers':
-                          [
-                              {'answer': ' Water', 'likes': 3, 'dislikes': 0,
+                              {'answer':' Water', 'likes': 3, 'dislikes':0,
                                'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
                               {'answer': 'J20', 'likes': 1, 'dislikes': 1,
                                'posted': None, 'edited': None, 'user': 'SeriousFred'},
@@ -158,7 +163,10 @@ def populate():
 
         i = 0
         for question in cat_data['questions']:
-            q = add_question(question['name'], question['description'], question['views'], c)
+            username = question['user']
+            u = User.objects.get(username=username)
+            up = UserProfile.objects.get(user=u)
+            q = add_question(question['name'], question['description'], question['views'], c, up)
             i += 1
             for answer in question['answers']:
                 username = answer['user']
@@ -187,8 +195,8 @@ def add_category(cat, description, approved):
     return c
 
 
-def add_question(name, description, views, cat):
-    q = Question.objects.get_or_create(name=name, text=description, category=cat, views=views)[0]
+def add_question(name, description, views, cat, user):
+    q = Question.objects.get_or_create(name=name, text=description, category=cat, views=views, user=user)[0]
     q.save()
     return q
 
@@ -219,10 +227,17 @@ def clean_db():
     if platform.system() == "Windows":
         subprocess.call(['del', 'db.sqlite3'], shell=True)
     else:
-        subprocess.check_call(['rm', 'db.sqlite3'])
+        subprocess.call(['rm', 'db.sqlite3'])
 
-    subprocess.check_call(['python', 'manage.py', 'makemigrations', 'ask_students'])
-    subprocess.check_call(['python', 'manage.py', 'migrate'])
+    subprocess.call(['python', 'manage.py', 'makemigrations', 'ask_students'])
+    subprocess.call(['python', 'manage.py', 'migrate'])
+
+
+def run_server():
+    print()
+    run = input("would you like to run the server? (y/n): ")
+    if run == "y":
+        subprocess.call(['python', 'manage.py', 'runserver'])
 
 
 if __name__ == '__main__':
@@ -231,3 +246,6 @@ if __name__ == '__main__':
 
     print("\nPopulating database...\n")
     populate()
+
+    run_server();
+

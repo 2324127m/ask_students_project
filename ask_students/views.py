@@ -114,9 +114,11 @@ def show_question(request, category_name_slug, question_id):
         context_dict['answers_list'] = answers_list
         context_dict['number_of_answers'] = len(answers_list)
 
-        user_profile = UserProfile.objects.get(pk=question.user.pk)
-        context_dict['user_profile'] = user_profile
-
+        try:
+            user_profile = UserProfile.objects.get(pk=question.user.pk)
+            context_dict['user_profile'] = user_profile
+        except:
+            context_dict['user_profile'] = None
 
         if question.answered is not None:
             context_dict['answer'] = question.answered
@@ -213,7 +215,7 @@ def register_profile(request):
     form = UserProfileForm()
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST)
+        form = UserProfileForm(request.POST, request.FILES)
         if form.is_valid():
             users_profile = form.save(commit=False)
             users_profile.user = request.user
