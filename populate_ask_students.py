@@ -99,9 +99,9 @@ def populate():
                               'posted': None, 'edited': None, 'user' : 'SweetEdna'},
                          ]
                       },
-                     {'name': "Help!?",
+                     {'name': "This is a really really long question title so we can see what it looks like!",
                       "description": "I really need ideas on what to have for dinner",
-                      "views": 123,
+                      "views": 180000,
                       "user": "ooeeooahahtingtang",
                       "answers":
                          [
@@ -361,6 +361,17 @@ def clean_db():
     subprocess.call(['python', 'manage.py', 'migrate'])
 
 
+def create_super_user():
+    print()
+    result = input("would you like to create superuser with USERNAME: admin PASSWORD: 12345678? (y/n): ")
+    if result == "y":
+        u = User(username='admin')
+        u.set_password('12345678')
+        u.is_superuser = True
+        u.is_staff = True
+        u.save()
+
+
 def run_server():
     print()
     run = input("would you like to run the server? (y/n): ")
@@ -375,5 +386,6 @@ if __name__ == '__main__':
     print("\nPopulating database...\n")
     populate()
 
-    run_server();
+    create_super_user()
+    run_server()
 
