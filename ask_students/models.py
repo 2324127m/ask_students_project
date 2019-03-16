@@ -47,7 +47,9 @@ class UserProfile(models.Model):
 	bio = models.CharField(max_length=4096, null=True)
 	likes = models.PositiveIntegerField(default=0)
 	dislikes = models.PositiveIntegerField(default=0)
-	image = models.ImageField(upload_to='profile_images', null=True)
+
+	location = "profile_images/" + str("test") + "/"
+	image = models.ImageField(upload_to=location, null=True)
 
 	slug = models.SlugField(unique=True)
 
