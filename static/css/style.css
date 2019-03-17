@@ -10,6 +10,7 @@ body {
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
 	color: #fff !important;
 	background-color: #369d4e !important;
+	margin-right: 4px;
 }
 
 .custom-colour li a {
@@ -48,6 +49,12 @@ body {
 	width: 70%;
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
+}
+
+.nav-item .active {
+	color: #fff;
+	background-color: #369d4e;
+	border-radius: 10px;
 }
 
 /* Nav Bar Toggle Styling */
@@ -97,7 +104,12 @@ body {
 .question-card .card-body span {
 	padding: 3px 6px;
 	font-weight: lighter;
-	font-style: oblique;
+	/* font-style: oblique; */
+}
+
+.question-card a {
+	font-style: italic;
+	color: black;
 }
 
 .question-card .card-header {
