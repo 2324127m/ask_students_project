@@ -1,12 +1,15 @@
 <div class="card question-card mb-3">
     <a href="{% url 'show_question' question.category.slug question.id %}">
-        <div class="card-header py-2 d-flex justify-content-between flex-row flex-wrap">
-            <span class="mr-auto text-left">{{ question.name|truncatechars:45 }}</span>
-            {% if not question.answered %}
-                <span class="unanswered-label text-truncate py-1 px-3 ml-auto bg-warning">Unanswered</span>
-            {% endif %}
-        </div>
+
+
+    <div class="card-header crop-text py-2 flex-row flex-wrap">
+        {% if not question.answered %}
+            <span class="unanswered-label text-truncate py-1 px-3 ml-auto bg-warning" style="float:right">Unanswered</span>
+        {% endif %}
+            <span class="mr-auto text-left">{{ question.name|truncatechars:62 }}</span>
+    </div>
     </a>
+
     <div class="card-body py-2 d-flex flex-row flex-wrap">
         <div class="row remove-overflow" >
             <div class="col-sm-6">

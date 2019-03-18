@@ -202,3 +202,8 @@ QUESTION.HTML
 	height: 200px;
 	width: auto;
 }
+
+.crop-text {
+	overflow : hidden;
+	text-overflow: ellipsis;
+}
