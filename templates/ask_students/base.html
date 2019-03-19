@@ -43,7 +43,7 @@
           <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">Home</a></li>
           <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'ask_question' %}active{% endif %}" href="#">Ask a Question</a></li>
           {% if user.is_authenticated %}
-          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'my_profile' %}active{% endif %}" href="{% url 'my_profile' %}">My Profile</a></li>
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'profile' and userprofile.user.username == user.username %}active{% endif %}" href="{% url 'profile' user.username %}">My Profile</a></li>
           {% endif %}
         </ul>
       </div>
@@ -109,7 +109,7 @@
       </div>
     </div>
   </footer>
-
+  
   <!-- Bootstrap core JavaScript from Bootstrap -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
   </script>
