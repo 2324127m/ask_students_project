@@ -170,11 +170,10 @@ def request_category(request):
 
         if form.is_valid():
             category = form.save(commit=False)
-
             up = UserProfile.objects.get(user=request.user)
             category.user = up
             category.save()
-            return render(request, 'ask_students/index.html', {})
+            return render(request, 'ask_students/category_requested.html', {})
         else:
             print(form.errors)
     return render(request, 'ask_students/request_category.html', {'form': form})

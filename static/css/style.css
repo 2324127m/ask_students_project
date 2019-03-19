@@ -126,6 +126,7 @@ body {
 .unanswered-label {
 	border-radius: 0.75rem;
 	font-size: 0.85rem;
+	margin-left: 10px !important;
 }
 
 .sidebar-item {

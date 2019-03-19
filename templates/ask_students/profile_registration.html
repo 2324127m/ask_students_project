@@ -10,13 +10,9 @@
 {% endblock %}
 
 {% block head_block %}
-    <script>
-        var loadFile = function (event) {
-            var output = document.getElementById('image-preview');
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.classList.add('image-preview-dim');
-        };
-    </script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+  <script src="{% static 'js/profile_registration.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -45,7 +41,7 @@
             <label for="id_image" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Image:</label>
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
                 <input type="file" id="id_image" name="image"  onchange="loadFile(event)"/>
-                <img id="image-preview"/>
+                <img class="img-fluid" id="image-preview"/>
             </div>
         </div>
 

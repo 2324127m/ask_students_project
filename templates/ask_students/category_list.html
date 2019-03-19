@@ -1,5 +1,7 @@
 {% if categories %}
     {% for category in categories %}
-        <a class="sidebar-item" href="{% url 'category' category.slug %}"><p>{{ category.name }}</p></a>
+        {% if category.approved %}
+            <a class="sidebar-item" href="{% url 'category' category.slug %}"><p>{{ category.name }}</p></a>
+        {% endif %}
     {% endfor %}
 {% endif %}
