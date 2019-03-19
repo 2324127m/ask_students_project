@@ -3,54 +3,42 @@ from ask_students.models import Question, Category, Answer
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 from django.utils import timezone
-
-
-def test_fixture1(category):
-    new_question = Question(name="Q1 has 90 views", category=category, views=90, posted=timezone.now() - timedelta(minutes=8), anonymous = True)
-
-    return new_question
+from ask_students.forms import AskQuestionForm
 
 
 class AddQuestionViewTests(TestCase):
-
-    def CheckEmptyFormRedisplaysForm(self):
-        pass
         
     def TestQuestionFields(self):
-        #Create a new category
-        new_category = Category(name = "Test Category 1")
-        new_category.save()
+        #name, text, category, supported file
+        form = AskQuestionForm({
+            'name': "Testing Testing 123",
+            'text': "This is a testtt",
+            'category': "Test",
+            }, entry=self.entry)
         
-        #Create and save a question for that category
-        question = test_fixture1(new_category)
-        question.save()
+            self.assertTrue(form.is_valid())
+            Question = form.save()
+            self.assertEqual(Question.name, "Testing Testing 123")
+            self.assertEqual(Question.text, "This is a testtt")
+            self.assertEqual(Question.category, "Test")
+            self.assertEqual(Question.entry, self.entry)
+
+    def TestEmptyForm(self):
+        form = AskQuestionForm({}, entry=self.entry)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {
+            'name': ['required'],
+            'text': ['required'],
+            'category': ['required'],
+        })
         
-        self.assertEqual('')
-
-    def TestNonExistantQuestionReturnsNone(self):
-        # Create a new category
-        new_category = Category(name="Test Category 1")
-        new_category.save()
-
-        # Get a repsonse when the question does not exist
-        response = self.client.get(reverse('add_question', kwargs={'category_name_slug': new_category.slug, 'question_id': 4321}))
-
-        self.assertEqual(response.context['question'], None)
-
-    def TestAnonymousWorks(self):
-        #Create a new category
-        new_category = Category(name = "Test Category 1")
-        new_category.save()
-        
-        #Create and save a question for that category
-        question = test_fixture1(new_category)
-        question.save()
 
     def TestQuestionPostWithoutFile(self):
-        #Create a new category
-        new_category = Category(name = "Test Category 1")
-        new_category.save()
-        
-        response = self.client.get(reverse('add_question', kwargs={'category_name_slug': new_category.slug, 'question_id': 4321}))
-
-        self.assertEqual(response.context['question'], None)
+       form = AskQuestionForm({'name' : 'TestFiles',
+                               'text' : 'Test for No files',
+                               'category' : 'Test',
+                               'support_file': (blank = True),
+                               }, entry = self.entry)
+       self.assetTrue(form.is_valid())
+       Question = form.save()
+       self.assertEqual(Question.support_file,(blank = True))
