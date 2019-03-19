@@ -14,46 +14,52 @@
     <!-- Show Question Title-->
     <h3>{{ question.name }}</h3>
 
-    <div class="row question-info">
-        <div class="card question-card col-lg-8">
-            <!-- Show Question Text in a box-->
-            <p class="question-text">{{ question.text }}</p>
-        </div>
+    <div class="container">
+        <div class="row question-info">
+            <!-- left side, show question text -->
+            <div class="col-sm-8 card question-cardleft-section">
+                <p class="question-text">{{ question.text }}</p>
+            </div>
 
-        <!-- Right side, show name, views and answers -->
+            <!-- Right side, show pic, name and question views  -->
+            <div class="col-sm-4 right-section">
+                <a href="{% url 'profile' user_profile.user.username %}">
 
+                    {% if user_profile.image %}
+                        <img width="25px" height="25px"
+                             src="{{ MEDIA_URL }}{{ user_profile.image }}"
+                             alt="{{ user.user_profile.username }} profile image"/>
+                    {% endif %}
+                    {{ user_profile.user.username }}
 
-        <div class="right-section col-lg-4">
-			 <a href="{% url 'profile' user_profile.user.username %}">
-            <p>
-                <!-- User profile -->
-                {% if user_profile.image %}
-                    <img width="25px" height="25px"
-                         src="{{ MEDIA_URL }}{{ user_profile.image }}"
-                         alt="{{ user.user_profile.username }} profile image"/>
+                </a>
+                <p>View{{ question.views|pluralize }}: {{ question.views }}</p>
+            </div>
+
+            <!-- Supporting file -->
+            <div class="col-xs-12 support-file left-section">
+                {% if not question.support_file %}
+                    <a target="_blank" href="{{ MEDIA_URL }}{{ question.support_file }}">View attached support file</a>
                 {% endif %}
-                {{ user_profile.user.username }}
-            </p>
-			</a>
-            <p class="right-section">View{{ question.views|pluralize }}: {{ question.views }}</p>
-            <p class="right-section">Answers: {{ number_of_answers }}</p>
+            </div>
+
+            <!-- Posted date -->
+            <div class="col-xs-12 date right-section">
+            {% if question.edited %}
+                {{ question.edited }} (edited)
+            {% else %}
+                {{ question.posted|date:'D d M Y H:i' }}
+            {% endif %}
+            </div>
+
         </div>
+
+
     </div>
 
-
-
-    <!-- Supporting file -->
-
-    {% if question.support_file %}
-        <img width="25px" height="25px"
-             src="{{ MEDIA_URL }}{{ question.support_file }}"
-             alt="Support image"/>
-    {% endif %}
-
-    <!-- Posted date -->
-
-
     <div class="page-break"></div>
+
+    <h3>{{ number_of_answers }} Answer{{ number_of_answers|pluralize }}</h3>
 
     {% for answer in answers_list %}
         {% show_answer answer %}
@@ -65,7 +71,7 @@
         <form id="answer_form" method="post" action="{% url 'show_question' question.category.slug question.pk %}">
             {% csrf_token %}
             <h3>Your Answer</h3>
-            
+
             <div class="answer-box">{{ answer_form.text }}</div>
             <input type="submit" name="Post your Answer" value="Post your Answer" />
     
