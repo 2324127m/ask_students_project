@@ -1,11 +1,12 @@
 .one {
   width: 75%;
   float: left;
-  height:160px;
+  height: 170px;
 }
+
 .two {
   margin-left: 75%;
-  height: 160px;
+  height: 170px;
 }
 
 .proflie-pic {
@@ -36,8 +37,9 @@
 }
 
 #bio {
-  padding: 10px 0px 5px 10px;
+  padding: 10px 0px 0px 10px;
   font-size: 16px;
+  text-align: center
 }
 
 #answers {
@@ -63,8 +65,7 @@
 }
 
 .answer-title {
-  padding: 0px 0px 15px 20px;
-  width: 80%;
+  padding: 0px 50px 15px 10px;
 }
 
 .answer-likes {
