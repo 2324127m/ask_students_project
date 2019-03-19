@@ -176,7 +176,8 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
-
+        ###ADDED THIS LINE AS EMAIL NOT SHOWING PROPERLY###
+        this_user_email = user.email
         userprofile = UserProfile.objects.get(user=user)
         user_permission = userprofile.permission
         likes = userprofile.likes
@@ -196,7 +197,7 @@ def profile(request, username):
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
-                    'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile }
+                    'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile, 'this_user_email' : this_user_email }
 
     return render(request, 'ask_students/profile.html', context_dict)
 

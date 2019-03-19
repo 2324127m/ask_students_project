@@ -3,7 +3,7 @@
 		<div class="row">
 			<div class="col-lg-8"> <p class="card-text">{{ answer.text }}</p> </div>
 			{% if not anonymous %}
-			<div class="col-lg-4"> <p class="card-text">{{ answer.user.user.username }}</p></div>
+			<div class="col-lg-4"> <a href="{% url 'profile' answer.user.user.username %}"><p class="card-text">{{ answer.user.user.username }}</a></p></div>
 			{% endif %}
 		</div>
 		<div class="row">

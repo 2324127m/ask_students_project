@@ -24,15 +24,17 @@
 
 
         <div class="right-section col-lg-4">
+			 <a href="{% url 'profile' user_profile.user.username %}">
             <p>
                 <!-- User profile -->
                 {% if user_profile.image %}
-                    <a href="{% url 'profile' user_profile.user.username %}"><img width="25px" height="25px"
+                    <img width="25px" height="25px"
                          src="{{ MEDIA_URL }}{{ user_profile.image }}"
-                         alt="{{ user.user_profile.username }} profile image"/></a>
+                         alt="{{ user.user_profile.username }} profile image"/>
                 {% endif %}
                 {{ user_profile.user.username }}
             </p>
+			</a>
             <p class="right-section">View{{ question.views|pluralize }}: {{ question.views }}</p>
             <p class="right-section">Answers: {{ number_of_answers }}</p>
         </div>
