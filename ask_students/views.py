@@ -195,7 +195,7 @@ def profile(request, username):
     # select user's profile instance or create a blank one
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
-    context_dict = {'user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
+    context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
                     'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile }
 
     return render(request, 'ask_students/profile.html', context_dict)
