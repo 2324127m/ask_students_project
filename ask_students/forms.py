@@ -27,7 +27,7 @@ class AskQuestionForm(forms.ModelForm):
     name = forms.CharField(max_length=128)
     text = forms.CharField(max_length=4096)
     anonymous = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
-    category = forms.ModelChoiceField(required=True, queryset=Category.objects.all())
+    category = forms.ModelChoiceField(required=True, queryset=Category.objects.filter(approved=True))
     support_file = forms.FileField(required=False)
 
     
