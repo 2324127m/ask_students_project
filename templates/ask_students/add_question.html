@@ -10,100 +10,13 @@
 {% endblock %}
 
 {% block body_block %}
+
 	<form role="form" class="p-4 p-lg-5" method="post" action=".">
         {% csrf_token %}
 
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                <strong> Warning! </strong> {{ error }} <br />
-            {% endfor %}
-            </div>
-        {% endif %}
-
-        <div class="form-group row pd-3">
-            <label for="title-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Title:</label>
-            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <input class="form-control {% if form.title.errors %} is-invalid {% endif %}"
-                       id="title-input" maxlength="30" name="title" type="text"
-                       aria-describedby="titleHelpBlock" required />
-
-                <small id="titleHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Max 256 Chars
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.title.errors }}
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row pd-3">
-            <label for="text-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Text:</label>
-            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <textarea class="form-control {% if form.title.errors %} is-invalid {% endif %}"
-                       id="text-input" maxlength="1024" name="text" type="text"
-                       aria-describedby="textHelpBlock" required ></textarea>
-
-                <small id="textHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Max 4096 Chars
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.text.errors }}
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row pd-3">
-            <label for="category-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Category:</label>
-            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <select class="form-control {% if form.title.errors %} is-invalid {% endif %}"
-                       id="category-input" maxlength="1024" name="text" type="select"
-                       aria-describedby="textHelpBlock" required >
-                    <option>TEST</option>
-
-                </select>
-
-                <small id="textHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Can't see the category you need? <a href="{% url 'request_category' %}">Request a Category</a>
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.category.errors }}
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row pd-3">
-            <label for="anonymous-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Anonymous:</label>
-            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <input class="form-control form-check-input {% if form.title.errors %} is-invalid {% endif %}"
-                       id="anonymous-input" name="anonymous" type="checkbox"
-                       aria-describedby="textHelpBlock" value="1" required />
-
-                <br/>
-                <small id="textHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Hide your username on this question.
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.category.errors }}
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row pd-3">
-            <label for="file-input" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Category:</label>
-            <div class="input-group col-sm-9 col-lg-8 col-xl-9">
-                <input class="form-control {% if form.title.errors %} is-invalid {% endif %}"
-                       id="category-input" maxlength="1024" name="file" type="file"
-                       aria-describedby="textHelpBlock"/>
-
-                <small id="textHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Upload a supporting file
-                </small>
-                <div class="invalid-feedback">
-                    {{ form.category.errors }}
-                </div>
-            </div>
-        </div>
+		
+		{{ form.as_p }}
+		
 
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <div class="my-3 g-recaptcha" data-sitekey="6LdGLJcUAAAAANAoIympAVqgNGkmOR_7p3uN2F_S"></div>
