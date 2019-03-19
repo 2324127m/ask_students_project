@@ -26,7 +26,7 @@ class Category(models.Model):
 	approved = models.BooleanField(default=False)
 	slug = models.SlugField(unique=True)
 
-	user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+	user = models.ForeignKey("UserProfile", on_delete=models.SET_NULL, null=True)
 
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
