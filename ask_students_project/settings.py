@@ -30,7 +30,7 @@ SECRET_KEY = '68i!tcur2^*!bgq7@qm#=zl-&r-o%m4z8dh3^1zi+l%6&#h*h&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['2324127m.pythonanywhere.com', '127.0.0.1']
 
 
 # Registration Settings
@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },

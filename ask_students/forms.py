@@ -1,10 +1,12 @@
 from django import forms
-from ask_students.models import UserProfile, Category, Question
+from ask_students.models import UserProfile, Category, Question, Answer, PlaceOfStudy, Permission
 
 
 class UserProfileForm(forms.ModelForm):
     bio = forms.CharField(required=False)
     image = forms.ImageField(required=False)
+    place_of_study = forms.ModelChoiceField(required=True, queryset=PlaceOfStudy.objects.all())
+    permission = forms.ModelChoiceField(required=True, queryset=Permission.objects.all())
 
     class Meta:
         model = UserProfile
@@ -33,3 +35,10 @@ class AskQuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         exclude = ('posted', 'user', 'category',)
+
+class AnswerForm(forms.ModelForm):
+	text = forms.CharField(max_length=4096, help_text="Enter you answer here", required=True)
+	
+	class Meta:
+		model = Answer
+		fields = ('text',)

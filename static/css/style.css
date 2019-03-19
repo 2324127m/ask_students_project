@@ -10,6 +10,7 @@ body {
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
 	color: #fff !important;
 	background-color: #369d4e !important;
+	margin-right: 4px;
 }
 
 .custom-colour li a {
@@ -34,8 +35,10 @@ body {
 	margin-right: 10px;
 }
 
-.ui-autocomplete {
-	z-index: 1030;
+/* To correctly display search bar AJAX results.
+	above other page content */
+.ui-front {
+	z-index: 1050 !important;
 }
 
 #nav-bar-search button {
@@ -48,6 +51,12 @@ body {
 	width: 70%;
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
+}
+
+.nav-item .active {
+	color: #fff;
+	background-color: #369d4e;
+	border-radius: 10px;
 }
 
 /* Nav Bar Toggle Styling */
@@ -79,12 +88,13 @@ body {
 **
 */
 
-#home-tab-content {
-	padding: 15px
-}
-
 #home-tab-control li a {
 	height: 100%;
+}
+
+#home-tab-control {
+
+	margin-bottom: 20px;
 }
 
 /* Question Card Styles */
@@ -96,7 +106,12 @@ body {
 .question-card .card-body span {
 	padding: 3px 6px;
 	font-weight: lighter;
-	font-style: oblique;
+	/* font-style: oblique; */
+}
+
+.question-card a {
+	font-style: italic;
+	color: black;
 }
 
 .question-card .card-header {
@@ -117,8 +132,24 @@ body {
 	color: black;
 }
 
+.sidebar-item-category{
+	color: gray;
+}
+
 .question-title {
 	color: black;
+}
+
+.latest-question-category {
+	color: #808080;
+	line-height: 0;
+	padding-bottom: 25px;
+}
+
+.remove-overflow {
+	white-space: nowrap;
+	overflow:hidden;
+	text-overflow: ellipsis"
 }
 
 /*
@@ -126,6 +157,27 @@ body {
 	color:green;
 }
 */
+
+/*
+QUESTION.HTML
+ */
+
+.question-info {
+	margin-top: 15px;
+}
+.question-text {
+	padding:10px;
+}
+
+.right-section {
+	line-height: 2px;
+	text-align: left;
+}
+
+.page-break {
+	margin: 25px 15px 25px 15px;
+	border: 1px solid #808080;
+}
 
 /*
 **	Footer Styling
@@ -141,4 +193,23 @@ body {
 }
 #footer a {
 	color: white;
+}
+
+/*
+**	Register
+ */
+
+.custom-error-style {
+	color: red;
+	font-style: italic;
+}
+
+.image-preview-dim {
+	height: 200px;
+	width: auto;
+}
+
+.crop-text {
+	overflow : hidden;
+	text-overflow: ellipsis;
 }

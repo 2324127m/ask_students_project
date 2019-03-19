@@ -10,8 +10,8 @@ import json
 from django.forms.models import model_to_dict
 from django.core import serializers
 
-from ask_students.models import Category, Question, Answer, UserProfile, User
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm
+from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm
 
 from django.contrib.auth.decorators import login_required
 from registration.backends.simple.views import RegistrationView
@@ -106,15 +106,47 @@ def show_question(request, category_name_slug, question_id):
         question = Question.objects.get(pk=question_id)
         # Earliest answer first
 
-        answers_list = Answer.objects.filter(questiontop=question).order_by('posted')
+        answers_list = Answer.objects.filter(questiontop=question).order_by('-likes')
 
-        # return top answer
+        # Return top answer
 
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
+        context_dict['number_of_answers'] = len(answers_list)
 
-        if question.answered != None:
+        try:
+            user_profile = UserProfile.objects.get(pk=question.user.pk)
+            context_dict['user_profile'] = user_profile
+        except:
+            context_dict['user_profile'] = None
+
+        if question.answered is not None:
             context_dict['answer'] = question.answered
+
+        form = AnswerForm
+
+        if request.method == 'GET':
+            question.views += 1
+            question.save()
+
+        # If method of the request is POST, then a user posting an answer to the question
+        if request.method == 'POST':
+            form = AnswerForm(request.POST)
+
+            if form.is_valid():
+                answer = form.save(commit=False)
+                answer.category = Category.objects.get(slug=category_name_slug)
+                answer.questiontop = question
+                # answer needs a user
+                # answer.user = user
+                answer.user = request.user
+                answer.save()
+
+            else:
+                print(form.errors)
+
+            # Add the form to context dictionary
+            context_dict['form'] = form
 
     except Question.DoesNotExist:
         context_dict['question'] = None
@@ -144,13 +176,19 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
+        ###ADDED THIS LINE AS EMAIL NOT SHOWING PROPERLY###
+        this_user_email = user.email
         userprofile = UserProfile.objects.get(user=user)
         user_permission = userprofile.permission
+        likes = userprofile.likes
+        dislikes = userprofile.dislikes
         #user_permission = user.permission
         if user_permission == None:
             role = "Student"
         else:
-            Permission.objects.filter(pk=user_permission).title
+            # Adding a permission via admin interface causes error here
+            # Permission.objects.filter(pk=user_permission)
+            role = user_permission.title
 
     except User.DoesNotExist:
         return redirect('index')
@@ -158,8 +196,8 @@ def profile(request, username):
     # select user's profile instance or create a blank one
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
-    context_dict = {'user': user, 'top_five_answers': most_liked_answers,
-                    'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile }
+    context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
+                    'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile, 'this_user_email' : this_user_email }
 
     return render(request, 'ask_students/profile.html', context_dict)
 
@@ -178,7 +216,7 @@ def register_profile(request):
     form = UserProfileForm()
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST)
+        form = UserProfileForm(request.POST, request.FILES)
         if form.is_valid():
             users_profile = form.save(commit=False)
             users_profile.user = request.user
@@ -209,19 +247,27 @@ def search(request):
     if request.is_ajax():
         query = request.GET.get('term', '')
         queryset = Question.objects.filter(name__istartswith=query)
+
+        # Return only the top 7 viewed questions.
+        querylist = queryset.order_by('views')[:7]
         results = []
 
-        print("Search for " + query)
+        for result in querylist:
 
-        for result in queryset:
-            print(result.name)
-            results.append(result.name)
+            # Create a label and url for this result.
+            out = dict()
+            out['label'] = result.name
+            out['url'] = "/category/" + result.category.slug + "/" + str(result.id)
 
+            results.append(out)
+
+        # Dump this result and return to caller.
         data = json.dumps(results)
         mt = 'application/json'
 
         return HttpResponse(data, mt)
 
+    # This is not an AJAX request, render normal search page request.
     else:
         search_query = request.GET.get('q')
         context_dict = {}
@@ -230,7 +276,7 @@ def search(request):
             search_terms = search_query.split()
             result = Question.objects.filter(name__contains=search_terms[0])
             for term in search_terms[1:]:
-                result = result | Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
+                result = result & Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
             context_dict['search_results'] = result
 
         return render(request, 'ask_students/search.html', context_dict)

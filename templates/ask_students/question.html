@@ -1,16 +1,63 @@
 {% extends 'ask_students/base.html' %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     {{ question.name }}
 {% endblock %}
 
 {% block pagetitle %}
-    {{ question.name }}
+    {{ question.category }} - {{ question.name }}
 {% endblock %}
 
 {% block body_block %}
 
+    <!-- Show Question Title-->
+    <h3>{{ question.name }}</h3>
+
+    <div class="row question-info">
+        <div class="card question-card col-lg-8">
+            <!-- Show Question Text in a box-->
+            <p class="question-text">{{ question.text }}</p>
+        </div>
+
+        <!-- Right side, show name, views and answers -->
+
+
+        <div class="right-section col-lg-4">
+			 <a href="{% url 'profile' user_profile.user.username %}">
+            <p>
+                <!-- User profile -->
+                {% if user_profile.image %}
+                    <img width="25px" height="25px"
+                         src="{{ MEDIA_URL }}{{ user_profile.image }}"
+                         alt="{{ user.user_profile.username }} profile image"/>
+                {% endif %}
+                {{ user_profile.user.username }}
+            </p>
+			</a>
+            <p class="right-section">View{{ question.views|pluralize }}: {{ question.views }}</p>
+            <p class="right-section">Answers: {{ number_of_answers }}</p>
+        </div>
+    </div>
+
+
+
+    <!-- Supporting file -->
+
+    {% if question.support_file %}
+        <img width="25px" height="25px"
+             src="{{ MEDIA_URL }}{{ question.support_file }}"
+             alt="Support image"/>
+    {% endif %}
+
+    <!-- Posted date -->
+
+
+    <div class="page-break"></div>
+
     {% for answer in answers_list %}
-        <p>Answer: {{ answer.text }}</p>
+        {% show_answer answer %}
     {% endfor %}
+
+
 {% endblock %}

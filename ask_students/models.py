@@ -45,9 +45,11 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 
 	bio = models.CharField(max_length=4096, null=True)
-	likes = models.IntegerField(default=0)
-	dislikes = models.IntegerField(default=0)
-	image = models.ImageField(upload_to='profile_images', null=True)
+	likes = models.PositiveIntegerField(default=0)
+	dislikes = models.PositiveIntegerField(default=0)
+
+	location = "profile_images/" + str("test") + "/"
+	image = models.ImageField(upload_to=location, null=True)
 
 	slug = models.SlugField(unique=True)
 
@@ -64,8 +66,8 @@ class UserProfile(models.Model):
 
 class Answer(models.Model):
 	text = models.CharField(max_length=4096)
-	likes = models.IntegerField(default=0)
-	dislikes = models.IntegerField(default=0)
+	likes = models.PositiveIntegerField(default=0)
+	dislikes = models.PositiveIntegerField(default=0)
 	posted = models.DateTimeField(default=timezone.now)
 	edited = models.DateTimeField(default=None, null=True)
 
@@ -86,14 +88,14 @@ class Question(models.Model):
 	text = models.CharField(max_length=4096, default="")
 	anonymous = models.BooleanField(default=False)
 	posted = models.DateTimeField(default=timezone.now)
-	edited = models.DateTimeField(default=None, null=True)
+	edited = models.DateTimeField(default=None, null=True, blank=True)
 	views = models.IntegerField(default=0)
 
 	answered = models.ForeignKey(Answer, on_delete=models.SET_NULL, null=True, default=None)
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-	support_file = models.ImageField(upload_to='support_files', null=True)
+	support_file = models.ImageField(upload_to='support_files', null=True, blank=True)
 
 	def __str__(self):
 		return self.name

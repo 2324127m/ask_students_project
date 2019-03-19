@@ -1,32 +1,57 @@
+<!DOCTYPE html>
 {% extends 'ask_students/base.html' %}
 {% load staticfiles %}
 
 {% block title %}
-   Profile - {{ user.username }}
+   Profile - {{ this_user.username }}
 {% endblock %}
 
 {% block pagetitle %}
-    {{ user.username }}
+    {{ this_user.username }}
 {% endblock %}
 
 {% block body_block %}
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+    <div class="one">
+        <h1 id="username">{{ this_user.username }}</h1>
 
-    <h1>{{ user.username }}</h1>
-
+		<strong class="user-info-title">Role :</strong> <strong class="user-info">{{ role }}</strong>
+		<br/>
+		<strong class="user-info-title">University :</strong> <strong class="user-info">{{ userprofile.place_of_study }}</strong>
+		<br/>
+		<strong class="user-info-title">Email :</strong> <strong class="user-info">{{ this_user_email }}</strong>
+		<br/>
+    </div>
+    
+    <div class="two">
+        {% if userprofile.image %}
+            <img class="proflie-pic" width="120px" height="120px"
+             src="{{ MEDIA_URL }}{{ userprofile.image }}"
+             alt="{{ user.username }} profile image"/>
+        {% else %}
+            <img class="proflie-pic" width="120px" height="120px"
+            src="{{ MEDIA_URL }}profile_images/default.jpg"
+            alt="{{ user.username }} profile image"/>
+        {% endif %}
+    </div>
+    <strong class="user-info-title">Bio</strong>
+    <p id="bio">{{ userprofile.bio }}</p>
+    <br/>
+    <div>        
+        <strong class="user-stats-title"> Answers: </strong> <strong id="answers">{{ number_of_answers }}</strong>
+		<strong class="user-stats-title"> Likes: </strong> <strong id="likes">{{ likes }}</strong>
+		<strong class="user-stats-title"> Dislikes: </strong> <strong id="dislikes">{{ dislikes }} </strong>
+		<br/>
+    </div>
+    
+    <div class="page-break"></div>
+    <strong class="user-stats-title"> Most Liked Answers </strong><br/>
+    
     <div>
-        <strong>Username: </strong>{{ user.username }}
-        <br/>
-		<h4>Role: </h4> {{ role }}
-		<br/>
-		<h4>University: </h4> {{ user.place_of_study }}
-		<br/>
-		<h4>Email: </h4> {{ user.user.email }}
-		<br/>
-        <strong>Answers: </strong>{{ number_of_answers }}
-		<strong> Likes: </strong> {{ user.likes }}
-		<strong> Dislikes: </strong> {{ user.dislikes }} 
-		<br/>
-		<strong> Most Liked Answers </strong> {{ top_five_answers }} 
-		
+        {% for answer in top_five_answers %}
+            <p class="question-title"></p>{{ forloop.counter }}) Question: 
+            <a href="{% url 'show_question' answer.questiontop.category.slug answer.questiontop.id %}">{{ answer.questiontop }}</a></p>
+            <strong class= "answer-title">Answer: {{ answer }}</strong><strong class="answer-likes">Likes: {{ answer.likes }}</strong>
+		{% endfor %}
 	</div>
 {% endblock %}

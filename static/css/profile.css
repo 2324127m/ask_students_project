@@ -1,0 +1,84 @@
+.one {
+  width: 75%;
+  float: left;
+  height:160px;
+}
+.two {
+  margin-left: 75%;
+  height: 160px;
+}
+
+.proflie-pic {
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
+#username {
+  padding: 0px 0px 15px 20px;
+  font-size: 26px;
+}
+
+.user-info-title {
+  padding: 0px 0px 15px 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.user-info {
+  padding: 0px 15px 15px 5px;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.user-stats-title {
+  padding: 15px 0px 0px 20px;
+  font-size: 21px;
+}
+
+#bio {
+  padding: 10px 0px 5px 10px;
+  font-size: 16px;
+}
+
+#answers {
+  padding: 15px 30px 0px 10px;
+  font-size: 20px;
+}
+
+#likes {
+  padding: 15px 30px 0px 10px;
+  font-size: 20px;
+  color: green;
+}
+
+#dislikes {
+  padding: 15px 30px 0px 10px;
+  font-size: 20px;
+  color: red;
+}
+
+
+#pagebreak-profile {
+  margin: 25px 15px 25px 15px ;
+  border-style: solid;
+
+}
+
+.question-title {
+  padding-left: 10px 0px 0px 15px;
+  font-size: 12px;
+}
+
+.answer-title {
+  padding: 0px 0px 15px 20px;
+}
+
+.answer-likes {
+  position: absolute;
+  right: 40px;
+}
+
+top-answer-question {
+  color:black;
+  font-style: Italic;
+}
