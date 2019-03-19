@@ -38,7 +38,7 @@
 
             <!-- Supporting file -->
             <div class="col-xs-12 support-file left-section">
-                {% if not question.support_file %}
+                {% if question.support_file %}
                     <a target="_blank" href="{{ MEDIA_URL }}{{ question.support_file }}">View attached support file</a>
                 {% endif %}
             </div>

@@ -15,41 +15,39 @@
 
 {% block body_block %}
     <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+    <div class="row">
 
-    <div class="one">
-        <h1 id="username">{{ this_user.username }}</h1>
+        <div class="col-sm-12 text-center">
+            {% if userprofile.image %}
+                <img class="proflie-pic" width="120px" height="120px"
+                     src="{{ MEDIA_URL }}{{ userprofile.image }}"
+                     alt="{{ user.username }} profile image"/>
+            {% else %}
+                <img class="proflie-pic" width="120px" height="120px"
+                     src="{{ MEDIA_URL }}profile_images/default.jpg"
+                     alt="{{ user.username }} profile image"/>
+            {% endif %}
 
-		<strong class="user-info-title">Role :</strong> <strong class="user-info">{{ role }}</strong>
-		<br/>
-		<strong class="user-info-title">University :</strong> <strong class="user-info">{{ userprofile.place_of_study }}</strong>
-		<br/>
-		<strong class="user-info-title">Email :</strong> <strong class="user-info">{{ this_user_email }}</strong>
-        <br/>
-    </div>
-    
-    <div class="two">
-        {% if userprofile.image %}
-            <img class="proflie-pic" width="120px" height="120px"
-             src="{{ MEDIA_URL }}{{ userprofile.image }}"
-             alt="{{ user.username }} profile image"/>
-        {% else %}
-            <img class="proflie-pic" width="120px" height="120px"
-            src="{{ MEDIA_URL }}profile_images/default.jpg"
-            alt="{{ user.username }} profile image"/>
-        {% endif %}
-    </div>
+            <h2 id="username">{{ this_user.username }}</h2>
+        </div>
+        <div class="col-sm-12">
+            <p class="user-info-title">Role: <span class="user-info">{{ role }}</span></p>
+            <p class="user-info-title">University: <span class="user-info">{{ userprofile.place_of_study }}</span></p>
+            <p class="user-info-title">Email: <span class="user-info">{{ this_user_email }}</span></p>
+        </div>
 
-    <p id="bio">{{ userprofile.bio }}</p>
-    <br/>
-    <div>        
-        <strong class="user-stats-title"> Answers: </strong> <strong id="answers">{{ number_of_answers }}</strong>
-		<strong class="user-stats-title"> Likes: </strong> <strong id="likes">{{ likes }}</strong>
-		<strong class="user-stats-title"> Dislikes: </strong> <strong id="dislikes">{{ dislikes }} </strong>
-		<br/>
+        <div class="col-sm-12">
+            <p class="user-info-title">Bio: <span class="user-info">{{ userprofile.bio }}</span></p>
+        </div>
+
+        <strong class="user-stats-title">Answers:<strong id="answers">{{ number_of_answers }}</strong></strong>
+        <strong class="user-stats-title">Likes:<strong id="likes">{{ likes }}</strong></strong>
+        <strong class="user-stats-title">Dislikes:<strong id="dislikes">{{ dislikes }}</strong></strong>
     </div>
     
     <div class="page-break"></div>
-    <strong class="user-stats-title"> Most Liked Answers </strong><br/>
+
+    <strong class="user-stats-title"> Top 5 Most Liked Answers </strong><br/>
     
     <div>
         {% for answer in top_five_answers %}

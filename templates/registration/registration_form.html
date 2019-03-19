@@ -11,17 +11,26 @@
 {% endblock %}
 
 {% block body_block %}
-
-
     <form id="register-form" role="form" class="p-3 p-lg-3" method="post" action=".">
         {% csrf_token %}
 
         {% if form.non_field_errors %}
             <div class="alert alert-danger" role="alert">
             {% for error in form.non_field_errors %}
-                <strong> Warning! </strong> {{ error }} <br />
+                <strong> Warning! </strong> {{ error|escape }} <br />
             {% endfor %}
             </div>
+        {% endif %}
+
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong> Warning! </strong> {{ error|escape }} <br />
+                    </div>
+                {% endfor %}
+            {% endfor %}
         {% endif %}
 
         <div class="form-group row pd-3">
@@ -31,7 +40,6 @@
                 <small id="usernameHelpBlock" class="form-text col-sm-12 text-muted px-3">
                     How you will be identified on the site.
                 </small>
-
                 <small id="errors_username" class="form-text col-sm-12 px-3"></small>
             </div>
         </div>
@@ -44,9 +52,7 @@
                     We will send an account activation email
                     to this address, so make sure you can access it.
                 </small>
-
                 <small id="errors_email" class="form-text col-sm-12 px-3"></small>
-
             </div>
         </div>
 
@@ -55,7 +61,6 @@
             <div class="input-group col-sm-9 col-lg-8 col-xl-9">
                 <input class="form-control" id="password1" name="password1" type="password"/>
                 <small id="errors_password1" class="form-text col-sm-12 px-3"></small>
-
             </div>
         </div>
 
@@ -66,6 +71,7 @@
                 <small id="errors_password2" class="form-text col-sm-12 px-3"></small>
             </div>
         </div>
+
 
         <button type="submit" class="btn btn-info col-12">Continue</button>
     </form>
