@@ -130,6 +130,10 @@ body {
 	color: black;
 }
 
+.sidebar-item-category{
+	color: gray;
+}
+
 .question-title {
 	color: black;
 }

@@ -1,5 +1,5 @@
 {% if latest_questions %}
     {% for question in latest_questions %}
-        <a class="sidebar-item" href="{% url 'show_question' question.category.slug question.id %}"><p>{{ question.name }}</p></a><p class="latest-question-category"><em>{{ question.category }}</em></p>
+        <a class="sidebar-item" href="{% url 'show_question' question.category.slug question.id %}"><p>{{ question.name }}</p></a><a class="sidebar-item-category" href="{% url 'category' question.category.slug %}"><p class="latest-question-category"><em>{{ question.category }}</em></a></p>
     {% endfor %}
 {% endif %}
