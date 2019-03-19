@@ -89,3 +89,6 @@ class ShowQuestionViewTests(TestCase):
 
         self.assertEqual(answers[0], best_answer)
 
+    def TestAnonymousWorks(self):
+        pass
+
