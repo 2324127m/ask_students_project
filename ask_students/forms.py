@@ -24,17 +24,15 @@ class RequestCategoryForm(forms.ModelForm):
         exclude = ('slug',)
 
 class AskQuestionForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Enter your question title here!")
-    text = forms.CharField(max_length=4096, help_text="Enter your question as descriptively as possible, max char limit 4096")
-    anonymous = forms.BooleanField(widget=forms.CheckboxInput())
-    #posted = forms.DateTimeField(widget=forms.HiddenInput())
-    #user = forms.IntegerField(widget=forms.HiddenInput())
-    #category = forms.CharField(widget=forms.HiddenInput())
-    support_file = forms.FileField()
+    name = forms.CharField(max_length=128)
+    text = forms.CharField(max_length=4096)
+    anonymous = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
+    category = forms.ModelChoiceField(required=True, queryset=Category.objects.all())
+    support_file = forms.FileField(required=False)
     
     class Meta:
         model = Question
-        exclude = ('posted', 'user', 'category',)
+        exclude = ('posted', 'user', 'answered', 'edited', 'views', )
 
 class AnswerForm(forms.ModelForm):
 	text = forms.CharField(max_length=4096, help_text="Enter you answer here", required=True)
