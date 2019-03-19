@@ -214,3 +214,9 @@ QUESTION.HTML
 	overflow : hidden;
 	text-overflow: ellipsis;
 }
+
+.edit-profile {
+	float: right;
+	color: white;
+	text-decoration: underline;
+}

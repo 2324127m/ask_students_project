@@ -8,10 +8,14 @@
 
 {% block pagetitle %}
     {{ this_user.username }}
+    {% if this_user.username == request.user.username %}
+        <a class="edit-profile" href="{% url 'my_profile' %}">Edit</a>
+    {% endif %}
 {% endblock %}
 
 {% block body_block %}
     <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+
     <div class="one">
         <h1 id="username">{{ this_user.username }}</h1>
 

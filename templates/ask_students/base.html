@@ -51,7 +51,7 @@
       <div class="collapse navbar-collapse order-lg-3" id="navbar-response-right">
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'my_profile' %}">Welcome <em>{{ user.username }}!</em></a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'profile' user.username %}">Welcome <em>{{ user.username }}!</em></a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/">Logout</a></li>
             {% else %}
                 <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'auth_login' %}active{% endif %}" href="{% url 'auth_login' %}">Login</a></li>
