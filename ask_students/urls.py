@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^ask/$', views.add_question, name='ask_question'),
 
+    url(r'^request_category/$', views.request_category, name='request_category'),
+
 
     # AJAX REQUESTS
     url(r'^ajax/search/$', views.search, name='search_ajax'),

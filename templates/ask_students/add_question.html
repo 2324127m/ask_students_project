@@ -64,7 +64,7 @@
                 </select>
 
                 <small id="textHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Can't see the category you need? Request a Category
+                    Can't see the category you need? <a href="{% url 'request_category' %}">Request a Category</a>
                 </small>
                 <div class="invalid-feedback">
                     {{ form.category.errors }}
