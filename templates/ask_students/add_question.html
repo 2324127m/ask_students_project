@@ -13,10 +13,13 @@
 
 	<form role="form" class="p-4 p-lg-5" method="post" action=".">
         {% csrf_token %}
+
 		
 		{{ form.as_p }}
 		
-       
+
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <div class="my-3 g-recaptcha" data-sitekey="6LdGLJcUAAAAANAoIympAVqgNGkmOR_7p3uN2F_S"></div>
 
         <button type="submit" class="btn btn-info col-12">Submit</button>
     </form>

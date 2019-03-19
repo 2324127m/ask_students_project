@@ -16,12 +16,13 @@ class UserProfileForm(forms.ModelForm):
 class RequestCategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=64, help_text="Please enter the category name.")
     description = forms.CharField(max_length=512, help_text="Please enter a description.")
-    approved = forms.BooleanField(widget=forms.HiddenInput())
-    slug = forms.SlugField(widget=forms.HiddenInput())
+    # approved = forms.BooleanField(widget=forms.HiddenInput())
+    # slug = forms.SlugField(widget=forms.HiddenInput())
 
     class Meta:
         model = Category
-        exclude = ('slug',)
+        exclude = ('slug', 'user')
+
 
 class AskQuestionForm(forms.ModelForm):
 
