@@ -35,8 +35,10 @@ body {
 	margin-right: 10px;
 }
 
-.ui-autocomplete {
-	z-index: 1030;
+/* To correctly display search bar AJAX results.
+	above other page content */
+.ui-front {
+	z-index: 1050 !important;
 }
 
 #nav-bar-search button {

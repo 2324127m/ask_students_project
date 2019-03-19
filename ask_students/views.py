@@ -247,19 +247,27 @@ def search(request):
     if request.is_ajax():
         query = request.GET.get('term', '')
         queryset = Question.objects.filter(name__istartswith=query)
+
+        # Return only the top 7 viewed questions.
+        querylist = queryset.order_by('views')[:7]
         results = []
 
-        print("Search for " + query)
+        for result in querylist:
 
-        for result in queryset:
-            print(result.name)
-            results.append(result.name)
+            # Create a label and url for this result.
+            out = dict()
+            out['label'] = result.name
+            out['url'] = "/category/" + result.category.slug + "/" + str(result.id)
 
+            results.append(out)
+
+        # Dump this result and return to caller.
         data = json.dumps(results)
         mt = 'application/json'
 
         return HttpResponse(data, mt)
 
+    # This is not an AJAX request, render normal search page request.
     else:
         search_query = request.GET.get('q')
         context_dict = {}
