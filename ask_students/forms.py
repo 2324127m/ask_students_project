@@ -28,9 +28,9 @@ class AskQuestionForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="Enter your question title here!")
     text = forms.CharField(max_length=4096, help_text="Enter your question as descriptively as possible, max char limit 4096")
     anonymous = forms.BooleanField(widget=forms.CheckboxInput())
-    #posted = forms.DateTimeField(widget=forms.HiddenInput())
-    #user = forms.IntegerField(widget=forms.HiddenInput())
-    #category = forms.CharField(widget=forms.HiddenInput())
+    posted = forms.DateTimeField(widget=forms.HiddenInput())
+    user = forms.IntegerField(widget=forms.HiddenInput())
+    category = forms.CharField(widget=forms.HiddenInput())
     support_file = forms.FileField()
     
     class Meta:

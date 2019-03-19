@@ -59,5 +59,20 @@
         {% show_answer answer %}
     {% endfor %}
 
+    {% if user.is_authenticated %}
+        <div class="page-break"></div>
+        
+        <form id="answer_form" method="post" action="{% url 'show_question' question.category.slug question.pk %}">
+            {% csrf_token %}
+            <h3>Your Answer</h3>
+            
+            <div class="answer-box">{{ answer_form.text }}</div>
+            <input type="submit" name="Post your Answer" value="Post your Answer" />
+    
+        
+        </form>
+    {% endif %}
+    
+    
 
 {% endblock %}
