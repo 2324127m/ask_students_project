@@ -111,8 +111,24 @@ def show_question(request, category_name_slug, question_id):
 
     try:
         question = Question.objects.get(pk=question_id)
-        # Earliest answer first
 
+        # If method of the request is POST, then a user posting an answer to the question
+        if request.method == 'POST':
+            form = AnswerForm(request.POST)
+
+            if form.is_valid():
+                answer = form.save(commit=False)
+                answer.category = Category.objects.get(slug=category_name_slug)
+                answer.questiontop = question
+                # answer.user must be a user profile object
+                answerup = UserProfile.objects.get(user=request.user)
+                answer.user = answerup
+                answer.save()
+
+            else:
+                print(form.errors)
+
+        # Earliest answer first
         answers_list = Answer.objects.filter(questiontop=question).order_by('-likes')
 
         # Return top answer
@@ -130,30 +146,14 @@ def show_question(request, category_name_slug, question_id):
         if question.answered is not None:
             context_dict['answer'] = question.answered
 
-        form = AnswerForm
+        answer_form = AnswerForm
 
         if request.method == 'GET':
             question.views += 1
             question.save()
 
-        # If method of the request is POST, then a user posting an answer to the question
-        if request.method == 'POST':
-            form = AnswerForm(request.POST)
-
-            if form.is_valid():
-                answer = form.save(commit=False)
-                answer.category = Category.objects.get(slug=category_name_slug)
-                answer.questiontop = question
-                # answer needs a user
-                # answer.user = user
-                answer.user = request.user
-                answer.save()
-
-            else:
-                print(form.errors)
-
-            # Add the form to context dictionary
-            context_dict['form'] = form
+        # Add the form to context dictionary
+        context_dict['answer_form'] = answer_form
 
     except Question.DoesNotExist:
         context_dict['question'] = None
