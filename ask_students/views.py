@@ -13,7 +13,7 @@ from django.core import serializers
 from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
 from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from registration.backends.simple.views import RegistrationView
 
 from datetime import datetime, timedelta
@@ -200,7 +200,7 @@ def delete_answer(request, question_id, answer_id):
 
     return redirect('show_question', category_name_slug=question.category.slug, question_id=question.pk)
 
-
+@login_required
 def request_category(request):
     form = RequestCategoryForm()
 
@@ -354,6 +354,7 @@ def search(request):
         return render(request, 'ask_students/search.html', context_dict)
 
 
+@login_required
 def vote(request):
     #not sure what's getting passed in request
     #think this would be the general idea tho
@@ -371,7 +372,8 @@ def vote(request):
             userProfile.dislikes += 1
         userProfile.save()
 
-
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 def approve_category(request):
     context_dict = {}
 
