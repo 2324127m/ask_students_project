@@ -75,6 +75,7 @@ def populate():
                       "description": "who?",
                       "views": 10,
                       "user": "YellowPony123",
+                      "support_file": "support_files/who-let-them-out.jpg",
                       "answers":
                          [
                              {'answer': 'who?! who?! who?!', 'likes': 5, 'dislikes': 3,
@@ -103,6 +104,7 @@ def populate():
                       "description": "I really need ideas on what to have for dinner",
                       "views": 180000,
                       "user": "ooeeooahahtingtang",
+                      "support_file": "support_files/hungry.jpg",
                       "answers":
                          [
                              {'answer': 'Ravioli', 'likes': 5, 'dislikes': 3,
@@ -172,6 +174,7 @@ def populate():
                       "description": "I am trying to learn but no one is taking this question seriously",
                       "views": 120,
                       "user": "DampSeatOnTheBus",
+                      "support_file": "support_files/array.jpg",
                       "answers":
                           [
                               {'answer':'0', 'likes': 70, 'dislikes':15, 'posted': None, 'edited': None, 'user': 'SeriousFred'},
@@ -253,6 +256,7 @@ def populate():
                       "description": "I just can't do it... I always get distracted",
                       "views": 380,
                       "user": "GustySeagull1942",
+                      "support_file": "support_files/study.jpg",
                       'answers':
                           [
                               {'answer':'You need to come up with a study plan, then follow that plan every day. Dont be lazy.', 'likes': 33, 'dislikes':11,
@@ -290,7 +294,10 @@ def populate():
             username = question['user']
             u = User.objects.get(username=username)
             up = UserProfile.objects.get(user=u)
-            q = add_question(question['name'], question['description'], question['views'], c, up)
+            if len(question) == 6:
+                q = add_question(question['name'], question['description'], question['views'], c, up, question['support_file'])
+            else:
+                q = add_question(question['name'], question['description'], question['views'], c, up)
             i += 1
             for answer in question['answers']:
                 username = answer['user']
@@ -299,6 +306,15 @@ def populate():
                 add_answer(cat, answer['answer'], answer['likes'], answer['dislikes'], up, q)
 
         print("  Adding {0} questions to {1}...".format(str(i), str(c)))
+
+
+    print()
+    print("Marking selected questions as answered...")
+    mark_as_answer(Answer.objects.get(pk=2))
+    mark_as_answer(Answer.objects.get(pk=11))
+    mark_as_answer(Answer.objects.get(pk=21))
+    mark_as_answer(Answer.objects.get(pk=23))
+    mark_as_answer(Answer.objects.get(pk=30))
 
 
 def add_place_of_study(title):
@@ -319,8 +335,10 @@ def add_category(cat, description, approved):
     return c
 
 
-def add_question(name, description, views, cat, user):
+def add_question(name, description, views, cat, user, support_file=None):
     q = Question.objects.get_or_create(name=name, text=description, category=cat, views=views, user=user)[0]
+    if support_file:
+        q.support_file = support_file
     q.save()
     return q
 
@@ -350,6 +368,12 @@ def add_answer(cat, answer, likes, dislikes, user, questiontop):
     a.save()
     return a
 
+def mark_as_answer(answer):
+    question = answer.questiontop
+    question.answered = answer
+    question.save()
+    return
+
 
 def clean_db():
     if platform.system() == "Windows":
@@ -370,6 +394,8 @@ def create_super_user():
         u.is_superuser = True
         u.is_staff = True
         u.save()
+
+        add_user_profile(u, "Site Administrator", 0, 0, "Student", "University of Glasgow", "profile_images/admin.jpg")
 
 
 def run_server():
