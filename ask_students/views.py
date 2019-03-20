@@ -290,3 +290,21 @@ def search(request):
             context_dict['search_results'] = result
 
         return render(request, 'ask_students/search.html', context_dict)
+
+def vote(request):
+    #not sure what's getting passed in request
+    #think this would be the general idea tho
+    answer = Answer.objects.get(pk=pk)
+    user = User.objects.get(username = answer.user.user.username)
+    userProfile = UserProfile.objects.get(user=user)
+
+    if request.is_ajax():
+        query = request.GET.get('like')
+        if like==1:
+            answer.likes += 1
+            userProfile.likes += 1
+        if like==0:
+            answer.dislikes += 1
+            userProfile.dislikes += 1
+        userProfile.save()
+        
