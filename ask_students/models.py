@@ -69,9 +69,9 @@ class Answer(models.Model):
 	likes = models.PositiveIntegerField(default=0)
 	dislikes = models.PositiveIntegerField(default=0)
 	posted = models.DateTimeField(default=timezone.now)
-	edited = models.DateTimeField(default=None, null=True)
+	edited = models.DateTimeField(default=None, null=True, blank=True)
 
-	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	questiontop = models.ForeignKey("Question", on_delete=models.CASCADE)
 

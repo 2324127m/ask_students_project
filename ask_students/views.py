@@ -125,9 +125,8 @@ def show_question(request, category_name_slug, question_id):
 
                 # If question is anonymous and answerer is the person who asked it
                 # then answer has no user, template will show anonymous
-                if question.anonymous:
-                    if question.user == user_prof:
-                        answer.user = None
+                if question.anonymous and question.user == user_prof:
+                    answer.user = None
                 else:
                     answer.user = user_prof
 
