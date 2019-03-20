@@ -17,7 +17,11 @@
         {% endif %}
     </div>
     <div class="col-md-4">
-        <a href="{% url 'profile' answer.user.user.username %}">{{ answer.user.user.username }}</a>
+        {% if answer.user %}
+            <a href="{% url 'profile' answer.user.user.username %}">{{ answer.user.user.username }}</a>
+        {% else %}
+            <a>Anonymous</a>
+        {% endif %}
     </div>
 
 </div>

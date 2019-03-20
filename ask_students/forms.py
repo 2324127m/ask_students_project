@@ -28,7 +28,7 @@ class AskQuestionForm(forms.ModelForm):
     text = forms.CharField(max_length=4096)
     anonymous = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
     category = forms.ModelChoiceField(required=True, queryset=Category.objects.filter(approved=True))
-    support_file = forms.FileField(required=False)
+    support_file = forms.ImageField(required=False)
 
     
     class Meta:

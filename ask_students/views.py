@@ -121,8 +121,16 @@ def show_question(request, category_name_slug, question_id):
                 answer.category = Category.objects.get(slug=category_name_slug)
                 answer.questiontop = question
                 # answer.user must be a user profile object
-                answerup = UserProfile.objects.get(user=request.user)
-                answer.user = answerup
+                user_prof = UserProfile.objects.get(user=request.user)
+
+                # If question is anonymous and answerer is the person who asked it
+                # then answer has no user, template will show anonymous
+                if question.anonymous:
+                    if question.user == user_prof:
+                        answer.user = None
+                else:
+                    answer.user = user_prof
+
                 answer.save()
 
             else:

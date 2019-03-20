@@ -23,16 +23,18 @@
 
             <!-- Right side, show pic, name and question views  -->
             <div class="col-sm-4 right-section">
+                {% if question.anonymous %}
+                    <a>Anonymous</a>
+                {% else %}
                 <a href="{% url 'profile' user_profile.user.username %}">
-
                     {% if user_profile.image %}
                         <img width="25px" height="25px"
                              src="{{ MEDIA_URL }}{{ user_profile.image }}"
                              alt="{{ user.user_profile.username }} profile image"/>
                     {% endif %}
                     {{ user_profile.user.username }}
-
                 </a>
+                {% endif %}
                 <p>View{{ question.views|pluralize }}: {{ question.views }}</p>
             </div>
 
