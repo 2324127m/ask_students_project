@@ -312,4 +312,16 @@ def vote(request):
             answer.dislikes += 1
             userProfile.dislikes += 1
         userProfile.save()
-        
+
+def approve_category(request):
+
+	try:
+		cat_list = Category.objects.filter(approved=False)
+		context_dict['category'] = cat_list
+		
+	except Category.DoesNotExist:
+        context_dict['category'] = None
+	
+	return render(request, 'ask_students/approve_category.html', context_dict)
+	
+	

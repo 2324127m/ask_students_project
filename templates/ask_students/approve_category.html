@@ -1,0 +1,24 @@
+{% extends 'ask_students/base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Approve a Category
+{% endblock %}
+
+{% block pagetitle %}
+    Approve a Category
+{% endblock %}
+
+{% block body_block %}
+	<div>
+	{% if categories %}
+		<ul>
+		{% for category in categories %}
+			<li>{{ category.name }}</li>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<strong>There are no categories to approve.</strong>
+	{% endif %}
+	</div>
+{% endblock %}
