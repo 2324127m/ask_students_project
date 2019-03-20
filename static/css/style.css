@@ -171,6 +171,12 @@ QUESTION.HTML
 	padding:10px;
 }
 
+.answer-card {
+	margin-bottom: 10px;
+}
+.dislike-img {
+	margin-left: 10px;
+}
 
 .left-section {
   	float: left;

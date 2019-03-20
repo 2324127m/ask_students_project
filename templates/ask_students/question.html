@@ -12,12 +12,12 @@
 {% block body_block %}
 
     <!-- Show Question Title-->
-    <h3>{{ question.name }}</h3>
+    <h4>{{ question.name }}</h4>
 
     <div class="container">
         <div class="row question-info">
             <!-- left side, show question text -->
-            <div class="col-sm-8 card question-cardleft-section">
+            <div class="col-sm-8 card question-card left-section">
                 <p class="question-text">{{ question.text }}</p>
             </div>
 
@@ -46,37 +46,38 @@
             <!-- Posted date -->
             <div class="col-xs-12 date right-section">
             {% if question.edited %}
-                {{ question.edited }} (edited)
+                {{ question.edited|date:'D d M Y H:i' }} (edit)
             {% else %}
                 {{ question.posted|date:'D d M Y H:i' }}
             {% endif %}
             </div>
-
         </div>
-
-
     </div>
 
     <div class="page-break"></div>
 
-    <h3>{{ number_of_answers }} Answer{{ number_of_answers|pluralize }}</h3>
+    <h4>{{ number_of_answers }} Answer{{ number_of_answers|pluralize }}</h4>
 
-    {% for answer in answers_list %}
-        {% show_answer answer %}
-    {% endfor %}
+    <div class="container">
+        {% for answer in answers_list %}
+            {% show_answer answer %}
+            <div class="page-break"></div>
+        {% endfor %}
+    </div>
 
     {% if user.is_authenticated %}
-        <div class="page-break"></div>
         
         <form id="answer_form" method="post" action="{% url 'show_question' question.category.slug question.pk %}">
             {% csrf_token %}
-            <h3>Your Answer</h3>
+            <h4>Your Answer</h4>
 
             <div class="answer-box">{{ answer_form.text }}</div>
             <input type="submit" name="Post your Answer" value="Post your Answer" />
     
         
         </form>
+    {% else %}
+        <p>You must be signed in to answer this question!</p>
     {% endif %}
     
     
