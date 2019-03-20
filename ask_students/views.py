@@ -155,9 +155,12 @@ def show_question(request, category_name_slug, question_id):
 
         answer_form = AnswerForm
 
-        if request.method == 'GET':
-            question.views += 1
-            question.save()
+        # Basic Handling Of View Count
+        # Iterates if there is no vq_id key set for user session
+        if request.method == 'GET' and not ('vq_%s' % question.id) in request.session:
+                request.session['vq_%s' % question.id] = True
+                question.views += 1
+                question.save()
 
         # Add the form to context dictionary
         context_dict['answer_form'] = answer_form
