@@ -173,6 +173,33 @@ def show_question(request, category_name_slug, question_id):
 
     return render(request, 'ask_students/question.html', context_dict)
 
+@login_required
+def delete_question(request, question_id):
+    question = Question.objects.get(pk=question_id)
+
+    # Check user requesting to delete is user who posted question
+    if request.user == question.user.user:
+        question.delete()
+
+    return redirect('index')
+
+@login_required
+def delete_answer(request, question_id, answer_id):
+    answer = Answer.objects.get(pk=answer_id)
+    question = Question.objects.get(pk=question_id)
+
+    # Check user requesting to delete is user who posted answer
+    if request.user == answer.user.user:
+        # Delete the number of likes and dislikes from overall user likes and dislikes
+        user_profile = answer.user
+        user_profile.likes -= answer.likes
+        user_profile.dislikes -= answer.dislikes
+        user_profile.save()
+
+        answer.delete()
+
+    return redirect('show_question', category_name_slug=question.category.slug, question_id=question.pk)
+
 
 def request_category(request):
     form = RequestCategoryForm()
