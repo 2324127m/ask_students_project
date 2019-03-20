@@ -242,6 +242,9 @@ def profile(request, username):
     except User.DoesNotExist:
         return redirect('index')
 
+    except UserProfile.DoesNotExist:
+        userprofile = None
+
     # select user's profile instance or create a blank one
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
@@ -316,40 +319,67 @@ def search(request):
 
         if search_query:
             search_terms = search_query.split()
-            result = Question.objects.filter(name__contains=search_terms[0])
+            questions = Question.objects.filter(name__icontains=search_terms[0])
+            answers = Answer.objects.filter(text__icontains=search_terms[0])
+            print(answers)
             for term in search_terms[1:]:
-                result = result & Question.objects.filter(name__icontains=term)  # Case insensitive containment filter
-            context_dict['search_results'] = result
+                questions = questions & Question.objects.filter(name__icontains=term)
+                answers = answers & Answer.objects.filter(text__icontains=term)
 
+            for answer in answers:
+                questions = questions | Question.objects.filter(id=answer.questiontop_id)
+                print(questions)
+
+            results = list(questions)
+
+            try:
+                paginator = Paginator(results, 8)
+
+                # Get ?page=xxx from request and return that page in the context_dict
+                requested_page = request.GET.get('page')
+
+                # If request does not specify a page, choose first page.
+                if requested_page is None:
+                    requested_page = 1
+
+                page = paginator.page(requested_page)  # Throws InvalidPage if no valid questions to display.
+                context_dict['search_results'] = page
+
+            # If there's no valid page, return null, we'll handle in template.
+            except InvalidPage:
+                context_dict['search_results'] = None
+
+        # Pass this back for further page display
+        context_dict['query'] = search_query
         return render(request, 'ask_students/search.html', context_dict)
+
 
 def vote(request):
     #not sure what's getting passed in request
     #think this would be the general idea tho
     answer = Answer.objects.get(pk=pk)
-    user = User.objects.get(username = answer.user.user.username)
+    user = User.objects.get(username=answer.user.user.username)
     userProfile = UserProfile.objects.get(user=user)
 
     if request.is_ajax():
         query = request.GET.get('like')
-        if like==1:
+        if query == 1:
             answer.likes += 1
             userProfile.likes += 1
-        if like==0:
+        if query == 0:
             answer.dislikes += 1
             userProfile.dislikes += 1
         userProfile.save()
 
+
 def approve_category(request):
     context_dict = {}
-	
+
     try:
         cat_list = Category.objects.filter(approved=False)
-		context_dict['category'] = cat_list
-		
+        context_dict['category'] = cat_list
+
     except Category.DoesNotExist:
         context_dict['category'] = None
-	
+
     return render(request, 'ask_students/approve_category.html', context_dict)
-	
-	

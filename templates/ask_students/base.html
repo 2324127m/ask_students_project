@@ -31,7 +31,6 @@
       <form class="order-lg-2 form-inline mx-0" id="nav-bar-search" name="nav-bar-search"
             action="{% url 'search' %}" method="GET" >
 
-          {% csrf_token %}
           <input aria-label="Search" name="q" id="nav-search-input" class="form-control autocomplete" placeholder="Search" type="text">
           <button type="submit" class="btn btn-info">?</button>
 

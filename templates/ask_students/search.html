@@ -13,6 +13,40 @@
 
     {% for question in search_results %}
         {% show_question question %}
+    {% empty %}
+        <p>Sorry, there are no results to display.</p>
     {% endfor %}
+    {% if search_results.has_other_pages %}
+    <nav id="CategoryQuestionPaginator" aria-label="Navigate Categories Question Pages">
+        <ul class="pagination justify-content-center">
+            {% if search_results.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page=1">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page={{ search_results.previous_page_number }}">
+                        {{ search_results.previous_page_number }}
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-item active">
+                <a class="page-link" href="?q={{ query }}&page={{ search_results.number }}">{{ search_results.number }}</a>
+            </li>
+            {% if search_results.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page={{ search_results.next_page_number }}">
+                        {{ search_results.next_page_number }}
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?q={{ query }}&page={{ search_results.paginator.num_pages }}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <span class="justify-content-end w-100">
+         <p class="text-muted text-justify text-md-right px-3">{{ search_results.paginator.count }} search_results over {{ search_results.paginator.num_pages }} pages</p>
+    </span>
+    {% endif %}
 	
 {% endblock %}

@@ -15,7 +15,8 @@
 
 {% block body_block %}
     <link href="{% static 'css/profile.css' %}" rel="stylesheet">
-    <div class="row">
+    {% if user.userprofile != None %}
+        <div class="row">
 
         <div class="col-sm-12 text-center">
             {% if userprofile.image %}
@@ -44,16 +45,20 @@
         <strong class="user-stats-title">Likes:<strong id="likes">{{ likes }}</strong></strong>
         <strong class="user-stats-title">Dislikes:<strong id="dislikes">{{ dislikes }}</strong></strong>
     </div>
-    
+
     <div class="page-break"></div>
 
     <strong class="user-stats-title"> Top 5 Most Liked Answers </strong><br/>
-    
+
     <div>
         {% for answer in top_five_answers %}
-            <p class="question-title"></p>{{ forloop.counter }}) Question: 
+            <p class="question-title"></p>{{ forloop.counter }}) Question:
             <a href="{% url 'show_question' answer.questiontop.category.slug answer.questiontop.id %}">{{ answer.questiontop }}</a></p>
             <strong class= "answer-title">Answer: {{ answer }}</strong><strong class="answer-likes">Likes: {{ answer.likes }}</strong>
 		{% endfor %}
 	</div>
+    {% else %}
+        <p>No Profile Found For This User...</p>
+    {% endif %}
+
 {% endblock %}
