@@ -265,13 +265,14 @@ def search(request):
     if request.is_ajax():
         query = request.GET.get('term', '')
         queryset = Question.objects.filter(name__istartswith=query)
+        querylist = queryset.order_by('views')[:7]
         results = []
 
-        print("Search for " + query)
-
-        for result in queryset:
-            print(result.name)
-            results.append(result.name)
+        for result in querylist:
+            out = dict()
+            out['label'] = result.name
+            out['url'] = "/category/" + result.category.slug + "/" + str(result.id)
+            results.append(out)
 
         data = json.dumps(results)
         mt = 'application/json'
