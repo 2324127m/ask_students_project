@@ -72,6 +72,7 @@ def category(request, category_name_slug):
 
     return render(request, 'ask_students/category.html', context_dict)
 
+
 @login_required
 def add_question(request):
     context_dict = {}
@@ -147,7 +148,8 @@ def show_question(request, category_name_slug, question_id):
         try:
             user_profile = UserProfile.objects.get(pk=question.user.pk)
             context_dict['user_profile'] = user_profile
-        except:
+
+        except UserProfile.DoesNotExist:
             context_dict['user_profile'] = None
 
         if question.answered is not None:
