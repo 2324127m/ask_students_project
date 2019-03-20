@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^ask/$', views.add_question, name='ask_question'),
 
     url(r'^request_category/$', views.request_category, name='request_category'),
-	url(r'^approve_category/$', views.approve_category, name='approve_category')
+	url(r'^approve_category/$', views.approve_category, name='approve_category'),
 
 
     # AJAX REQUESTS
