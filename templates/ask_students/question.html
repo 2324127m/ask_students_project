@@ -39,21 +39,32 @@
             </div>
 
             <!-- Supporting file -->
-            <div class="col-xs-12 support-file left-section">
+            <div class="col-xs-8 support-file left-section">
                 {% if question.support_file %}
                     <a target="_blank" href="{{ MEDIA_URL }}{{ question.support_file }}">View attached support file</a>
                 {% endif %}
             </div>
+			
 
             <!-- Posted date -->
-            <div class="col-xs-12 date right-section">
+            <div class="col-xs-8 date right-section">
             {% if question.edited %}
                 {{ question.edited|date:'D d M Y H:i' }} (edit)
             {% else %}
                 {{ question.posted|date:'D d M Y H:i' }}
             {% endif %}
             </div>
-        </div>
+		</div>	
+		<div class="row question-info">
+		<div class="col-xs-4">
+		hello
+		</div>
+		<div class="col-xs-8">
+		hello
+		</div>
+		</div>
+		
+		
     </div>
 
     <div class="page-break"></div>
