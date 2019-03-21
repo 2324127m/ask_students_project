@@ -11,6 +11,8 @@
 {% endblock %}
 
 {% block head_block %}
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
   <script src="{% static 'js/question.js' %}"></script>
 {% endblock %}
 
@@ -96,13 +98,21 @@
 
     {% if user.is_authenticated %}
         
-        <form id="answer_form" method="post" action="{% url 'show_question' question.category.slug question.pk %}">
+        <form id="answer_form" role="form" method="post" action="{% url 'show_question' question.category.slug question.pk %}">
             {% csrf_token %}
-            {% display_form_error_fields %}
+            {% display_form_error_fields form %}
             <h4>Your Answer</h4>
 
-            <div class="answer-box">{{ answer_form.text }}</div>
-            <input type="submit" name="Post your Answer" value="Post your Answer" />
+            <div class="form-group row pd-3">
+                <div class="input-group col-sm-12 col-lg-12 col-xl-12">
+                    <input class="form-control"
+                       id="id_text" maxlength="4096" name="answer_text" type="text"/>
+                    <small id="errors_answer_text" class="form-text col-sm-12 px-3"></small>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-info col-3">Post your answer</button>
+      <!--      <div class="answer-box">{{ answer_form.text }}</div>
+            <input type="submit" name="Post your Answer" value="Post your Answer" /> -->
     
         
         </form>
