@@ -12,23 +12,7 @@
 {% block body_block %}
     <link href="{% static 'css/signin.css' %}" rel="stylesheet">
 
-    {% if form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                <strong> Warning! </strong> {{ error|escape }} <br/>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
-                <div class="alert alert-danger" role="alert">
-                    <strong> Warning! </strong> {{ error|escape }} <br/>
-                </div>
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
+    {% display_form_error_fields form %}
 
     <form class="form-signin" role="form" method="post" action=".">
         {% csrf_token %}

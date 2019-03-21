@@ -1,5 +1,6 @@
 {% extends "ask_students/base.html" %}
 {% load static %}
+{% load ask_students_templatetags %}
 
 {% block title %}Sign Up - Step 1{% endblock %}
 {% block pagetitle %}Sign Up - Step 1{% endblock %}
@@ -14,24 +15,7 @@
     <form id="register-form" role="form" class="p-3 p-lg-3" method="post" action=".">
         {% csrf_token %}
 
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                <strong> Warning! </strong> {{ error|escape }} <br />
-            {% endfor %}
-            </div>
-        {% endif %}
-
-
-        {% if form.errors %}
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        <strong> Warning! </strong> {{ error|escape }} <br />
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        {% endif %}
+        {% display_form_error_fields form %}
 
         <div class="form-group row pd-3">
             <label for="username" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Username:</label>

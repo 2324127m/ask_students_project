@@ -1,5 +1,6 @@
 {% extends 'ask_students/base.html' %}
 {% load staticfiles %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     Request a Category
@@ -9,9 +10,17 @@
     Request a Category
 {% endblock %}
 
+{% block head_block %}
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+  <script src="{% static 'js/request-category.js' %}"></script>
+{% endblock %}
+
 {% block body_block %}
-    <form role="form" class="p-4 p-lg-5" method="post" action=".">
+    <form id="request-category" role="form" class="p-4 p-lg-5" method="post" action=".">
         {% csrf_token %}
+
+        {% display_form_error_fields form %}
 
         {% if form.non_field_errors %}
             <div class="alert alert-danger" role="alert">
@@ -27,9 +36,7 @@
             <div class="input-group col-sm-8 col-lg-8 col-xl-8">
                 <input class="form-control"
                        id="id_name" maxlength="30" name="name" type="text"/>
-                <small id="titleHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Max 256 Chars
-                </small>
+                <small id="errors_name" class="form-text col-sm-12 px-3"></small>
             </div>
         </div>
 
@@ -39,9 +46,7 @@
             <div class="input-group col-sm-8 col-lg-8 col-xl-8">
                 <input class="form-control"
                        id="id_description" maxlength="30" name="description" type="text"/>
-                <small id="titleHelpBlock" class="form-text col-sm-12 text-muted px-3">
-                    Max 256 Chars
-                </small>
+                <small id="errors_description" class="form-text col-sm-12 px-3"></small>
             </div>
         </div>
 
