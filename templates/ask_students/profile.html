@@ -19,14 +19,14 @@
         <div class="row">
 
         <div class="col-sm-12 text-center">
-            {% if userprofile.image %}
+            {% if this_profile.image %}
                 <img class="profile-pic" width="120px" height="120px"
-                     src="{{ MEDIA_URL }}{{ userprofile.image }}"
+                     src="{{ MEDIA_URL }}{{ this_profile.image }}"
                      alt="{{ user.username }} profile image"/>
             {% else %}
                 <img class="profile-pic" width="120px" height="120px"
                      src="{{ MEDIA_URL }}profile_images/default.jpg"
-                     alt="{{ user.username }} profile image"/>
+                     alt="{{ this_user.username }} profile image"/>
             {% endif %}
 
             <h2 id="username">{{ this_user.username }}</h2>
