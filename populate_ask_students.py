@@ -136,7 +136,7 @@ def populate():
                       "answers":
                          [
                              {'answer': 'Just click about on the bar at the bottom of the page', 'likes': 13, 'dislikes': 3,
-                              'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                              'posted': None, 'edited': None, 'user': 'HealthyBeing'},
                              {'answer': 'Its for students to ask questions, obviously', 'likes':22, 'dislikes': 7,
                               'posted': None, 'edited': None, 'user': 'YellowPony123'},
                              {'answer': 'Nobody knows for sure', 'likes': 10, 'dislikes': 10,
@@ -202,7 +202,7 @@ def populate():
                       "answers":
                          [
                              {'answer': 'I prefer C', 'likes': 50, 'dislikes': 13,
-                              'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                              'posted': None, 'edited': None, 'user': 'HealthyBeing'},
                              {'answer': 'Java', 'likes':31, 'dislikes': 15,
                               'posted': None, 'edited': None, 'user': 'SeriousFred'},
                              {'answer': 'I agree, python is best', 'likes': 68, 'dislikes': 15,
@@ -214,7 +214,7 @@ def populate():
                      {'name': "Can someone help me with python",
                       "description": "I need to know how to loop through a list in python, but I only know C style for loops. Help!",
                       "views": 452,
-                      "user": "HealthyLivingForAHealthyBeing",
+                      "user": "HealthyBeing",
                       "answers":
                          [
                              {'answer': 'Do for item in list: Simple as that ', 'likes': 15, 'dislikes': 0,
@@ -237,7 +237,7 @@ def populate():
                       'answers':
                          [
                              {'answer':'McDonalds', 'likes': 70, 'dislikes' : 61,
-                              'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                              'posted': None, 'edited': None, 'user': 'HealthyBeing'},
                              {'answer':'BlueLagoon', 'likes':321, 'dislikes': 29,
                               'posted': None, 'edited': None, 'user': 'AngryTelephonePole87'},
                          ]},
@@ -263,7 +263,7 @@ def populate():
                               {'answer':'You need to come up with a study plan, then follow that plan every day. Dont be lazy.', 'likes': 33, 'dislikes':11,
                                'posted': None, 'edited': None, 'user': 'SeriousFred'},
                               {'answer': 'Keep yourself focused by turning off your phone', 'likes': 43, 'dislikes': 9,
-                               'posted': None, 'edited': None, 'user': 'HealthyLivingForAHealthyBeing'},
+                               'posted': None, 'edited': None, 'user': 'HealthyBeing'},
                               {'answer': 'Dont worry about it too much. Stress doesnt help anything', 'likes': 80, 'dislikes': 21,
                                'posted': None, 'edited': None, 'user': 'AintGotNoMoney'},
                               {'answer': 'I also find it difficult. Maybe we should request a new category to be made call "Study Tips"?', 'likes': 19, 'dislikes': 1,
