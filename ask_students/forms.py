@@ -10,7 +10,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        exclude = ('user', 'likes', 'dislikes', 'slug')
+        exclude = ('user', 'likes', 'dislikes', 'slug', 'up_votes', 'down_votes')
 
 
 class RequestCategoryForm(forms.ModelForm):

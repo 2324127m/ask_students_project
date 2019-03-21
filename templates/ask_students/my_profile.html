@@ -1,5 +1,6 @@
 {% extends 'ask_students/base.html' %}
 {% load staticfiles %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     Edit your Profile
@@ -10,12 +11,20 @@
 {% endblock %}
 
 {% block body_block %}
-
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
     <h1>{{ user.username }}</h1>
 
     <div>
-        <strong>Username: </strong>{{ user.username }}
-        <p>add lots of functionality here, need forms here to allow user to change password and profile pic</p>
+        <form role='form' method="post" id="form" class="p-3 p-lg-3" action="." enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <p class="user-info-title">Change Bio: <br/></p><p class="change-info">{{ form.bio }}</p>
+            <p class="user-info-title">Change Image:<br/><span class="change-info">{{ form.image }}</span></p>
+            <p class="user-info-title">Change Place of Study: <br/><span class="change-info">{{ form.place_of_study }}</span></p>
+            <p class="user-info-title">Change Role: <br/><span class="change-info">{{ form.permission }}</span></p>
+            
+            <button type="submit" name="edit" class="btn btn-info col-12">Edit</button>
+        </form>
     </div>
 
 {% endblock %}
