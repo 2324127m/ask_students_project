@@ -68,7 +68,7 @@
         {% if question.user.user == user %}
             <div class="row question-info">
                 <div class="col-xs-4">
-                    <a id="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
+                    <a class="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
                 </div>
                 <div class="col-xs-8">
                     <a id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
