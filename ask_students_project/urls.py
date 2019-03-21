@@ -26,7 +26,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^', include('ask_students.urls')),
-    url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
