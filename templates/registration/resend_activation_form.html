@@ -1,0 +1,13 @@
+{% extends "ask_students/base.html" %}
+
+{% block title %}Resend Activation Email{% endblock %}
+
+{% block pagetitle %}Resend Activation Email{% endblock %}
+
+{% block body_block %}
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

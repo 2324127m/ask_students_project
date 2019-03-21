@@ -261,6 +261,20 @@ def select_answer(request, question_id):
     return render(request, 'ask_students/select_answer.html', {'form': form})
 
 def profile(request, username):
+    if request.user.userprofile is None:
+        return HttpResponseNotFound();
+
+    # Set Defaults For Context
+    user = None
+    all_answers = None
+    most_liked_answers = None
+    number_of_answers = None
+    this_user_email = None
+    this_profile = None
+    user_permission = None
+    likes = None
+    dislikes = None
+
     # Get user, if doesn't exist -> redirect to home page
     try:
         user = User.objects.get(username=username)
