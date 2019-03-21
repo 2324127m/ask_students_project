@@ -229,7 +229,6 @@ def delete_answer(request, question_id, answer_id):
 @login_required
 def request_category(request):
     form = RequestCategoryForm()
-
     if request.method == 'POST':
         form = RequestCategoryForm(request.POST)
 
@@ -243,8 +242,39 @@ def request_category(request):
             print(form.errors)
     return render(request, 'ask_students/request_category.html', {'form': form})
 
+@login_required
+def select_answer(request, question_id):
+    q=Question.objects.get(pk=question_id)
+    form = SelectAnswerForm()
+    form.answer = Answer.objects.filter(questiontop = q)
+    if request.method == 'POST':
+        form = SelectAnswerForm(request.POST)
+
+        if form.is_valid():
+            answer = form.save(commit=False)
+            question = Question.objects.get(pk = form.question)
+            question.answered = form.answer
+            question.save()
+            return redirect('show_question', category_name_slug=question.category.slug, question_id=question.pk)
+        else:
+            print(form.errors)
+    return render(request, 'ask_students/select_answer.html', {'form': form})
 
 def profile(request, username):
+    if request.user.userprofile is None:
+        return HttpResponseNotFound();
+
+    # Set Defaults For Context
+    user = None
+    all_answers = None
+    most_liked_answers = None
+    number_of_answers = None
+    this_user_email = None
+    this_profile = None
+    user_permission = None
+    likes = None
+    dislikes = None
+
     # Get user, if doesn't exist -> redirect to home page
     try:
         user = User.objects.get(username=username)
