@@ -217,6 +217,25 @@ def delete_question(request, question_id):
 
 
 @login_required
+def edit_question(request, question_id):
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        return redirect('index')
+
+
+    if request.method == 'POST':
+        form = QuestionForm(request.POST, request.FILES, instance=question)
+        if form.is_valid():
+            form.edited = datetime.now()
+            form.save(commit=True)
+        else:
+            print(form.errors)
+
+    return redirect('show_question', question.category.slug, question.pk)
+
+
+@login_required
 def delete_answer(request, question_id, answer_id):
     answer = Answer.objects.get(pk=answer_id)
     question = Question.objects.get(pk=question_id)
@@ -232,6 +251,24 @@ def delete_answer(request, question_id, answer_id):
         answer.delete()
 
     return redirect('show_question', category_name_slug=question.category.slug, question_id=question.pk)
+
+
+@login_required
+def edit_answer(request, answer_id):
+    try:
+        answer = Answer.objects.get(pk=answer_id)
+    except:
+        return redirect('index')
+
+    if request.method == 'POST':
+        form = AnswerForm(request.POST, instance=answer)
+        if form.is_valid():
+            form.edited = datetime.now()
+            form.save()
+        else:
+            print(form.errors)
+
+    return redirect('show_question', answer.questiontop.category.slug, answer.questiontop.pk)
 
 @login_required
 def request_category(request):
@@ -270,8 +307,6 @@ def select_answer(request, question_id):
     return render(request, 'ask_students/select_answer.html', {'form': form, 'question' : q, 'answers': answers,})
 
 def profile(request, username):
-    if request.user.userprofile is None:
-        return HttpResponseNotFound();
 
     # Set Defaults For Context
     user = None
@@ -290,7 +325,6 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
-        ###ADDED THIS LINE AS EMAIL NOT SHOWING PROPERLY###
         this_user_email = user.email
         this_profile = UserProfile.objects.get(user=user)
         user_permission = this_profile.permission
