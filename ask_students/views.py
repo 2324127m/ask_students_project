@@ -169,19 +169,26 @@ def show_question(request, category_name_slug, question_id):
             context_dict['liked'] = None
             context_dict['disliked'] = None
 
-
-
         # Return top answer
         if question.answered!=None:
             selected_answer = Answer.objects.get(pk=question.answered.pk)
-            context_dict['selected_answer'] = selected_answer
-        else:
-            context_dict['selected_answer']=None
+            new_answers_list = []
+            new_answers_list.append(selected_answer)
+            for item in answers_list:
+                if item != selected_answer:
+                    new_answers_list.append(item)
 
-        
+            context_dict['selected_answer'] = True
+        else:
+            context_dict['selected_answer'] = None
+
         context_dict['question'] = question
-        context_dict['answers_list'] = answers_list
-        context_dict['number_of_answers'] = len(answers_list)
+        if context_dict['selected_answer']:
+            context_dict['answers_list'] = new_answers_list
+        else:
+            context_dict['answers_list'] = answers_list
+
+        context_dict['number_of_answers'] = len(new_answers_list)
 
         try:
             asker_profile = UserProfile.objects.get(pk=question.user.pk)
