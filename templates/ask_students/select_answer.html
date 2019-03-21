@@ -4,7 +4,7 @@
 {% block head_block %}
 {% endblock %}
 {% block body_block %}
-    <form role="form" class="p-4 p-lg-5" method="post" action="." enctype="multipart/form-data">
+    <form role="form" class="p-4 p-lg-5" method="post" action=".">
         {% csrf_token %}
 
         {% display_form_error_fields form %}

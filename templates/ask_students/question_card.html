@@ -9,8 +9,9 @@
     </div>
     </a>
 
-    <div class="card-body py-2 d-flex flex-row flex-wrap">
-        <div class="row remove-overflow" >
+    <!--<div class="card-body py-2 d-flex flex-row flex-wrap"> Why do we need all these classes?-->
+    <div class="card-body py-2 flex-row flex-wrap">
+        <div class="row" >
             <div class="col-sm-6">
                 <span>Views: {{ question.views }}</span>
             </div>
@@ -25,7 +26,7 @@
                     <span>Anonymous</span>
                 {% else %}
                     <a href="{% url 'profile' question.user.user.username %}">
-                        <span>{{ question.user.user.username|truncatechars:25 }}</span>
+                        <span>{{ question.user.user.username }}</span>
                     </a>
                 {% endif %}
             </div>
