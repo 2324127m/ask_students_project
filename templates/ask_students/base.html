@@ -21,11 +21,31 @@
   {% block head_block %}
 
   {% endblock %}
+    <style>
+        @media (max-width: 576px) {
+            /* override Bootstrap's container */
+            .container-fluid {
+                padding-right: 5px;
+                padding-left: 5px;
+                margin-right: auto;
+                margin-left: auto
+            }
+        }
+
+        @media (min-width: 577px) {
+            /* override Bootstrap's container */
+            .container-fluid {
+                padding-right:30px;
+                padding-left:30px;
+            }
+        }
+
+    </style>
 </head>
 <body>
   <!-- Navigation Bar -->
   <nav class="navbar fixed-top justify-content-between navbar-expand-lg navbar-white bg-white sticky-top border-bottom border-dark custom-colour">
-    <div class="container">
+    <div class="container-fluid">
       <a href="{% url 'index' %}"><img class="navbar-brand" height="52" width="46" src="{% static 'images/home.png' %}"></a>
 
       <form class="order-lg-2 form-inline mx-0" id="nav-bar-search" name="nav-bar-search"
@@ -69,7 +89,7 @@
     </div>
   </nav>
   <!-- Page Content -->
-  <div class="container-fluid my-2" style="width:95%">
+  <div class="container-fluid my-2">
     <!-- Marketing Icons Section -->
     <div class="row">
       <div class="col-lg-3 order-lg-1 order-3 my-2 main">

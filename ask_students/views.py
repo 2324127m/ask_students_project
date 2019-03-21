@@ -502,12 +502,7 @@ def incr_dislikes(answer, answerer_profile):
 @user_passes_test(lambda u: u.is_staff)
 def approve_category(request):
     context_dict = {}
-
-    try:
-        cat_list = Category.objects.filter(approved=False)
-        context_dict['category'] = cat_list
-
-    except Category.DoesNotExist:
-        context_dict['category'] = None
+    cat_list = Category.objects.all().filter(approved=False)
+    context_dict['category'] = cat_list
 
     return render(request, 'ask_students/approve_category.html', context_dict)
