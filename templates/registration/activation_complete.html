@@ -1,0 +1,13 @@
+{% extends "ask_students/base.html" %}
+
+{% block title %}Account Activated{% endblock %}
+{% block pagetitle %}Account Activated{% endblock %}
+
+{% block body_block %}
+<p>
+    Your account is now activated.
+    {% if not user.is_authenticated %}
+        You can log in.
+    {% endif %}
+</p>
+{% endblock %}
