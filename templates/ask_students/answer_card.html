@@ -6,9 +6,12 @@
     </div>
 
     <div class="col-md-3 col-sm-6">
-        <img id="like-btn-{{ answer.pk }}" class="like-img like-btn" src="{% static 'images/like.png' %}"/>
+        <img id="like-btn-{{ answer.pk }}" class="like-img like-btn"
+             src="{% if liked %}{% static 'images/active-like.png' %}{% else %}{% static 'images/like.png' %}{% endif %}"/>
         <a id="like-{{ answer.pk }}">{{ answer.likes }}</a>
-        <img id="dislike-btn-{{ answer.pk }}" class="dislike-img dislike-btn" src="{% static 'images/dislike.png' %}"/>
+
+        <img style="" id="dislike-btn-{{ answer.pk }}" class="dislike-img dislike-btn"
+             src="{% if disliked %}{% static 'images/active-dislike.png' %}{% else %}{% static 'images/dislike.png' %}{% endif %}"/>
         <a id="dislike-{{ answer.pk }}">{{ answer.dislikes }}</a>
     </div>
     <div class="col-md-5 col-sm-6">

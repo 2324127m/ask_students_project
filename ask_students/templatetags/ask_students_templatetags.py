@@ -30,8 +30,8 @@ def show_full_question(question):
                 return {'question': question}
 
 @register.inclusion_tag('ask_students/answer_card.html')
-def show_answer(answer):
+def show_answer(answer, liked, disliked):
         if not isinstance(answer, Answer):
                 return None
         else:
-                return {'answer':answer}
+                return {'answer': answer, 'liked': liked, 'disliked': disliked }

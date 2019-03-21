@@ -80,7 +80,13 @@
 
     <div class="container">
         {% for answer in answers_list %}
-            {% show_answer answer %}
+            {% if answer.pk in liked %}
+                {% show_answer answer True False %}
+            {% elif answer.pk in disliked %}
+                {% show_answer answer False True %}
+            {% else %}
+                {% show_answer answer False False %}
+            {% endif %}
             {% if answer.user.user == user %}
                 <a id="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
             {% endif %}

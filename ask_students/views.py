@@ -112,6 +112,7 @@ def show_question(request, category_name_slug, question_id):
 
     try:
         question = Question.objects.get(pk=question_id)
+        user_profile = UserProfile.objects.get(user=request.user)
 
         # If method of the request is POST, then a user posting an answer to the question
         if request.method == 'POST':
@@ -121,15 +122,13 @@ def show_question(request, category_name_slug, question_id):
                 answer = form.save(commit=False)
                 answer.category = Category.objects.get(slug=category_name_slug)
                 answer.questiontop = question
-                # answer.user must be a user profile object
-                user_prof = UserProfile.objects.get(user=request.user)
 
                 # If question is anonymous and answerer is the person who asked it
                 # then answer has no user, template will show anonymous
-                if question.anonymous and question.user == user_prof:
+                if question.anonymous and question.user == user_profile:
                     answer.user = None
                 else:
-                    answer.user = user_prof
+                    answer.user = user_profile
 
                 answer.save()
 
@@ -139,11 +138,18 @@ def show_question(request, category_name_slug, question_id):
         # Earliest answer first
         answers_list = Answer.objects.filter(questiontop=question).order_by('-likes')
 
-        # Return top answer
+        user_liked_answers = list(answers_list.filter(up_voters=user_profile))
+        user_disliked_answers = list(answers_list.filter(down_voters=user_profile))
 
+        user_liked_answers = [x.pk for x in user_liked_answers]
+        user_disliked_answers = [y.pk for y in user_disliked_answers]
+
+        # Return top answer
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
         context_dict['number_of_answers'] = len(answers_list)
+        context_dict['liked'] = user_liked_answers
+        context_dict['disliked'] = user_disliked_answers
 
         try:
             user_profile = UserProfile.objects.get(pk=question.user.pk)
@@ -376,6 +382,9 @@ def vote(request):
             # And what kind of vote is this user placing.
             vote = int(request.POST.get('vote'))
 
+            # Feedback to client what action server took, defaults to no action
+            action = ""
+
             # I clicked like!
             if vote == 1:
                 if user_profile not in answer.up_voters.all():
@@ -388,12 +397,13 @@ def vote(request):
                     # Now make me a liker!
                     incr_likes(answer, answerer_profile)
                     answer.up_voters.add(user_profile)
+                    action="like"
 
                 # I currently have a like, but I've changed my mind.
                 else:
                     decr_likes(answer, answerer_profile)
                     answer.up_voters.remove(user_profile)
-
+                    action = "remove"
 
             # I clicked dislike
             elif vote == 0:
@@ -408,11 +418,13 @@ def vote(request):
                     # Make me a hater
                     incr_dislikes(answer, answerer_profile)
                     answer.down_voters.add(user_profile)
+                    action = "dislike"
 
                 # I have a dislike, but I've changed my mind, remove it!
                 else:
                     decr_dislikes(answer, answerer_profile)
                     answer.down_voters.remove(user_profile)
+                    action = "remove"
 
             # Commit any changes to DB
             answer.save()
@@ -422,7 +434,8 @@ def vote(request):
             # Lets send back the new likes/dislikes for the page to display
             response = {"likes": answer.likes,
                         "dislikes": answer.dislikes,
-                        "answer_id": answer.id}
+                        "answer_id": answer.id,
+                        "action": action}
 
             response = json.dumps(response)
 
