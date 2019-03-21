@@ -10,6 +10,12 @@
     Edit your Profile - {{ user.username }}
 {% endblock %}
 
+{% block head_block %}
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+  <script src="{% static 'js/support-image.js' %}"></script>
+{% endblock %}
+
 {% block body_block %}
     <link href="{% static 'css/profile.css' %}" rel="stylesheet">
 
@@ -25,10 +31,11 @@
                 </label>
             </div>
 
-            <div class="form-group">
-                <label for="id_image" class="user-info-title">Upload a new profile image:</label>
-                <p class="change-info">{{ form.image }}</p>
-            </div>
+                <label for="id_image" class="user-info-title">
+                    View your current profile image <a target="_blank" href="{{ MEDIA_URL }}{{ form.image.value }}">here</a>
+                    <br/><br/>Upload a new profile image:</label>
+                <input onchange="loadFile(event)" type="file" name="image" id="id_image"><br/>
+                <img class="img-fluid" id="image-preview"/>
 
             <div class="form-group">
                 <label for="id_place_of_study" class="user-info-title">Update your place of study:</label>
@@ -44,13 +51,11 @@
     </div>
 
     <div class="page-break">
-
     </div>
 
-    <div>
+    <div class="mt-5">
         <a href="{% url 'auth_password_change' %}">
-            <button style="margin-top:40px;"class="btn btn-info col-4">Change your password here!</button>
+            <button class="btn btn-info col-6">Change your password here!</button>
         </a>
     </div>
-
 {% endblock %}
