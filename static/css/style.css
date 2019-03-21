@@ -17,6 +17,12 @@ body {
 	text-align: center;
 }
 
+.edit-answer {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /* Override Horizontal Column Padding */
 .container .row .main {
 	padding: 8px;

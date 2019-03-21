@@ -19,12 +19,16 @@
 
 {% block body_block %}
 
-    <!-- Show Question Title-->
-    {% if question.answered != None %}
-        <h4>{{ question.name }} (Answered)</h4>
-    {% else %}
-        <h4>{{ question.name }}</h4>
-    {% endif %}
+    <h4>{{ question.name }} -
+        <!-- Functions specific to user who posted question -->
+        {% if question.answered != None %}
+            (Answered)
+        {% endif %}
+        {% if question.user.user == user %}
+            <a style="font-size: 60%; margin-left: 15px;" class="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
+            <a style="font-size: 60%; margin-left: 10px;" id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
+        {% endif %}
+    </h4>
 
     <div class="container">
         <div class="row question-info">
@@ -68,17 +72,6 @@
             </div>
         </div>
 
-        <!-- Functions specific to user who posted question -->
-        {% if question.user.user == user %}
-            <div class="row question-info">
-                <div class="col-xs-4 left-section">
-                    <a id="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
-                </div>
-                <div class="col-xs-8">
-                    <a id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
-                </div>
-            </div>
-        {% endif %}
     </div>
 
     <div class="page-break"></div>
@@ -87,33 +80,39 @@
 
 
     {% if selected_answer %}
-        {% if selected_answer.pk in liked %}
-            {% show_answer selected_answer question True False %}
-        {% elif selected_answer.pk in disliked %}
-            {% show_answer selected_answer question False True %}
-        {% else %}
-            {% show_answer selected_answer question False False %}
-        {% endif %}
-        {% if answer.user.user == user %}
-            <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
-        {% endif %}
+        <div class="answer-number-1">
+            {% if selected_answer.pk in liked %}
+                {% show_answer selected_answer question True False %}
+            {% elif selected_answer.pk in disliked %}
+                {% show_answer selected_answer question False True %}
+            {% else %}
+                {% show_answer selected_answer question False False %}
+            {% endif %}
+            {% if answer.user.user == user %}
+                <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
+                <a class="" href="" onclick="myFunction()" >Edit</a>
+            {% endif %}
+        </div>
         <div class="page-break"></div>
     {% endif %}
 
     {% for answer in answers_list %}
-        {% if answer != selected_answer %}
-            {% if answer.pk in liked %}
-                {% show_answer answer question True False %}
-            {% elif answer.pk in disliked %}
-                {% show_answer answer question False True %}
-            {% else %}
-                {% show_answer answer question False False %}
-            {% endif %}
+        <div class="answer-number-{{ forloop.counter|add:"1" }}">
+            {% if answer != selected_answer %}
+                {% if answer.pk in liked %}
+                    {% show_answer answer question True False %}
+                {% elif answer.pk in disliked %}
+                    {% show_answer answer question False True %}
+                {% else %}
+                    {% show_answer answer question False False %}
+                {% endif %}
             {% if answer.user.user == user %}
                 <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
+                <a onclick="myFunction()" href="" class="">Edit</a>
             {% endif %}
             <div class="page-break"></div>
         {% endif %}
+        </div>
     {% endfor %}
 
     {% if user.is_authenticated %}
@@ -145,6 +144,7 @@
         <p>You must be signed in to answer this question!</p>
     {% endif %}
     <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}";</script>
-    <script src="/static/js/answervotehandler.js"></script>
+    <script src="{% static 'js/answervotehandler.js' %}"></script>
+    <script src="{% static 'js/question-answer-edit.js' %}"></script>
 
 {% endblock %}

@@ -49,7 +49,7 @@ def populate():
              {'username': 'GustySeagull1942', 'first_name': 'Gill', 'last_name': 'MacMill', 'email': 'mrsmacmill@gmail.com',
               'password': 'TROONBEACH', 'bio': 'Seagulls and seaweed is all that this gal needs', 'image': 'profile_images/GustySeagull1942.jpg',
               'likes': 111, 'dislikes': 105, 'permission': 'Undergraduate', 'place_of_study': 'Robert Gordon University'},
-             {'username': 'HealthyLivingForAHealthyBeing', 'first_name': 'Harriot', 'last_name': 'MacTarrot', 'email': 'harriot_mactarrot@yahoo.co.uk',
+             {'username': 'HealthyBeing', 'first_name': 'Harriot', 'last_name': 'MacTarrot', 'email': 'harriot_mactarrot@yahoo.co.uk',
               'password': 'carrot', 'bio': '#fitlife',
               'likes': 176, 'dislikes': 86, 'permission': 'Student', 'place_of_study': 'University of Glasgow'},
              {'username': 'AintGotNoMoney', 'first_name': 'Isabelle', 'last_name': 'MacDinnerBell', 'email': 'dinner_bell@gmail.com',
