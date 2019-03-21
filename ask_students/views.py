@@ -502,21 +502,33 @@ def incr_dislikes(answer, answerer_profile):
 @user_passes_test(lambda u: u.is_staff)
 def approve_category(request):
     context_dict = {}
+
     cat_list = Category.objects.all().filter(approved=False)
-    context_dict['category'] = cat_list
+
+    data = []
+    for i in range(len(cat_list)):
+        form = ApproveCategoryForm()
+        tup = (form, cat_list[i])
+        data.append(tup)
+
+    context_dict['data'] = data
     
     if request.method == 'POST':
         form = ApproveCategoryForm(request.POST)
-
         if form.is_valid():
-            category = form.save(commit=False)
-            category.approved = True
-            category.save()
+            form.save(commit=True)
+
+            print(form.cleaned_data['id_category'])
+            #cat = Category.objects.get(pk=)
+            #cat.approved = True
+            #cat.save()
+
             cat_list = Category.objects.all().filter(approved=False)
+            context_dict['category'] = cat_list
+
             return render(request, 'ask_students/index.html', {})
         else:
             print(form.errors)
 
     return render(request, 'ask_students/approve_category.html', context_dict)
-    
-    
+
