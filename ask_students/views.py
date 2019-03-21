@@ -2,7 +2,7 @@ import sys
 
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 
 from django.core.paginator import Paginator, InvalidPage
 
@@ -356,21 +356,44 @@ def search(request):
 
 @login_required
 def vote(request):
-    #not sure what's getting passed in request
-    #think this would be the general idea tho
-    answer = Answer.objects.get(pk=pk)
-    user = User.objects.get(username=answer.user.user.username)
-    userProfile = UserProfile.objects.get(user=user)
 
-    if request.is_ajax():
-        query = request.GET.get('like')
-        if query == 1:
-            answer.likes += 1
-            userProfile.likes += 1
-        if query == 0:
-            answer.dislikes += 1
-            userProfile.dislikes += 1
-        userProfile.save()
+    # Request must be AJAX, and if its not a secure POST with valid CSRF, we ain't interested.
+    if request.is_ajax() and request.method == 'POST':
+        try:
+            # Parse the answer we need to change.
+            answer = request.POST.get('answer_id')
+            answer = int(answer.strip('dislike-btn-').strip('like-btn-'))
+            answer = Answer.objects.get(pk=answer)
+
+            # Get the profile we need to update dis/likes on
+            answerer_profile = answer.user
+
+            # And what kind of vote is this user placing.
+            vote = int(request.POST.get('vote'))
+
+            if vote == 1:
+                answer.likes += 1
+                answerer_profile.likes += 1
+            elif vote == 0:
+                answer.dislikes += 1
+                answerer_profile.dislikes += 1
+
+            # Commit any channges to DB
+            answer.save()
+            answerer_profile.save()
+
+            # Lets send back the new likes/dislikes for the page to display
+            response = {"likes": answer.likes,
+                        "dislikes": answer.dislikes,
+                        "answer_id": answer.id}
+
+            response = json.dumps(response)
+
+            return HttpResponse(response)
+
+        except Answer.DoesNotExist:
+            return HttpResponseNotFound("Specified Answer Not Found")
+
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)

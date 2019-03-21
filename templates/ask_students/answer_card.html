@@ -6,8 +6,10 @@
     </div>
 
     <div class="col-md-3 col-sm-6">
-        <img src="{% static 'images/like.png' %}"/>{{ answer.likes }}
-        <img class="dislike-img" src="{% static 'images/dislike.png' %}"/>{{ answer.dislikes }}
+        <img id="like-btn-{{ answer.pk }}" class="like-img like-btn" src="{% static 'images/like.png' %}"/>
+        <a id="like-{{ answer.pk }}">{{ answer.likes }}</a>
+        <img id="dislike-btn-{{ answer.pk }}" class="dislike-img dislike-btn" src="{% static 'images/dislike.png' %}"/>
+        <a id="dislike-{{ answer.pk }}">{{ answer.dislikes }}</a>
     </div>
     <div class="col-md-5 col-sm-6">
         {% if answer.edited %}

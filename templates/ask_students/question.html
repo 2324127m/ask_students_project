@@ -102,7 +102,7 @@
     {% else %}
         <p>You must be signed in to answer this question!</p>
     {% endif %}
-    
-    
+    <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}";</script>
+    <script src="/static/js/answervotehandler.js"></script>
 
 {% endblock %}
