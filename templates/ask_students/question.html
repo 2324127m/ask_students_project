@@ -20,7 +20,11 @@
 {% block body_block %}
 
     <!-- Show Question Title-->
-    <h4>{{ question.name }}</h4>
+	{% if question.answered != None %}
+    <h4>{{ question.name }} (Answered)</h4>
+	{% else %}
+	<h4>{{ question.name }}</h4>
+	{% endif %}
 
     <div class="container">
         <div class="row question-info">
@@ -67,7 +71,7 @@
         <!-- Functions specific to user who posted question -->
         {% if question.user.user == user %}
             <div class="row question-info">
-                <div class="col-xs-4">
+                <div class="col-xs-4 left-section">
                     <a id="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
                 </div>
                 <div class="col-xs-8">
@@ -82,18 +86,35 @@
     <h4>{{ number_of_answers }} Answer{{ number_of_answers|pluralize }}</h4>
 
     <div class="container">
-        {% for answer in answers_list %}
-            {% if answer.pk in liked %}
-                {% show_answer answer True False %}
-            {% elif answer.pk in disliked %}
-                {% show_answer answer False True %}
+		
+		{% if selected_answer %}
+			{% if selected_answer.pk in liked %}
+                {% show_answer selected_answer question True False %}
+            {% elif selected_answer.pk in disliked %}
+                {% show_answer selected_answer question False True %}
             {% else %}
-                {% show_answer answer False False %}
+                {% show_answer selected_answer question False False %}
             {% endif %}
             {% if answer.user.user == user %}
                 <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
             {% endif %}
             <div class="page-break"></div>
+		{% endif %}
+		
+        {% for answer in answers_list %}
+			{% if answer != selected_answer %}
+				{% if answer.pk in liked %}
+					{% show_answer answer question True False %}
+				{% elif answer.pk in disliked %}
+					{% show_answer answer question False True %}
+				{% else %}
+					{% show_answer answer question False False %}
+				{% endif %}
+				{% if answer.user.user == user %}
+					<a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
+				{% endif %}
+				<div class="page-break"></div>
+			{% endif %}
         {% endfor %}
     </div>
 

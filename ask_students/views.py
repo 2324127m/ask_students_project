@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 
 from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, SelectAnswerForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from registration.backends.simple.views import RegistrationView
@@ -167,7 +167,16 @@ def show_question(request, category_name_slug, question_id):
             context_dict['liked'] = None
             context_dict['disliked'] = None
 
+
+
         # Return top answer
+        if question.answered!=None:
+            selected_answer = Answer.objects.get(pk=question.answered.pk)
+            context_dict['selected_answer'] = selected_answer
+        else:
+            context_dict['selected_answer']=None
+
+        
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
         context_dict['number_of_answers'] = len(answers_list)
@@ -246,19 +255,21 @@ def request_category(request):
 def select_answer(request, question_id):
     q=Question.objects.get(pk=question_id)
     form = SelectAnswerForm()
-    form.answer = Answer.objects.filter(questiontop = q)
+    answers = Answer.objects.filter(questiontop = q)
+    
     if request.method == 'POST':
         form = SelectAnswerForm(request.POST)
 
         if form.is_valid():
-            answer = form.save(commit=False)
-            question = Question.objects.get(pk = form.question)
-            question.answered = form.answer
-            question.save()
-            return redirect('show_question', category_name_slug=question.category.slug, question_id=question.pk)
+            #print(q.name)
+            a = form.save(commit=False)
+            q.answered = Answer.objects.get(pk=a.answered.pk)
+            q.save()
+            print(q.answered.text)
+            return redirect('show_question', category_name_slug=q.category.slug, question_id=q.pk)
         else:
             print(form.errors)
-    return render(request, 'ask_students/select_answer.html', {'form': form})
+    return render(request, 'ask_students/select_answer.html', {'form': form, 'question' : q, 'answers': answers,})
 
 def profile(request, username):
     if request.user.userprofile is None:
@@ -307,7 +318,6 @@ def profile(request, username):
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
                     'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email }
 
-    print(context_dict)
 
     return render(request, 'ask_students/profile.html', context_dict)
 

@@ -95,7 +95,7 @@ class Question(models.Model):
 	edited = models.DateTimeField(default=None, null=True, blank=True)
 	views = models.IntegerField(default=0)
 
-	answered = models.ForeignKey(Answer, on_delete=models.SET_NULL, null=True, default=None)
+	answered = models.ForeignKey(Answer, on_delete=models.SET_NULL, null=True, default=None, blank=True)
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

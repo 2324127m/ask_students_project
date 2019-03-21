@@ -22,11 +22,11 @@ class RequestCategoryForm(forms.ModelForm):
         exclude = ('slug', 'user', 'approved')
 
 class SelectAnswerForm(forms.ModelForm):
-    answers=forms.ModelChoiceField(required=True, queryset=Answer.objects.all())
+    answered=forms.ModelChoiceField(required=False, queryset=Answer.objects.all())
 
     class Meta:
         model = Question
-        exclude = ()
+        exclude = ('name', 'text', 'anonymous', 'posted', 'edited', 'views', 'user', 'category', 'support_file')
 
 class AskQuestionForm(forms.ModelForm):
     name = forms.CharField(max_length=128)

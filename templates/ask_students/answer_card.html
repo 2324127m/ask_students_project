@@ -2,7 +2,11 @@
 <div class="row question-info no-gutters">
     <!-- left side, show question text -->
     <div class="col-sm-12 card question-card answer-card">
-        <p class="question-text">{{ answer.text }}</p>
+	{% if question.answered.pk == answer.pk %}
+        <p class="question-text"><strong style="color:green">Selected answer: </strong>{{ answer.text }}</p>
+	{% else %}
+		<p class="question-text">{{ answer.text }}</p>
+	{% endif %}
     </div>
 
     <div class="col-md-3 col-sm-6">

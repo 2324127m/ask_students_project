@@ -32,11 +32,11 @@ def show_full_question(question):
 
 
 @register.inclusion_tag('ask_students/answer_card.html')
-def show_answer(answer, liked, disliked):
+def show_answer(answer, question, liked, disliked):
     if not isinstance(answer, Answer):
         return None
     else:
-        return {'answer': answer, 'liked': liked, 'disliked': disliked}
+        return {'answer': answer, 'liked': liked, 'disliked': disliked, 'question':question}
 
 
 @register.inclusion_tag('ask_students/form_error_fields.html')
