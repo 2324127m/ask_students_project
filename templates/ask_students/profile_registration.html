@@ -1,5 +1,6 @@
 {% extends 'ask_students/base.html' %}
 {% load staticfiles %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     Sign Up - Step 2
@@ -21,13 +22,7 @@
           enctype="multipart/form-data">
         {% csrf_token %}
 
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                <strong> Warning! </strong> {{ error }} <br />
-            {% endfor %}
-            </div>
-        {% endif %}
+        {% display_form_error_fields form %}
 
         <div class="form-group row pd-3">
             <label for="id_bio" class="col-sm-3 col-lg-4 col-xl-3 col-form-label"> Bio:</label>

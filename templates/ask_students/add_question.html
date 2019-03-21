@@ -1,5 +1,6 @@
 {% extends 'ask_students/base.html' %}
 {% load staticfiles %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     Ask A Question!
@@ -13,6 +14,8 @@
 
 	<form role="form" class="p-4 p-lg-5" method="post" action="." enctype="multipart/form-data">
         {% csrf_token %}
+
+        {% display_form_error_fields form %}
 		
 		<div class="form-group">
 			<label for="id_name">Enter your question title here!</label>
