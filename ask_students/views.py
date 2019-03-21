@@ -109,7 +109,7 @@ def add_question(request):
 
 def show_question(request, category_name_slug, question_id):
     context_dict = {}
-
+    was_question_answered = False
     try:
         question = Question.objects.get(pk=question_id)
 
@@ -146,6 +146,8 @@ def show_question(request, category_name_slug, question_id):
                     answer.user = user_profile
 
                 answer.save()
+
+                was_question_answered = True
 
             else:
                 print(form.errors)
@@ -202,6 +204,11 @@ def show_question(request, category_name_slug, question_id):
         context_dict['question'] = None
         context_dict['answers_list'] = None
 
+    if was_question_answered:
+        if category_name_slug and question_id:
+            return HttpResponseRedirect(reverse('show_question', kwargs={'category_name_slug': category_name_slug,
+                                                                         'question_id': question_id}))
+
     return render(request, 'ask_students/question.html', context_dict)
 
 
@@ -222,7 +229,6 @@ def edit_question(request, question_id):
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
         return redirect('index')
-
 
     if request.method == 'POST':
         form = QuestionForm(request.POST, request.FILES, instance=question)
@@ -270,6 +276,7 @@ def edit_answer(request, answer_id):
 
     return redirect('show_question', answer.questiontop.category.slug, answer.questiontop.pk)
 
+
 @login_required
 def request_category(request):
     form = RequestCategoryForm()
@@ -286,6 +293,7 @@ def request_category(request):
             print(form.errors)
     return render(request, 'ask_students/request_category.html', {'form': form})
 
+
 @login_required
 def select_answer(request, question_id):
     q=Question.objects.get(pk=question_id)
@@ -296,15 +304,14 @@ def select_answer(request, question_id):
         form = SelectAnswerForm(request.POST)
 
         if form.is_valid():
-            #print(q.name)
             a = form.save(commit=False)
             q.answered = Answer.objects.get(pk=a.answered.pk)
             q.save()
-            print(q.answered.text)
             return redirect('show_question', category_name_slug=q.category.slug, question_id=q.pk)
         else:
             print(form.errors)
     return render(request, 'ask_students/select_answer.html', {'form': form, 'question' : q, 'answers': answers,})
+
 
 def profile(request, username):
 
@@ -350,7 +357,6 @@ def profile(request, username):
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
                     'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email }
 
-
     return render(request, 'ask_students/profile.html', context_dict)
 
 
@@ -363,10 +369,10 @@ def my_profile(request):
     
     user_profile = UserProfile.objects.get(user=user)  
     form = UserProfileForm(initial={'bio': user_profile.bio,
-                            'image': user_profile.image,
-                            'place_of_study': user_profile.place_of_study,
-                            'permission': user_profile.permission
-                            })
+                                    'image': user_profile.image,
+                                    'place_of_study': user_profile.place_of_study,
+                                    'permission': user_profile.permission
+                                    })
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
@@ -586,41 +592,42 @@ def incr_dislikes(answer, answerer_profile):
         answerer_profile.dislikes += 1
 
 
+# This view requires a user who is also a member of staff to be logged in
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def approve_category(request):
     context_dict = {}
 
+    # Get a list of categories that have not been approved
     cat_list = Category.objects.all().filter(approved=False)
 
+    # Get a list of tuples, each consists of a approve category form and a category that needs approving
     data = []
     for i in range(len(cat_list)):
         form = ApproveCategoryForm()
         tup = (form, cat_list[i])
         data.append(tup)
 
+    # Add to context dictionary so template can display this
     context_dict['data'] = data
-    
+
+    # If the staff member approves a category, it's a post request
     if request.method == 'POST':
+        # Get the submitted form
         form = ApproveCategoryForm(request.POST)
         if form.is_valid():
             cat_form = form.save(commit=False)
 
+            # If it's valid, get the category we wish to approve
             cat = Category.objects.get(pk=request.POST['category'])
+
+            # Approve it and save it
+            cat.description = request.POST['description']
             cat.approved = True
             cat.save()
 
-            cat_list = Category.objects.all().filter(approved=False)
-
-            data = []
-            for i in range(len(cat_list)):
-                form = ApproveCategoryForm()
-                tup = (form, cat_list[i])
-                data.append(tup)
-
-            context_dict['data'] = data
-
-            return render(request, 'ask_students/approve_category.html', context_dict)
+            # Safely redirect user back to approve category page and display categories that still need approving
+            return HttpResponseRedirect(reverse('approve_category'))
         else:
             print(form.errors)
 

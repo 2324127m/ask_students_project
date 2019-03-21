@@ -14,30 +14,43 @@
     <link href="{% static 'css/profile.css' %}" rel="stylesheet">
 
     <div>
-        <form role='form' method="post" id="form" action="." enctype="multipart/form-data">
+        <form role='form' method="post" id="this-form" action="." enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="form-group">
                 <label for="id_bio" class="user-info-title">Bio:
                     <textarea rows="4" cols="50" class="form-control" id="id_bio"
-                              name="text" form="form"
+                              name="bio" form="this-form"
                               maxlength="512" required>{{ form.bio.value }}</textarea>
                 </label>
             </div>
 
-
             <div class="form-group">
-                <label for="id_bio" class="user-info-title">Upload a new profile image:</label>
+                <label for="id_image" class="user-info-title">Upload a new profile image:</label>
                 <p class="change-info">{{ form.image }}</p>
             </div>
 
-            <p></p>
-            <p class="user-info-title">Change Place of Study: <br/><span
-                    class="change-info">{{ form.place_of_study }}</span></p>
-            <p class="user-info-title">Change Role: <br/><span class="change-info">{{ form.permission }}</span></p>
+            <div class="form-group">
+                <label for="id_place_of_study" class="user-info-title">Update your place of study:</label>
+                <span class="change-info">{{ form.place_of_study }}</span>
+            </div>
 
-            <button type="submit" name="edit" class="btn btn-info col-12">Edit</button>
+            <div class="form-group">
+                <label for="id_permission" class="user-info-title">Update role:</label>
+                <span class="change-info">{{ form.permission }}</span>
+            </div>
+            <button type="submit" name="edit" class="btn btn-info col-4 mx-auto d-block">Update</button>
         </form>
+    </div>
+
+    <div class="page-break">
+
+    </div>
+
+    <div>
+        <a href="{% url 'auth_password_change' %}">
+            <button style="margin-top:40px;"class="btn btn-info col-4">Change your password here!</button>
+        </a>
     </div>
 
 {% endblock %}
