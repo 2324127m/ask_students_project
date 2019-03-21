@@ -98,7 +98,7 @@
         
         <form id="answer_form" method="post" action="{% url 'show_question' question.category.slug question.pk %}">
             {% csrf_token %}
-            {% display_form_error_fields %}
+            {% display_form_error_fields form %}
             <h4>Your Answer</h4>
 
             <div class="answer-box">{{ answer_form.text }}</div>
