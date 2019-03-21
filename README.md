@@ -56,8 +56,8 @@
 
 3. ## External Sources
       We used a number of external sources for the making of this web application:
-       BootStrap 4
-       jQuery 
-       jQuery Validate
-       jQuery UI
-       Django Registration Redux
+      *BootStrap 4
+      *jQuery 
+      *jQuery Validate
+      *jQuery UI
+      *Django Registration Redux
