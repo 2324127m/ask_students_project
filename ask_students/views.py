@@ -82,7 +82,7 @@ def add_question(request):
     if request.method == 'POST':
         form = AskQuestionForm(request.POST)
         if form.is_valid():
-            question = form.save(commit = True)
+            question = form.save(commit=True)
             question.posted = datetime.now()
             up = UserProfile.objects.get(user=request.user)
             question.user = up
@@ -112,7 +112,22 @@ def show_question(request, category_name_slug, question_id):
 
     try:
         question = Question.objects.get(pk=question_id)
-        user_profile = UserProfile.objects.get(user=request.user)
+
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)  # user_profile is ALWAYS the requester's profile
+
+        except UserProfile.DoesNotExist:
+            user_profile = None
+
+        except TypeError:
+            user_profile = None
+
+        # Basic Handling Of View Count
+        # Iterates if there is no vq_id key set for user session
+        if request.method == 'GET' and not ('vq_%s' % question.id) in request.session:
+            request.session['vq_%s' % question.id] = True
+            question.views += 1
+            question.save()
 
         # If method of the request is POST, then a user posting an answer to the question
         if request.method == 'POST':
@@ -123,7 +138,7 @@ def show_question(request, category_name_slug, question_id):
                 answer.category = Category.objects.get(slug=category_name_slug)
                 answer.questiontop = question
 
-                # If question is anonymous and answerer is the person who asked it
+                # If question is anonymous and answerer is the original asker
                 # then answer has no user, template will show anonymous
                 if question.anonymous and question.user == user_profile:
                     answer.user = None
@@ -138,37 +153,38 @@ def show_question(request, category_name_slug, question_id):
         # Earliest answer first
         answers_list = Answer.objects.filter(questiontop=question).order_by('-likes')
 
-        user_liked_answers = list(answers_list.filter(up_voters=user_profile))
-        user_disliked_answers = list(answers_list.filter(down_voters=user_profile))
+        if user_profile is not None:
+            user_liked_answers = list(answers_list.filter(up_voters=user_profile))
+            user_disliked_answers = list(answers_list.filter(down_voters=user_profile))
 
-        user_liked_answers = [x.pk for x in user_liked_answers]
-        user_disliked_answers = [y.pk for y in user_disliked_answers]
+            user_liked_answers = [x.pk for x in user_liked_answers]
+            user_disliked_answers = [y.pk for y in user_disliked_answers]
+
+            context_dict['liked'] = user_liked_answers
+            context_dict['disliked'] = user_disliked_answers
+
+        else:
+            context_dict['liked'] = None
+            context_dict['disliked'] = None
 
         # Return top answer
         context_dict['question'] = question
         context_dict['answers_list'] = answers_list
         context_dict['number_of_answers'] = len(answers_list)
-        context_dict['liked'] = user_liked_answers
-        context_dict['disliked'] = user_disliked_answers
 
         try:
-            user_profile = UserProfile.objects.get(pk=question.user.pk)
-            context_dict['user_profile'] = user_profile
+            asker_profile = UserProfile.objects.get(pk=question.user.pk)
+            context_dict['asker_profile'] = asker_profile
 
         except UserProfile.DoesNotExist:
-            context_dict['user_profile'] = None
+            context_dict['asker_profile'] = None
 
         if question.answered is not None:
             context_dict['answer'] = question.answered
+        else:
+            context_dict['answer'] = None
 
         answer_form = AnswerForm
-
-        # Basic Handling Of View Count
-        # Iterates if there is no vq_id key set for user session
-        if request.method == 'GET' and not ('vq_%s' % question.id) in request.session:
-                request.session['vq_%s' % question.id] = True
-                question.views += 1
-                question.save()
 
         # Add the form to context dictionary
         context_dict['answer_form'] = answer_form
@@ -177,7 +193,10 @@ def show_question(request, category_name_slug, question_id):
         context_dict['question'] = None
         context_dict['answers_list'] = None
 
+    print(context_dict)
+
     return render(request, 'ask_students/question.html', context_dict)
+
 
 @login_required
 def delete_question(request, question_id):
@@ -188,6 +207,7 @@ def delete_question(request, question_id):
         question.delete()
 
     return redirect('index')
+
 
 @login_required
 def delete_answer(request, question_id, answer_id):
@@ -233,10 +253,10 @@ def profile(request, username):
         number_of_answers = len(all_answers)
         ###ADDED THIS LINE AS EMAIL NOT SHOWING PROPERLY###
         this_user_email = user.email
-        userprofile = UserProfile.objects.get(user=user)
-        user_permission = userprofile.permission
-        likes = userprofile.likes
-        dislikes = userprofile.dislikes
+        this_profile = UserProfile.objects.get(user=user)
+        user_permission = this_profile.permission
+        likes = this_profile.likes
+        dislikes = this_profile.dislikes
         #user_permission = user.permission
         if user_permission == None:
             role = "Student"
@@ -249,13 +269,15 @@ def profile(request, username):
         return redirect('index')
 
     except UserProfile.DoesNotExist:
-        userprofile = None
+        this_profile = None
 
     # select user's profile instance or create a blank one
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
-                    'number_of_answers': number_of_answers, 'role' : role, 'userprofile' : userprofile, 'this_user_email' : this_user_email }
+                    'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email }
+
+    print(context_dict)
 
     return render(request, 'ask_students/profile.html', context_dict)
 

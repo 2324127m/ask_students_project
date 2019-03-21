@@ -15,16 +15,16 @@
 
 {% block body_block %}
     <link href="{% static 'css/profile.css' %}" rel="stylesheet">
-    {% if user.userprofile != None %}
+    {% if this_profile is not None %}
         <div class="row">
 
         <div class="col-sm-12 text-center">
             {% if userprofile.image %}
-                <img class="proflie-pic" width="120px" height="120px"
+                <img class="profile-pic" width="120px" height="120px"
                      src="{{ MEDIA_URL }}{{ userprofile.image }}"
                      alt="{{ user.username }} profile image"/>
             {% else %}
-                <img class="proflie-pic" width="120px" height="120px"
+                <img class="profile-pic" width="120px" height="120px"
                      src="{{ MEDIA_URL }}profile_images/default.jpg"
                      alt="{{ user.username }} profile image"/>
             {% endif %}
