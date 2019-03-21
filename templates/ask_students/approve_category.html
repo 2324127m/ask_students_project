@@ -22,7 +22,7 @@
             {% for dat in data %}
                 <p>Request received from {{ dat.1.user.user.username }} </p>
                 <p>Category name: {{ dat.1 }} </p>
-                <form id="approve-category-{{ forloop.counter }}" class="approve-category" role="form" method="post" action=".">
+                <form id="approve-category-{{ forloop.counter }}" role="form" method="post" action=".">
                     {% csrf_token %}
                     {% display_form_error_fields form %}
 
@@ -31,7 +31,7 @@
                               name="description" form="approve-category-{{ forloop.counter }}"
                               maxlength="512" required>{{ dat.1.description }}</textarea>
                     <input type="hidden" name="category" id="id_category" value="{{ dat.1.id }}"><br/>
-                    <button type="Submit"  class="btn btn-info">Approve</button>
+                    <button type="Submit" class="approve-category btn btn-info">Approve</button>
                 </form>
                 <br/>
             {% endfor %}

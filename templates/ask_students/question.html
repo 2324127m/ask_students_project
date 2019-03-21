@@ -11,20 +11,20 @@
 {% endblock %}
 
 {% block head_block %}
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
-  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
-  <script src="{% static 'js/question.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+    <script src="{% static 'js/question.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
 
     <!-- Show Question Title-->
-	{% if question.answered != None %}
-    <h4>{{ question.name }} (Answered)</h4>
-	{% else %}
-	<h4>{{ question.name }}</h4>
-	{% endif %}
+    {% if question.answered != None %}
+        <h4>{{ question.name }} (Answered)</h4>
+    {% else %}
+        <h4>{{ question.name }}</h4>
+    {% endif %}
 
     <div class="container">
         <div class="row question-info">
@@ -38,14 +38,14 @@
                 {% if question.anonymous %}
                     <a>Anonymous</a>
                 {% else %}
-                <a href="{% url 'profile' asker_profile.user.username %}">
-                    {% if asker_profile.image %}
-                        <img width="25px" height="25px"
-                             src="{{ MEDIA_URL }}{{ asker_profile.image }}"
-                             alt="{{ asker_profile.user.username }} profile image"/>
-                    {% endif %}
-                    {{ asker_profile.user.username }}
-                </a>
+                    <a href="{% url 'profile' asker_profile.user.username %}">
+                        {% if asker_profile.image %}
+                            <img width="25px" height="25px"
+                                 src="{{ MEDIA_URL }}{{ asker_profile.image }}"
+                                 alt="{{ asker_profile.user.username }} profile image"/>
+                        {% endif %}
+                        {{ asker_profile.user.username }}
+                    </a>
                 {% endif %}
                 <p>View{{ question.views|pluralize }}: {{ question.views }}</p>
             </div>
@@ -56,71 +56,70 @@
                     <a target="_blank" href="{{ MEDIA_URL }}{{ question.support_file }}">View attached support file</a>
                 {% endif %}
             </div>
-			
+
 
             <!-- Posted date -->
             <div class="col-xs-8 date right-section">
-            {% if question.edited %}
-                {{ question.edited|date:'D d M Y H:i' }} (edit)
-            {% else %}
-                {{ question.posted|date:'D d M Y H:i' }}
-            {% endif %}
+                {% if question.edited %}
+                    {{ question.edited|date:'D d M Y H:i' }} (edit)
+                {% else %}
+                    {{ question.posted|date:'D d M Y H:i' }}
+                {% endif %}
             </div>
-		</div>	
-        
+        </div>
+
         <!-- Functions specific to user who posted question -->
         {% if question.user.user == user %}
             <div class="row question-info">
                 <div class="col-xs-4 left-section">
                     <a id="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
-				</div>
+                </div>
                 <div class="col-xs-8">
                     <a id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
                 </div>
             </div>
-		{% endif %}
+        {% endif %}
     </div>
 
     <div class="page-break"></div>
 
     <h4>{{ number_of_answers }} Answer{{ number_of_answers|pluralize }}</h4>
 
-    <div class="container">
-		
-		{% if selected_answer %}
-			{% if selected_answer.pk in liked %}
-                {% show_answer selected_answer question True False %}
-            {% elif selected_answer.pk in disliked %}
-                {% show_answer selected_answer question False True %}
+
+    {% if selected_answer %}
+        {% if selected_answer.pk in liked %}
+            {% show_answer selected_answer question True False %}
+        {% elif selected_answer.pk in disliked %}
+            {% show_answer selected_answer question False True %}
+        {% else %}
+            {% show_answer selected_answer question False False %}
+        {% endif %}
+        {% if answer.user.user == user %}
+            <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
+        {% endif %}
+        <div class="page-break"></div>
+    {% endif %}
+
+    {% for answer in answers_list %}
+        {% if answer != selected_answer %}
+            {% if answer.pk in liked %}
+                {% show_answer answer question True False %}
+            {% elif answer.pk in disliked %}
+                {% show_answer answer question False True %}
             {% else %}
-                {% show_answer selected_answer question False False %}
+                {% show_answer answer question False False %}
             {% endif %}
             {% if answer.user.user == user %}
                 <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
             {% endif %}
             <div class="page-break"></div>
-		{% endif %}
-		
-        {% for answer in answers_list %}
-			{% if answer != selected_answer %}
-				{% if answer.pk in liked %}
-					{% show_answer answer question True False %}
-				{% elif answer.pk in disliked %}
-					{% show_answer answer question False True %}
-				{% else %}
-					{% show_answer answer question False False %}
-				{% endif %}
-				{% if answer.user.user == user %}
-					<a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
-				{% endif %}
-				<div class="page-break"></div>
-			{% endif %}
-        {% endfor %}
-    </div>
+        {% endif %}
+    {% endfor %}
 
     {% if user.is_authenticated %}
-        
-        <form id="answer_form" role="form" method="post" action="{% url 'show_question' question.category.slug question.pk %}">
+
+        <form id="answer_form" role="form" method="post"
+              action="{% url 'show_question' question.category.slug question.pk %}">
             {% csrf_token %}
             {% display_form_error_fields form %}
             <h4>Your Answer</h4>
@@ -133,7 +132,7 @@
             <div class="form-group row pd-3">
                 <div class="input-group col-sm-12 col-lg-12 col-xl-12">
                     <input class="form-control"
-                       id="id_text" name="text" type="text"/>
+                           id="id_text" name="text" type="text"/>
                     <small id="errors_text" class="form-text col-sm-12 px-3"></small>
                 </div>
             </div>
