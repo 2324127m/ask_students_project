@@ -73,7 +73,7 @@ def populate():
                  [
                      {'name': "Who let the dogs out?",
                       "description": "who?",
-                      "views": 10,
+                      "views": 394,
                       "user": "YellowPony123",
                       "support_file": "support_files/who-let-them-out.jpg",
                       "answers":
@@ -100,9 +100,9 @@ def populate():
                               'posted': None, 'edited': None, 'user' : 'SweetEdna'},
                          ]
                       },
-                     {'name': "This is a really really long question title so we can see what it looks like!",
+                     {'name': "Please help me!",
                       "description": "I really need ideas on what to have for dinner",
-                      "views": 180000,
+                      "views": 101,
                       "user": "ooeeooahahtingtang",
                       "support_file": "support_files/hungry.jpg",
                       "answers":
@@ -119,7 +119,7 @@ def populate():
                       },
                       {'name': "Who wrote Around the World in 80 Days?",
                       "description": "I need to know for an essay I'm writing",
-                      "views": 40,
+                      "views": 301,
                       "user": "GustySeagull1942",
                       "answers":
                          [
@@ -172,7 +172,7 @@ def populate():
                  [
                      {'name': "What is the first index in an array",
                       "description": "I am trying to learn but no one is taking this question seriously",
-                      "views": 120,
+                      "views": 850,
                       "user": "DampSeatOnTheBus",
                       "support_file": "support_files/array.jpg",
                       "answers":
@@ -213,7 +213,7 @@ def populate():
                     },
                      {'name': "Can someone help me with python",
                       "description": "I need to know how to loop through a list in python, but I only know C style for loops. Help!",
-                      "views": 42,
+                      "views": 452,
                       "user": "HealthyLivingForAHealthyBeing",
                       "answers":
                          [
@@ -232,7 +232,7 @@ def populate():
                  [
                      {'name': "Where is a good place to eat out in Glasgow",
                       "description": "Looking for healthy organic food",
-                      "views": 654,
+                      "views": 434,
                       "user": "SeriousFred",
                       'answers':
                          [
