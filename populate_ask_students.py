@@ -73,7 +73,7 @@ def populate():
                  [
                      {'name': "Who let the dogs out?",
                       "description": "who?",
-                      "views": 10,
+                      "views": 394,
                       "user": "YellowPony123",
                       "support_file": "support_files/who-let-them-out.jpg",
                       "answers":
@@ -100,9 +100,9 @@ def populate():
                               'posted': None, 'edited': None, 'user' : 'SweetEdna'},
                          ]
                       },
-                     {'name': "This is a really really long question title so we can see what it looks like!",
+                     {'name': "Please help me!",
                       "description": "I really need ideas on what to have for dinner",
-                      "views": 180000,
+                      "views": 101,
                       "user": "ooeeooahahtingtang",
                       "support_file": "support_files/hungry.jpg",
                       "answers":
@@ -119,7 +119,7 @@ def populate():
                       },
                       {'name': "Who wrote Around the World in 80 Days?",
                       "description": "I need to know for an essay I'm writing",
-                      "views": 40,
+                      "views": 301,
                       "user": "GustySeagull1942",
                       "answers":
                          [
@@ -172,7 +172,7 @@ def populate():
                  [
                      {'name': "What is the first index in an array",
                       "description": "I am trying to learn but no one is taking this question seriously",
-                      "views": 120,
+                      "views": 850,
                       "user": "DampSeatOnTheBus",
                       "support_file": "support_files/array.jpg",
                       "answers":
@@ -213,7 +213,7 @@ def populate():
                     },
                      {'name': "Can someone help me with python",
                       "description": "I need to know how to loop through a list in python, but I only know C style for loops. Help!",
-                      "views": 42,
+                      "views": 452,
                       "user": "HealthyLivingForAHealthyBeing",
                       "answers":
                          [
@@ -224,6 +224,7 @@ def populate():
                 ]
              },
 
+
         'Student Living General':
             {'description': 'General questions on Student Living',
              'approved': True,
@@ -231,7 +232,7 @@ def populate():
                  [
                      {'name': "Where is a good place to eat out in Glasgow",
                       "description": "Looking for healthy organic food",
-                      "views": 654,
+                      "views": 434,
                       "user": "SeriousFred",
                       'answers':
                          [
@@ -307,9 +308,19 @@ def populate():
 
         print("  Adding {0} questions to {1}...".format(str(i), str(c)))
 
+    # Add requested categories
+    requested_categories = {'Psychology': {'description': "I need this because there isn't a psychology category :(",
+                                           'user': 'YellowPony123'},
+                            'Geography': {'description': "because it's nice to have it",
+                                           'user': 'SeriousFred'}}
 
-    print()
-    print("Marking selected questions as answered...")
+    for cat, cat_data in requested_categories.items():
+        username = cat_data['user']
+        u = User.objects.get(username=username)
+        up = UserProfile.objects.get(user=u)
+        add_a_requested_category(cat, cat_data['description'], up)
+
+    print("\nMarking selected questions as answered...")
     mark_as_answer(Answer.objects.get(pk=2))
     mark_as_answer(Answer.objects.get(pk=11))
     mark_as_answer(Answer.objects.get(pk=21))
@@ -331,6 +342,14 @@ def add_permission(title):
 
 def add_category(cat, description, approved):
     c = Category.objects.get_or_create(name=cat, description=description, approved=approved, user=None)[0]
+    c.save()
+    return c
+
+
+def add_a_requested_category(name, description, user):
+    c = Category.objects.get_or_create(name=name,
+                                       description=description,
+                                       approved=False, user=user)[0]
     c.save()
     return c
 

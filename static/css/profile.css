@@ -63,9 +63,6 @@
   right: 40px;
 }
 
-/*
-Do we need this? And is it a class or id?
-top-answer-question {
-  color:black;
-  font-style: Italic;
-}*/
+.change-info {
+  padding: 0px 0px 25px 0px;
+}

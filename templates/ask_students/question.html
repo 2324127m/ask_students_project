@@ -39,7 +39,7 @@
                     <a>Anonymous</a>
                 {% else %}
                 <a href="{% url 'profile' asker_profile.user.username %}">
-                    {% if user_profile.image %}
+                    {% if asker_profile.image %}
                         <img width="25px" height="25px"
                              src="{{ MEDIA_URL }}{{ asker_profile.image }}"
                              alt="{{ asker_profile.user.username }} profile image"/>
@@ -73,7 +73,7 @@
             <div class="row question-info">
                 <div class="col-xs-4 left-section">
                     <a id="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
-                </div>
+				</div>
                 <div class="col-xs-8">
                     <a id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
                 </div>
@@ -125,6 +125,11 @@
             {% display_form_error_fields form %}
             <h4>Your Answer</h4>
 
+            {% if question.anonymous %}
+                {% if user.pk == question.user.user.id %}
+                    <p>Since you have asked this question as anonymous, this post will also be anonymous</p>
+                {% endif %}
+            {% endif %}
             <div class="form-group row pd-3">
                 <div class="input-group col-sm-12 col-lg-12 col-xl-12">
                     <input class="form-control"

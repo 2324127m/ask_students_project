@@ -1,4 +1,6 @@
 {% load static %}
+{% load staticfiles %}
+{% load ask_students_templatetags %}
 <div class="row question-info no-gutters">
     <!-- left side, show question text -->
     <div class="col-sm-12 card question-card answer-card">
@@ -27,7 +29,14 @@
     </div>
     <div class="col-md-4">
         {% if answer.user %}
-            <a href="{% url 'profile' answer.user.user.username %}">{{ answer.user.user.username }}</a>
+            <a href="{% url 'profile' answer.user.user.username %}">
+                {% if answer.user.image %}
+                    <img width="25px" height="25px"
+                        src="{{ MEDIA_URL }}{{ answer.user.image }}"
+                        alt="{{ answer.user.user.username }} profile image"/>
+                {% endif %}
+                {{ answer.user.user.username }}
+            </a>
         {% else %}
             <a>Anonymous</a>
         {% endif %}

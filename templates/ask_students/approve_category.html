@@ -3,31 +3,41 @@
 {% load ask_students_templatetags %}
 
 {% block title %}
-    Approve a Category
+    New Category Requests
 {% endblock %}
 
 {% block pagetitle %}
-    Approve a Category
+    New Category Requests
+{% endblock %}
+
+{% block head_block %}
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+  <script src="{% static 'js/approve-category.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
-	<div>
-	{% if category %}
-		<ul>
-		{% for cat in category %}
-			<li>Category Request: {{ cat.name }} </li>
-            <p4>Why: {{ cat.description}} </p4>
-            <form id="approve-category" role="form" class="p-4 p-lg-5" method="post" action=".">
-        {% csrf_token %}
+    <div>
+        {% if data %}
+            {% for dat in data %}
+                <p>Request received from {{ dat.1.user.user.username }} </p>
+                <p>Category name: {{ dat.1 }} </p>
+                <form id="approve-category-{{ forloop.counter }}" class="approve-category" role="form" method="post" action=".">
+                    {% csrf_token %}
+                    {% display_form_error_fields form %}
 
-        {% display_form_error_fields form %}
-        {{ form.as_p }}
-        <button type="Submit" class="btn btn-info col-3">APPROVE</button>
-        </form>
-		{% endfor %}
-		</ul>
-	{% else %}
-		<strong>There are no categories to approve.</strong>
-	{% endif %}
-	</div>
+                    <label for="id_description">Category Description (edit as appropriate!):</label>
+                    <textarea rows="4" cols="50" class="form-control" id="id_description"
+                              name="description" form="approve-category-{{ forloop.counter }}"
+                              maxlength="512" required>{{ dat.1.description }}</textarea>
+                    <input type="hidden" name="category" id="id_category" value="{{ dat.1.id }}"><br/>
+                    <button type="Submit"  class="btn btn-info">Approve</button>
+                </form>
+                <br/>
+            {% endfor %}
+
+        {% else %}
+            <strong>Wow! There are no categories to approve! Well Done!</strong>
+        {% endif %}
+    </div>
 {% endblock %}

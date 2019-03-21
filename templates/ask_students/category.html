@@ -18,41 +18,44 @@
 {% endblock %}
 
 {% block body_block %}
-            {% for question in questions %}
-                {% show_question question %}
-            {% empty %}
-                <p>Sorry, there are no questions to display.</p>
-            {% endfor %}
-            {% if questions.has_other_pages %}
-            <nav id="CategoryQuestionPaginator" aria-label="Navigate Categories Question Pages">
-                <ul class="pagination justify-content-center">
-                    {% if questions.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page=1">&laquo; First</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ questions.previous_page_number }}">
-                                {{ questions.previous_page_number }}
-                            </a>
-                        </li>
-                    {% endif %}
-                    <li class="page-item active">
-                        <a class="page-link" href="?page={{ questions.number }}">{{ questions.number }}</a>
+    <p class="text-center font-weight-bold">
+    {{ category.description }}
+    </p>
+    {% for question in questions %}
+        {% show_question question %}
+    {% empty %}
+        <p>There are no questions in this category. Be the first to ask a question in {{ category.name }}!</p>
+    {% endfor %}
+    {% if questions.has_other_pages %}
+        <nav id="CategoryQuestionPaginator" aria-label="Navigate Categories Question Pages">
+            <ul class="pagination justify-content-center">
+                {% if questions.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">&laquo; First</a>
                     </li>
-                    {% if questions.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ questions.next_page_number }}">
-                                {{ questions.next_page_number }}
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ questions.paginator.num_pages }}">Last &raquo;</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-            <span class="justify-content-end w-100">
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ questions.previous_page_number }}">
+                            {{ questions.previous_page_number }}
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ questions.number }}">{{ questions.number }}</a>
+                </li>
+                {% if questions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ questions.next_page_number }}">
+                            {{ questions.next_page_number }}
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ questions.paginator.num_pages }}">Last &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <span class="justify-content-end w-100">
                  <p class="text-muted text-justify text-md-right px-3">{{ questions.paginator.count }} questions over {{ questions.paginator.num_pages }} pages</p>
             </span>
-            {% endif %}
+    {% endif %}
 {% endblock %}
