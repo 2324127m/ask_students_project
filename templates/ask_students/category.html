@@ -21,7 +21,7 @@
             {% for question in questions %}
                 {% show_question question %}
             {% empty %}
-                <p>Sorry, there are no questions to display.</p>
+                <p>There are no questions in this category. Be the first to ask a question in {{ category.name }}!</p>
             {% endfor %}
             {% if questions.has_other_pages %}
             <nav id="CategoryQuestionPaginator" aria-label="Navigate Categories Question Pages">

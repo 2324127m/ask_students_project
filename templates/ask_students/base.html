@@ -98,6 +98,12 @@
           <h4 class="card-header font-weight-normal">Categories</h4>
           <div class="card-body">
                 {% block left_sidebar_block %}
+                    {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                            <p>Welcome back superuser. Please check for categories that need approving!
+                                <a href="{% url 'approve_category' %}">Approve Categories Now</a>.</p>
+                        {% endif %}
+                    {% endif %}
                     {% get_category_list %}
                 {% endblock %}
           </div>

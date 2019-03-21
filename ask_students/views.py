@@ -559,17 +559,23 @@ def approve_category(request):
     if request.method == 'POST':
         form = ApproveCategoryForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
+            cat_form = form.save(commit=False)
 
-            print(form.cleaned_data['id_category'])
-            #cat = Category.objects.get(pk=)
-            #cat.approved = True
-            #cat.save()
+            cat = Category.objects.get(pk=request.POST['category'])
+            cat.approved = True
+            cat.save()
 
             cat_list = Category.objects.all().filter(approved=False)
-            context_dict['category'] = cat_list
 
-            return render(request, 'ask_students/index.html', {})
+            data = []
+            for i in range(len(cat_list)):
+                form = ApproveCategoryForm()
+                tup = (form, cat_list[i])
+                data.append(tup)
+
+            context_dict['data'] = data
+
+            return render(request, 'ask_students/approve_category.html', context_dict)
         else:
             print(form.errors)
 
