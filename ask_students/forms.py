@@ -21,9 +21,14 @@ class RequestCategoryForm(forms.ModelForm):
         model = Category
         exclude = ('slug', 'user', 'approved')
 
+class SelectAnswerForm(forms.ModelForm):
+    answers=forms.ModelChoiceField(required=True, queryset=Answer.objects.all())
+
+    class Meta:
+        model = Question
+        exclude = ()
 
 class AskQuestionForm(forms.ModelForm):
-
     name = forms.CharField(max_length=128)
     text = forms.CharField(max_length=4096)
     anonymous = forms.BooleanField(widget=forms.CheckboxInput(), required=False)

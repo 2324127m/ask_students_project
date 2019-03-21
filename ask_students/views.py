@@ -229,7 +229,6 @@ def delete_answer(request, question_id, answer_id):
 @login_required
 def request_category(request):
     form = RequestCategoryForm()
-
     if request.method == 'POST':
         form = RequestCategoryForm(request.POST)
 
@@ -243,6 +242,23 @@ def request_category(request):
             print(form.errors)
     return render(request, 'ask_students/request_category.html', {'form': form})
 
+@login_required
+def select_answer(request, question_id):
+    q=Question.objects.get(pk=question_id)
+    form = SelectAnswerForm()
+    form.answer = Answer.objects.filter(questiontop = q)
+    if request.method == 'POST':
+        form = SelectAnswerForm(request.POST)
+
+        if form.is_valid():
+            answer = form.save(commit=False)
+            question = Question.objects.get(pk = form.question)
+            question.answered = form.answer
+            question.save()
+            return redirect('show_question', category_name_slug=question.category.slug, question_id=question.pk)
+        else:
+            print(form.errors)
+    return render(request, 'ask_students/select_answer.html', {'form': form})
 
 def profile(request, username):
     # Get user, if doesn't exist -> redirect to home page

@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^faq/$', views.faq, name="faq"),
     url(r'^search/$', views.search, name='search'),
     url(r'^ask/$', views.add_question, name='ask_question'),
-
+    url(r'^select_answer/(?P<question_id>[1-9]\d*)/$', views.select_answer, name='select_answer'),
     url(r'^request_category/$', views.request_category, name='request_category'),
     url(r'^approve_category/$', views.approve_category, name='approve_category'),
 
