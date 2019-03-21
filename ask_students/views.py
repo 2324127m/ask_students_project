@@ -356,6 +356,11 @@ def search(request):
 
 @login_required
 def vote(request):
+    try:
+        user_profile = request.user.userprofile
+
+    except UserProfile.DoesNotExist:
+        return redirect('register_profile')
 
     # Request must be AJAX, and if its not a secure POST with valid CSRF, we ain't interested.
     if request.is_ajax() and request.method == 'POST':
@@ -371,16 +376,48 @@ def vote(request):
             # And what kind of vote is this user placing.
             vote = int(request.POST.get('vote'))
 
+            # I clicked like!
             if vote == 1:
-                answer.likes += 1
-                answerer_profile.likes += 1
-            elif vote == 0:
-                answer.dislikes += 1
-                answerer_profile.dislikes += 1
+                if user_profile not in answer.up_voters.all():
+                    # I'm not currently liking this
+                    if user_profile in answer.down_voters.all():
+                        # But I already dislike this, time to change that.
+                        decr_dislikes(answer, answerer_profile)
+                        answer.down_voters.remove(user_profile)
 
-            # Commit any channges to DB
+                    # Now make me a liker!
+                    incr_likes(answer, answerer_profile)
+                    answer.up_voters.add(user_profile)
+
+                # I currently have a like, but I've changed my mind.
+                else:
+                    decr_likes(answer, answerer_profile)
+                    answer.up_voters.remove(user_profile)
+
+
+            # I clicked dislike
+            elif vote == 0:
+                if user_profile not in answer.down_voters.all():
+                    # I'm not in the downvoters pool
+
+                    if user_profile in answer.up_voters.all():
+                        # But I am currently a liker, time to change that.
+                        decr_likes(answer, answerer_profile)
+                        answer.up_voters.remove(user_profile)
+
+                    # Make me a hater
+                    incr_dislikes(answer, answerer_profile)
+                    answer.down_voters.add(user_profile)
+
+                # I have a dislike, but I've changed my mind, remove it!
+                else:
+                    decr_dislikes(answer, answerer_profile)
+                    answer.down_voters.remove(user_profile)
+
+            # Commit any changes to DB
             answer.save()
             answerer_profile.save()
+            user_profile.save()
 
             # Lets send back the new likes/dislikes for the page to display
             response = {"likes": answer.likes,
@@ -389,10 +426,41 @@ def vote(request):
 
             response = json.dumps(response)
 
+            print("Hey buddeh, got here!")
             return HttpResponse(response)
 
         except Answer.DoesNotExist:
             return HttpResponseNotFound("Specified Answer Not Found")
+
+
+# Helper Functions NOTE THESE DON'T SAVE STATE
+def decr_likes(answer, answerer_profile):
+    if answer.likes > 0:
+        answer.likes -= 1
+
+    if answerer_profile.likes > 0:
+        answerer_profile.likes -= 1
+
+
+def decr_dislikes(answer, answerer_profile):
+
+    if answer.dislikes > 0:
+        answer.dislikes -= 1
+
+    if answerer_profile.dislikes > 0:
+        answerer_profile.dislikes -= 1
+
+
+def incr_likes(answer, answerer_profile):
+
+    answer.likes += 1
+    answerer_profile.likes += 1
+
+
+def incr_dislikes(answer, answerer_profile):
+
+        answer.dislikes += 1
+        answerer_profile.dislikes += 1
 
 
 @login_required

@@ -44,6 +44,10 @@ class UserProfile(models.Model):
 	# Has fields user.username, user.password (Optional user.firstname, user.lastname)
 	user = models.OneToOneField(User)
 
+	# These store links between users and the answers they vote on.
+	up_votes = models.ManyToManyField('Answer', related_name="up_voters")
+	down_votes = models.ManyToManyField('Answer', related_name="down_voters")
+
 	bio = models.CharField(max_length=4096, null=True)
 	likes = models.PositiveIntegerField(default=0)
 	dislikes = models.PositiveIntegerField(default=0)
