@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 
 from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from registration.backends.simple.views import RegistrationView
@@ -227,7 +227,6 @@ def delete_answer(request, question_id, answer_id):
 @login_required
 def request_category(request):
     form = RequestCategoryForm()
-
     if request.method == 'POST':
         form = RequestCategoryForm(request.POST)
 
@@ -241,8 +240,39 @@ def request_category(request):
             print(form.errors)
     return render(request, 'ask_students/request_category.html', {'form': form})
 
+@login_required
+def select_answer(request, question_id):
+    q=Question.objects.get(pk=question_id)
+    form = SelectAnswerForm()
+    form.answer = Answer.objects.filter(questiontop = q)
+    if request.method == 'POST':
+        form = SelectAnswerForm(request.POST)
+
+        if form.is_valid():
+            answer = form.save(commit=False)
+            question = Question.objects.get(pk = form.question)
+            question.answered = form.answer
+            question.save()
+            return redirect('show_question', category_name_slug=question.category.slug, question_id=question.pk)
+        else:
+            print(form.errors)
+    return render(request, 'ask_students/select_answer.html', {'form': form})
 
 def profile(request, username):
+    if request.user.userprofile is None:
+        return HttpResponseNotFound();
+
+    # Set Defaults For Context
+    user = None
+    all_answers = None
+    most_liked_answers = None
+    number_of_answers = None
+    this_user_email = None
+    this_profile = None
+    user_permission = None
+    likes = None
+    dislikes = None
+
     # Get user, if doesn't exist -> redirect to home page
     try:
         user = User.objects.get(username=username)
@@ -515,7 +545,33 @@ def incr_dislikes(answer, answerer_profile):
 @user_passes_test(lambda u: u.is_staff)
 def approve_category(request):
     context_dict = {}
+
     cat_list = Category.objects.all().filter(approved=False)
-    context_dict['category'] = cat_list
+
+    data = []
+    for i in range(len(cat_list)):
+        form = ApproveCategoryForm()
+        tup = (form, cat_list[i])
+        data.append(tup)
+
+    context_dict['data'] = data
+    
+    if request.method == 'POST':
+        form = ApproveCategoryForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+
+            print(form.cleaned_data['id_category'])
+            #cat = Category.objects.get(pk=)
+            #cat.approved = True
+            #cat.save()
+
+            cat_list = Category.objects.all().filter(approved=False)
+            context_dict['category'] = cat_list
+
+            return render(request, 'ask_students/index.html', {})
+        else:
+            print(form.errors)
 
     return render(request, 'ask_students/approve_category.html', context_dict)
+

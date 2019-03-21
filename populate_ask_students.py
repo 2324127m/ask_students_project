@@ -224,6 +224,7 @@ def populate():
                 ]
              },
 
+
         'Student Living General':
             {'description': 'General questions on Student Living',
              'approved': True,
@@ -307,9 +308,19 @@ def populate():
 
         print("  Adding {0} questions to {1}...".format(str(i), str(c)))
 
+    # Add requested categories
+    requested_categories = {'Psychology': {'description': "I need this because there isn't a psychology category :(",
+                                           'user': 'YellowPony123'},
+                            'Geography': {'description': "because it's nice to have it",
+                                           'user': 'SeriousFred'}}
 
-    print()
-    print("Marking selected questions as answered...")
+    for cat, cat_data in requested_categories.items():
+        username = cat_data['user']
+        u = User.objects.get(username=username)
+        up = UserProfile.objects.get(user=u)
+        add_a_requested_category(cat, cat_data['description'], up)
+
+    print("\nMarking selected questions as answered...")
     mark_as_answer(Answer.objects.get(pk=2))
     mark_as_answer(Answer.objects.get(pk=11))
     mark_as_answer(Answer.objects.get(pk=21))
@@ -331,6 +342,14 @@ def add_permission(title):
 
 def add_category(cat, description, approved):
     c = Category.objects.get_or_create(name=cat, description=description, approved=approved, user=None)[0]
+    c.save()
+    return c
+
+
+def add_a_requested_category(name, description, user):
+    c = Category.objects.get_or_create(name=name,
+                                       description=description,
+                                       approved=False, user=user)[0]
     c.save()
     return c
 

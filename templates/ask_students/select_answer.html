@@ -1,0 +1,26 @@
+{% extends 'ask_students/base.html' %}
+{% load ask_students_templatetags %}
+{% load static %}
+{% block head_block %}
+    Select an answer for your Question!
+{% endblock %}
+{% block body_block %}
+    <form role="form" class="p-4 p-lg-5" method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% display_form_error_fields form %}
+
+        <h3>Choose your favourite answer!</h3>
+		<div class="form-group">
+			<label for="id_category">Choose a category!</label>
+			<select name="category" class="form-control" required id="id_category">
+			<option value selected class="form-control">pick a category, any category...</option>
+			{% for category in categories %}
+			<option value="{{ category.pk }}" class="form-control">{{ category.name }}</option>
+			{% endfor %}
+			</select>
+		</div>
+
+        <button type="submit" class="btn btn-info col-12">Submit</button>
+    </form>
+{% endblock %}

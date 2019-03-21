@@ -22,22 +22,38 @@ class RequestCategoryForm(forms.ModelForm):
         exclude = ('slug', 'user', 'approved')
 
 
-class AskQuestionForm(forms.ModelForm):
+class SelectAnswerForm(forms.ModelForm):
+    answers=forms.ModelChoiceField(required=True, queryset=Answer.objects.all())
 
+    class Meta:
+        model = Question
+        exclude = ()
+
+
+class AskQuestionForm(forms.ModelForm):
     name = forms.CharField(max_length=128)
     text = forms.CharField(max_length=4096)
     anonymous = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
     category = forms.ModelChoiceField(required=True, queryset=Category.objects.filter(approved=True))
     support_file = forms.ImageField(required=False)
 
-    
     class Meta:
         model = Question
         exclude = ('posted', 'user', 'answered', 'edited', 'views', )
 
+
 class AnswerForm(forms.ModelForm):
-	text = forms.CharField(max_length=4096, help_text="Enter you answer here", required=True)
-	
-	class Meta:
-		model = Answer
-		fields = ('text',)
+    text = forms.CharField(max_length=4096, help_text="Enter you answer here", required=True)
+
+    class Meta:
+        model = Answer
+        fields = ('text',)
+
+
+class ApproveCategoryForm(forms.ModelForm):
+    category = forms.IntegerField(widget=forms.HiddenInput())
+    description = forms.CharField(max_length=512)
+    
+    class Meta:
+        model = Category
+        exclude = ('slug', 'user', 'approved', 'name')

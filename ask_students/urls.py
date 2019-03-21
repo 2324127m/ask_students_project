@@ -12,14 +12,13 @@ urlpatterns = [
     url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<question_id>[1-9]\d*)/$', views.show_question, name='show_question'),
     url(r'^delete_question/(?P<question_id>[1-9]\d*)/$', views.delete_question, name='delete_question'),
     url(r'^delete_answer/(?P<question_id>[1-9]\d*)/(?P<answer_id>[1-9]\d*)/$', views.delete_answer, name='delete_answer'),
-    url(r'^request_category/$', views.request_category, name="request_category"),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/ask_question/$', views.add_question, name='ask_question'),
     url(r'^about_us/$', views.about_us, name="about_us"),
     url(r'^contact_us/$', views.contact_us, name="contact_us"),
     url(r'^faq/$', views.faq, name="faq"),
     url(r'^search/$', views.search, name='search'),
     url(r'^ask/$', views.add_question, name='ask_question'),
-
+    url(r'^select_answer/(?P<question_id>[1-9]\d*)/$', views.select_answer, name='select_answer'),
     url(r'^request_category/$', views.request_category, name='request_category'),
     url(r'^approve_category/$', views.approve_category, name='approve_category'),
 
