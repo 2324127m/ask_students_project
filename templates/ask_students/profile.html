@@ -22,7 +22,7 @@
             {% if this_profile.image %}
                 <img class="profile-pic" width="120px" height="120px"
                      src="{{ MEDIA_URL }}{{ this_profile.image }}"
-                     alt="{{ user.username }} profile image"/>
+                     alt="{{ this_user.username }} profile image"/>
             {% else %}
                 <img class="profile-pic" width="120px" height="120px"
                      src="{{ MEDIA_URL }}profile_images/default.jpg"
@@ -33,12 +33,12 @@
         </div>
         <div class="col-sm-12">
             <p class="user-info-title">Role: <span class="user-info">{{ role }}</span></p>
-            <p class="user-info-title">University: <span class="user-info">{{ userprofile.place_of_study }}</span></p>
+            <p class="user-info-title">University: <span class="user-info">{{this_profile.place_of_study }}</span></p>
             <p class="user-info-title">Email: <span class="user-info">{{ this_user_email }}</span></p>
         </div>
 
         <div class="col-sm-12">
-            <p class="user-info-title">Bio: <span class="user-info">{{ userprofile.bio }}</span></p>
+            <p class="user-info-title">Bio: <span class="user-info">{{ this_profile.bio }}</span></p>
         </div>
 
         <strong class="user-stats-title">Answers:<strong id="answers">{{ number_of_answers }}</strong></strong>
