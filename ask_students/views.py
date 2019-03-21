@@ -193,8 +193,6 @@ def show_question(request, category_name_slug, question_id):
         context_dict['question'] = None
         context_dict['answers_list'] = None
 
-    print(context_dict)
-
     return render(request, 'ask_students/question.html', context_dict)
 
 
@@ -307,18 +305,33 @@ def profile(request, username):
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
                     'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email }
 
-    print(context_dict)
 
     return render(request, 'ask_students/profile.html', context_dict)
 
 
 @login_required
 def my_profile(request):
-    user = User.objects.get(username=request.user)
+    try:
+        user = User.objects.get(username=request.user)
+    except User.DoesNotExist:
+        return redirect('index')
+    
+    user_profile = UserProfile.objects.get(user=user)  
+    form = UserProfileForm(initial={'bio': user_profile.bio,
+                            'image': user_profile.image,
+                            'place_of_study': user_profile.place_of_study,
+                            'permission': user_profile.permission
+                            })
 
-    context_dict = {'user': user}
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('profile', user.username)
+        else:
+            print(form.errors)
 
-    return render(request, 'ask_students/my_profile.html', context_dict)
+    return render(request, 'ask_students/my_profile.html', {'user_profile': user_profile, 'selected_user': user, 'form': form})
 
 
 @login_required
@@ -379,14 +392,14 @@ def search(request):
             search_terms = search_query.split()
             questions = Question.objects.filter(name__icontains=search_terms[0])
             answers = Answer.objects.filter(text__icontains=search_terms[0])
-            print(answers)
+            # print(answers)
             for term in search_terms[1:]:
                 questions = questions & Question.objects.filter(name__icontains=term)
                 answers = answers & Answer.objects.filter(text__icontains=term)
 
             for answer in answers:
                 questions = questions | Question.objects.filter(id=answer.questiontop_id)
-                print(questions)
+                # print(questions)
 
             results = list(questions)
 
