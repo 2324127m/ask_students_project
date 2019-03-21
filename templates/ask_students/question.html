@@ -104,6 +104,11 @@
             {% display_form_error_fields form %}
             <h4>Your Answer</h4>
 
+            {% if question.anonymous %}
+                {% if user.pk == question.user.user.id %}
+                    <p>Since you have asked this question as anonymous, this post will also be anonymous</p>
+                {% endif %}
+            {% endif %}
             <div class="form-group row pd-3">
                 <div class="input-group col-sm-12 col-lg-12 col-xl-12">
                     <input class="form-control"
