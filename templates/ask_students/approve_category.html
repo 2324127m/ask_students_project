@@ -11,9 +11,9 @@
 
 {% block body_block %}
 	<div>
-	{% if categories %}
+	{% if category %}
 		<ul>
-		{% for category in categories %}
+		{% for cat in category %}
 			<li>{{ category.name }}</li>
 		{% endfor %}
 		</ul>
