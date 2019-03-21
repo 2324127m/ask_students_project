@@ -18,6 +18,7 @@
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css" />
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
   {% block head_block %}
 
   {% endblock %}
@@ -46,7 +47,7 @@
   <!-- Navigation Bar -->
   <nav class="navbar fixed-top justify-content-between navbar-expand-lg navbar-white bg-white sticky-top border-bottom border-dark custom-colour">
     <div class="container-fluid">
-      <a href="{% url 'index' %}"><img class="navbar-brand" height="40" width="34" src="{% static 'images/home.png' %}"></a>
+      <a href="{% url 'index' %}"><img class="navbar-brand" height="40" width="31" src="{% static 'images/home.png' %}"></a>
 
       <form class="order-lg-2 form-inline mx-0" id="nav-bar-search" name="nav-bar-search"
             action="{% url 'search' %}" method="GET" >
