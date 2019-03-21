@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 
 from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from registration.backends.simple.views import RegistrationView
@@ -504,5 +504,19 @@ def approve_category(request):
     context_dict = {}
     cat_list = Category.objects.all().filter(approved=False)
     context_dict['category'] = cat_list
+    
+    if request.method == 'POST':
+        form = ApproveCategoryForm(request.POST)
+
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.approved = True
+            category.save()
+            cat_list = Category.objects.all().filter(approved=False)
+            return render(request, 'ask_students/index.html', {})
+        else:
+            print(form.errors)
 
     return render(request, 'ask_students/approve_category.html', context_dict)
+    
+    

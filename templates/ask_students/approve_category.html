@@ -1,5 +1,6 @@
 {% extends 'ask_students/base.html' %}
 {% load staticfiles %}
+{% load ask_students_templatetags %}
 
 {% block title %}
     Approve a Category
@@ -14,7 +15,15 @@
 	{% if category %}
 		<ul>
 		{% for cat in category %}
-			<li>{{ category.name }}</li>
+			<li>Category Request: {{ cat.name }} </li>
+            <p4>Why: {{ cat.description}} </p4>
+            <form id="approve-category" role="form" class="p-4 p-lg-5" method="post" action=".">
+        {% csrf_token %}
+
+        {% display_form_error_fields form %}
+        {{ form.as_p }}
+        <button type="Submit" class="btn btn-info col-3">APPROVE</button>
+        </form>
 		{% endfor %}
 		</ul>
 	{% else %}

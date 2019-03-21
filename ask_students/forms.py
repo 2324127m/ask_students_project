@@ -41,3 +41,10 @@ class AnswerForm(forms.ModelForm):
 	class Meta:
 		model = Answer
 		fields = ('text',)
+        
+class ApproveCategoryForm(forms.ModelForm):
+    category = forms.IntegerField(widget = forms.HiddenInput())
+    
+    class Meta:
+        model = Category
+        exclude = ('slug','user','approved','description','name',)
