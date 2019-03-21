@@ -270,8 +270,6 @@ def select_answer(request, question_id):
     return render(request, 'ask_students/select_answer.html', {'form': form, 'question' : q, 'answers': answers,})
 
 def profile(request, username):
-    if request.user.userprofile is None:
-        return HttpResponseNotFound();
 
     # Set Defaults For Context
     user = None
@@ -290,7 +288,6 @@ def profile(request, username):
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
-        ###ADDED THIS LINE AS EMAIL NOT SHOWING PROPERLY###
         this_user_email = user.email
         this_profile = UserProfile.objects.get(user=user)
         user_permission = this_profile.permission

@@ -1,15 +1,19 @@
 {% load static %}
 {% load staticfiles %}
 {% load ask_students_templatetags %}
-<div class="row question-info no-gutters">
+<a class="close float-right" style="margin-left:5px; " href="#">×</a>
+<div class="row question-info no-gutters clearfix">
     <!-- left side, show question text -->
+
+
     <div class="col-sm-12 card question-card answer-card">
-	{% if question.answered.pk == answer.pk %}
-        <p class="question-text"><strong style="color:green">Selected answer: </strong>{{ answer.text }}</p>
-	{% else %}
-		<p class="question-text">{{ answer.text }}</p>
-	{% endif %}
+        {% if question.answered.pk == answer.pk %}
+            <p class="question-text"><strong style="color:green">Selected answer: </strong>{{ answer.text }}</p>
+        {% else %}
+            <p class="question-text">{{ answer.text }}</p>
+        {% endif %}
     </div>
+
 
     <div class="col-md-3 col-sm-6">
         <img id="like-btn-{{ answer.pk }}" class="like-img like-btn"
@@ -32,7 +36,7 @@
             <a href="{% url 'profile' answer.user.user.username %}">
                 {% if answer.user.image %}
                     <img width="25px" height="25px"
-                        src="{{ MEDIA_URL }}{{ answer.user.image }}"
+                        src="{% get_media_prefix %}{{ answer.user.image }}"
                         alt="{{ answer.user.user.username }} profile image"/>
                 {% endif %}
                 {{ answer.user.user.username }}
