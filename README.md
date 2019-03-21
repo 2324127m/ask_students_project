@@ -9,6 +9,8 @@
    2. Install Dependencies
 
    3. Create and Populate Database
+   
+3. External Sources
 
       
 
@@ -52,8 +54,10 @@
 
       
 
-      
-
-      
-
-   1. ### 
+3. ## External Sources
+      We used a number of external sources for the making of this web application:
+    •	BootStrap 4
+    •	jQuery 
+    •	jQuery Validate
+    •	jQuery UI
+    •	Django Registration Redux
