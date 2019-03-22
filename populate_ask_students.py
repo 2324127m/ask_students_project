@@ -1,4 +1,4 @@
-import os, subprocess, platform
+import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ask_students_project.settings')
 import django
@@ -394,16 +394,7 @@ def mark_as_answer(answer):
     return
 
 
-def clean_db():
-    if platform.system() == "Windows":
-        subprocess.call(['del', 'db.sqlite3'], shell=True)
-    else:
-        subprocess.call(['rm', 'db.sqlite3'])
-
-    subprocess.call(['python', 'manage.py', 'makemigrations', 'ask_students'])
-    subprocess.call(['python', 'manage.py', 'migrate'])
-
-
+# Create super user for database
 def create_super_user():
     print()
     result = input("would you like to create superuser with USERNAME: admin PASSWORD: 12345678? (y/n): ")
@@ -417,19 +408,8 @@ def create_super_user():
         add_user_profile(u, "Site Administrator", 0, 0, "Lecturer", "University of Glasgow", "profile_images/admin.jpg")
 
 
-def run_server():
-    print()
-    run = input("would you like to run the server? (y/n): ")
-    if run == "y":
-        subprocess.call(['python', 'manage.py', 'runserver'])
-
-
 if __name__ == '__main__':
-    print("\nCleaning old database...\n")
-    clean_db()
-
     print("\nPopulating database...\n")
     populate()
-
     create_super_user()
-    run_server()
+
