@@ -1,4 +1,5 @@
 import sys
+import urllib
 
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
@@ -123,6 +124,30 @@ def add_question(request):
     if request.method == 'POST':
         form = AskQuestionForm(request.POST)
         if form.is_valid():
+
+            # FETCH RECAPTCHA VALIDATION RESULTS
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+
+            # Where do we query for validation
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+
+            values = {
+                'secret': '6LcqVZkUAAAAAMhBsxELP97pi_G_xNsvfXosUMdr',
+                'response': recaptcha_response
+            }
+
+            # Parse Results
+            data = urllib.parse.urlencode(values).encode()
+            req = urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+
+            if not result['success']:
+                form.add_error(None, "Invalid ReCAPTCHA Response, Try Again")
+                context_dict['form'] = form
+                context_dict['categories'] = categories
+                return render(request, 'ask_students/add_question.html', context_dict)
+
             question = form.save(commit=True)
             question.posted = datetime.now()
             up = UserProfile.objects.get(user=request.user)
@@ -131,19 +156,19 @@ def add_question(request):
             if 'support_file' in request.FILES:
                 question.support_file = request.FILES['support_file']
 
-            
             question.save()
             category_name = form.cleaned_data['category']
             category_slug = Category.objects.get(name=category_name).slug
             print(question.pk)
-            return HttpResponseRedirect(reverse('index'), request)
+            return HttpResponseRedirect(reverse('show_question', kwargs={'category_name_slug': category_slug,
+                                                                         'question_id': question.pk}))
 
         else:
             # Display errors if question cannot be added
             print(form.errors)
 
     context_dict['form'] = form
-    context_dict['categories']=categories
+    context_dict['categories'] = categories
 
     return render(request, 'ask_students/add_question.html', context_dict)
 
