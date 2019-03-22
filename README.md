@@ -47,13 +47,21 @@
 
       Now we can populate the database with initial values.
 
-      `python python populate_ask_students.py`
+      `python populate_ask_students.py`
 
       Will generate some users, categories, questions and answers, and will give you the option in the terminal to create a super user, which can be helpful for development.
 
        ***It is not recommended for security reasons to create this super user in production environment***
 
+   4. ### Additional Information about Population Script
+
+      In the population script we have created demo users for testing and demonstration purposes.
       
+      Listed below are the details for two of these users, if you wish to log in without creating a new account
+      
+      USERNAME: YellowPony123   PASSWORD: pigsdontfly
+      
+      USERNAME: HealthyBeing    PASSWORD: carrot
 
 3. ## External Sources
       We used a number of external sources for the making of this web application:
