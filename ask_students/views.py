@@ -3,6 +3,7 @@ import sys
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from registration.forms import RegistrationFormUniqueEmail
 
 from django.core.paginator import Paginator, InvalidPage
 
@@ -11,7 +12,8 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 
 from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, SelectAnswerForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, \
+    SelectAnswerForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from registration.backends.simple.views import RegistrationView
@@ -20,6 +22,8 @@ from datetime import datetime, timedelta
 
 
 class MyRegistrationView(RegistrationView):
+    form_class = RegistrationFormUniqueEmail
+
     def get_success_url(self, user):
         return reverse('register_profile')
 
