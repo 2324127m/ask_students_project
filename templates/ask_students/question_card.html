@@ -24,6 +24,8 @@
             <div class="col-sm-6">
                 {% if question.anonymous %}
                     <span>Anonymous</span>
+                {% elif question.user == None %}
+                    <span>User Deleted</span>
                 {% else %}
                     <a href="{% url 'profile' question.user.user.username %}">
                         <span>{{ question.user.user.username }}</span>

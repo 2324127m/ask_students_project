@@ -14,6 +14,7 @@
   <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
   <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
   <script src="{% static 'js/support-image.js' %}"></script>
+  <script src="{% static 'js/my-profile.js' %}"></script>
 {% endblock %}
 
 {% block body_block %}
@@ -53,9 +54,13 @@
     <div class="page-break">
     </div>
 
-    <div class="mt-5">
+    <div class="mt-5 text-center">
         <a href="{% url 'auth_password_change' %}">
-            <button class="btn btn-info col-6">Change your password here!</button>
+            <button class="btn btn-info col-5">Change your password here!</button>
+        </a>
+        
+        <a href="{% url 'delete_user_profile' user.pk %}">
+            <button class="delete-user-profile btn btn-info btn-danger col-5">Delete Profile</button>
         </a>
     </div>
 {% endblock %}

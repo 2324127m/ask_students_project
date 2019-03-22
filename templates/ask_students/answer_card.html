@@ -42,6 +42,8 @@
     <div class="col-md-4">
         {% if answer.anonymous %}
             <a>Anonymous <i>(Question Poster)</i></a>
+        {% elif answer.user == None %}
+            <a>User Deleted</a>
         {% else %}
             <a href="{% url 'profile' answer.user.user.username %}">
                 {% if answer.user.image %}

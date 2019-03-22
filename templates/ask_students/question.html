@@ -42,6 +42,8 @@
             <div class="col-sm-4 right-section">
                 {% if question.anonymous %}
                     <a>Anonymous</a>
+                {% elif question.user == None %}
+                    <a>User Deleted</a>
                 {% else %}
                     <a href="{% url 'profile' asker_profile.user.username %}">
                         {% if asker_profile.image %}

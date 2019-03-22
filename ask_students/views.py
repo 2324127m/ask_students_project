@@ -228,7 +228,8 @@ def show_question(request, category_name_slug, question_id):
             asker_profile = UserProfile.objects.get(pk=question.user.pk)
             context_dict['asker_profile'] = asker_profile
 
-        except UserProfile.DoesNotExist:
+        # Multiple exceptions, if question has not user or user does not exist
+        except:
             context_dict['asker_profile'] = None
 
         if question.answered is not None:
@@ -429,6 +430,19 @@ def my_profile(request):
             print(form.errors)
 
     return render(request, 'ask_students/my_profile.html', {'user_profile': user_profile, 'selected_user': user, 'form': form})
+
+
+@login_required
+def delete_user_profile(request, user_id):
+    user_profile = UserProfile.objects.get(pk=user_id)
+    user = user_profile.user
+
+    # Check user requesting to delete is the user who will be deleted
+    if request.user == user:
+        user_profile.delete()
+        user.delete()
+
+    return redirect('index')
 
 
 @login_required
