@@ -1,24 +1,15 @@
 # Ask Students
 
-1. Introduction
-
-2. Installation
-
-   1. Setup Environment
-
-   2. Install Dependencies
-
-   3. Create and Populate Database
-   
-3. External Sources
-
-      
-
 1. ## Introduction
 
    Ask Students is a web app developed using Django for the purpose of allowing university and college staff and students to ask and answer each others questions. The site can be viewed publically, but contributing to discussions, creating categories or asking a new question requires visitor to register an account.
 
-   
+   1. ### Demo App
+
+      We have a demo of our site available for you to experiment on at:
+
+      [Python Anywhere]: http://2324127m.pythonanywhere.com
+      [Python Anywhere](http://2324127m.pythonanywhere.com)
 
 2. ## Installation
 
@@ -36,7 +27,7 @@
 
       `pip install -r requirements.txt`
 
-      Alternatively, open the file in a text editor and install manually using pip.
+      Alternatively, open the file in a text editor and install the dependencies listed in the requirements.txt file manually or using pip.
 
    3. ### Create and Populate Database
 
@@ -48,9 +39,19 @@
 
       `python manage.py migrate`
 
-      to create the database file and define the schemea using the previously created migration scripts.
+      Also, for convienence, we have created a utility script which will create the migrations files and migrate the database in one step.
 
-      ***Optionally*** *You can choose to populate the database with some initial dummy users, questions, answers, etc for testing or other development purposes.*
+      You can utilise this functionality by running:
+
+      `python clean_migrate_run.py`
+
+      Now we can populate the database with initial values.
+
+      `python python populate_ask_students.py`
+
+      Will generate some users, categories, questions and answers, and will give you the option in the terminal to create a super user, which can be helpful for development.
+
+       ***It is not recommended for security reasons to create this super user in production environment***
 
       
 
@@ -61,3 +62,4 @@
       - jQuery Validate
       - jQuery UI
       - Django Registration Redux
+      - Google reCAPTCHA
