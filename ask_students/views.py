@@ -377,6 +377,7 @@ def profile(request, username):
     # Get user, if doesn't exist -> redirect to home page
     try:
         user = User.objects.get(username=username)
+        joined = user.date_joined.date()
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
@@ -401,7 +402,8 @@ def profile(request, username):
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
-                    'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email }
+                    'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email,
+                    'date_joined': joined}
 
     return render(request, 'ask_students/profile.html', context_dict)
 
