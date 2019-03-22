@@ -1,36 +1,36 @@
-import sys
 import urllib
+import json
+
+from ask_students.models import Category, Question, Answer, UserProfile, User
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, \
+    SelectAnswerForm, EditQuestionForm
 
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
-from registration.forms import RegistrationFormUniqueEmail
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, InvalidPage
-from django.contrib.auth import get_user_model
-
-UserModel = get_user_model()
-
-import json
-from django.forms.models import model_to_dict
-from django.core import serializers
-
-from django.contrib.auth import authenticate, login
-
-from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, \
-    SelectAnswerForm, EditQuestionForm
-
 from django.contrib.auth.decorators import login_required, user_passes_test
-from registration.backends.default.views import RegistrationView, ActivationView
-from registration import signals
+from django.contrib.auth import get_user_model
 
 from datetime import datetime, timedelta
 
+from registration.backends.default.views import RegistrationView, ActivationView
+from registration.forms import RegistrationFormUniqueEmail
+from registration import signals
 
+
+# Required For Register Method
+UserModel = get_user_model()
+
+
+# Custom View To Handle User/UserProfile Dependency
 class MyRegistrationView(RegistrationView):
     form_class = RegistrationFormUniqueEmail
 
+    # Almost entirely a copy of django-registration-redux register
+    # but also creates a profile for every user to ensure
+    # this dependency condition is met.
     def register(self, form):
 
         site = get_current_site(self.request)
@@ -51,6 +51,7 @@ class MyRegistrationView(RegistrationView):
                                      user=new_user,
                                      request=self.request)
 
+        # Create a Dependent User
         profile = UserProfile()
         profile.user = new_user
         new_user.profile = profile
@@ -58,7 +59,8 @@ class MyRegistrationView(RegistrationView):
 
         return new_user
 
-
+# Override Activation View To Redirect To My Profile Edit Page On Activation.
+# We want to encourage people to fill out their profile.
 class MyActivationView(ActivationView):
     # Override On Success To Take To Edit Profile
     def get_success_url(self, user):
@@ -66,10 +68,10 @@ class MyActivationView(ActivationView):
 
 
 def index(request):
+
     # Get top questions in past week
     past_week = timezone.now() - timedelta(days=7)
 
-    # Filter doesn't work here, fix this - temp solution is to ignore datetime
     top_questions_list = Question.objects.filter(posted__gte=past_week).order_by('-views')[:10]
 
     # Oldest unanswered question first
@@ -82,7 +84,9 @@ def index(request):
     return render(request, 'ask_students/index.html', context_dict)
 
 
+# SHOW CATEGORIES
 def category(request, category_name_slug):
+
     context_dict = {}
 
     try:
@@ -92,17 +96,19 @@ def category(request, category_name_slug):
         question_list = Question.objects.filter(category=category_obj).order_by('-posted')
         question_paginator = Paginator(question_list, 10)  # Where second argument is max questions per page.
 
-        # Get ?page=xxx from request and return that page in the context_dict
+        # Get ?page=xxx from request and return that page in the context_dict to template
         requested_page = request.GET.get('page')
 
         # If request does not specify a page, choose first page.
         if requested_page is None:
             requested_page = 1
 
-        question_page = question_paginator.page(requested_page)  # Throws InvalidPage if no valid questions to display.
+        question_page = question_paginator.page(requested_page)
+        # Above Throws InvalidPage if no valid questions to display.
 
         context_dict['questions'] = question_page
 
+    # We Want To Send Null Values To Template On Failure To Find Request
     except Category.DoesNotExist:
         context_dict['category'] = None
         context_dict['questions'] = None
@@ -117,14 +123,23 @@ def category(request, category_name_slug):
 @login_required
 def add_question(request):
     context_dict = {}
+
+    # Fetch All Categories
     categories = Category.objects.all()
     form = AskQuestionForm()
 
+    # Set Up Context For Later Returns
+    context_dict['form'] = form
+    context_dict['categories'] = categories
+
+    # If POSTING
     if request.method == 'POST':
         form = AskQuestionForm(request.POST)
         if form.is_valid():
 
             # FETCH RECAPTCHA VALIDATION RESULTS
+            # NOTE :  RECAPTCHA DOES NOT WORK ON PYTHON ANYWHERE AS THEY WHITELIST ALLOWED APIS
+            #           WE MUST REMOVE THIS TO USE ON PYTHON ANYWHERE
             recaptcha_response = request.POST.get('g-recaptcha-response')
 
             # Where do we query for validation
@@ -141,49 +156,57 @@ def add_question(request):
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
 
+            # If reCAPTCHA says no
             if not result['success']:
+
+                # Then lets return an error in the form and ask user to resubmit.
                 form.add_error(None, "Invalid ReCAPTCHA Response, Try Again")
-                context_dict['form'] = form
-                context_dict['categories'] = categories
                 return render(request, 'ask_students/add_question.html', context_dict)
 
+            # END OF THE RECAPTCHA CONTENT
+
+            # Otherwise, form and captcha are valid, lets save!
             question = form.save(commit=True)
             question.posted = datetime.now()
             up = UserProfile.objects.get(user=request.user)
             question.user = up
 
+            # If user has uploaded a file, then lets add it to their question
             if 'support_file' in request.FILES:
                 question.support_file = request.FILES['support_file']
 
             question.save()
+
             category_name = form.cleaned_data['category']
             category_slug = Category.objects.get(name=category_name).slug
-            print(question.pk)
+
             return HttpResponseRedirect(reverse('show_question', kwargs={'category_name_slug': category_slug,
                                                                          'question_id': question.pk}))
-        else:
-            # Display errors if question cannot be added
-            print(form.errors)
 
-    context_dict['form'] = form
-    context_dict['categories'] = categories
-
+    # If we're not saving a new question, return the form to the add question view
+    # with errors if appropriate.
     return render(request, 'ask_students/add_question.html', context_dict)
 
 
+# QUESTION PAGE
 def show_question(request, category_name_slug, question_id):
     context_dict = {}
+
+    # Default Value
     was_question_answered = False
     try:
+        # Get Question from id in URL
         question = Question.objects.get(pk=question_id)
 
         try:
             user_profile = UserProfile.objects.get(user=request.user)  # user_profile is ALWAYS the requester's profile
 
         except UserProfile.DoesNotExist:
+            # This User Somehow Doesn't Have a Profile, Exit Gracefully.
             user_profile = None
 
         except TypeError:
+            # This can happen when request user is anonymous, so once again, obviously no profile
             user_profile = None
 
         # Basic Handling Of View Count
@@ -198,6 +221,7 @@ def show_question(request, category_name_slug, question_id):
             form = AnswerForm(request.POST)
 
             if form.is_valid():
+                # Then lets start making the answer.
                 answer = form.save(commit=False)
                 answer.category = Category.objects.get(slug=category_name_slug)
                 answer.questiontop = question
@@ -212,13 +236,11 @@ def show_question(request, category_name_slug, question_id):
 
                 was_question_answered = True
 
-            else:
-                print(form.errors)
-
-        # Earliest answer first
+        # Earliest answer first list of answers.
         answers_list = Answer.objects.filter(questiontop=question).order_by('-likes')
 
         if user_profile is not None:
+            # Lets set up the users likes and dislikes to display to them on page.
             user_liked_answers = list(answers_list.filter(up_voters=user_profile))
             user_disliked_answers = list(answers_list.filter(down_voters=user_profile))
 
@@ -228,12 +250,15 @@ def show_question(request, category_name_slug, question_id):
             context_dict['liked'] = user_liked_answers
             context_dict['disliked'] = user_disliked_answers
         else:
+            # If the user has no profile (i.e. anonymous) they don't have any already set likes/dislikes.
             context_dict['liked'] = None
             context_dict['disliked'] = None
 
-        # Return top answer
+        # Lets get the selected answer if there is one.
         new_answers_list = []
+
         if question.answered is not None:
+
             selected_answer = Answer.objects.get(pk=question.answered.pk)
             new_answers_list.append(selected_answer)
             for item in answers_list:
@@ -241,18 +266,22 @@ def show_question(request, category_name_slug, question_id):
                     new_answers_list.append(item)
 
             context_dict['selected_answer'] = True
+
         else:
+            # there isn't a selected answer, return none.
             context_dict['selected_answer'] = None
 
         context_dict['question'] = question
         if context_dict['selected_answer']:
             context_dict['answers_list'] = new_answers_list
             context_dict['number_of_answers'] = len(new_answers_list)
+
         else:
             context_dict['answers_list'] = answers_list
             context_dict['number_of_answers'] = len(answers_list)
 
         try:
+            # Lets try to get the profile of the question asker.
             asker_profile = UserProfile.objects.get(pk=question.user.pk)
             context_dict['asker_profile'] = asker_profile
 
@@ -265,12 +294,14 @@ def show_question(request, category_name_slug, question_id):
         else:
             context_dict['answer'] = None
 
+        # Init a form to let the current user add a new answer to this question.
         answer_form = AnswerForm
 
         # Add the form to context dictionary
         context_dict['answer_form'] = answer_form
 
     except Question.DoesNotExist:
+        # This request is invalid, send null to template.
         context_dict['question'] = None
         context_dict['answers_list'] = None
 
@@ -295,6 +326,7 @@ def delete_question(request, question_id):
 
 @login_required
 def delete_answer(request, question_id, answer_id):
+
     answer = Answer.objects.get(pk=answer_id)
     question = Question.objects.get(pk=question_id)
 
@@ -313,9 +345,11 @@ def delete_answer(request, question_id, answer_id):
 
 @login_required
 def edit_question(request, question_id):
+
     try:
         question = Question.objects.get(pk=question_id)
         form = EditQuestionForm()
+
     except Question.DoesNotExist:
         return redirect('index')
 
@@ -328,8 +362,6 @@ def edit_question(request, question_id):
 
             return HttpResponseRedirect(reverse('show_question', kwargs={'category_name_slug': question.category.slug,
                                                                          'question_id': question_id}))
-        else:
-            print(form.errors)
 
     return render(request, 'ask_students/edit_question.html', {'form': form, 'old_question': question,
                                                                'categories': Category.objects.all().filter(
@@ -341,11 +373,13 @@ def edit_answer(request, answer_id):
     try:
         answer = Answer.objects.get(pk=answer_id)
         form = AnswerForm()
+
     except Answer.DoesNotExist:
         return redirect('index')
 
     if request.method == 'POST':
         form = AnswerForm(request.POST, instance=answer)
+
         if form.is_valid():
             answer = form.save(commit=False)
             answer.edited = timezone.now()
@@ -362,7 +396,9 @@ def edit_answer(request, answer_id):
 
 @login_required
 def request_category(request):
+
     form = RequestCategoryForm()
+
     if request.method == 'POST':
         form = RequestCategoryForm(request.POST)
 
@@ -372,8 +408,7 @@ def request_category(request):
             category.user = up
             category.save()
             return render(request, 'ask_students/category_requested.html', {})
-        else:
-            print(form.errors)
+
     return render(request, 'ask_students/request_category.html', {'form': form})
 
 
@@ -391,20 +426,16 @@ def select_answer(request, question_id):
             q.answered = Answer.objects.get(pk=a.answered.pk)
             q.save()
             return redirect('show_question', category_name_slug=q.category.slug, question_id=q.pk)
-        else:
-            print(form.errors)
-    return render(request, 'ask_students/select_answer.html', {'form': form, 'question': q, 'answers': answers, })
+
+    return render(request, 'ask_students/select_answer.html', {'form': form, 'question' : q, 'answers': answers,})
 
 
 def profile(request, username):
     # Set Defaults For Context
     user = None
-    all_answers = None
     most_liked_answers = None
     number_of_answers = None
     this_user_email = None
-    this_profile = None
-    user_permission = None
     likes = None
     dislikes = None
     role = "Student"
@@ -412,34 +443,31 @@ def profile(request, username):
     # Get user, if doesn't exist -> redirect to home page
     try:
         user = User.objects.get(username=username)
-        joined = user.date_joined.date()
-        all_answers = Answer.objects.filter(user=user.pk)
-        most_liked_answers = all_answers.order_by('-likes')[:5]
-        number_of_answers = len(all_answers)
-        this_user_email = user.email
-        this_profile = UserProfile.objects.get(user=user)
-        user_permission = this_profile.permission
-        likes = this_profile.likes
-        dislikes = this_profile.dislikes
-        # user_permission = user.permission
-        if user_permission != None:
-            # Adding a permission via admin interface causes error here
-            # Permission.objects.filter(pk=user_permission)
-            role = user_permission.title
 
     except User.DoesNotExist:
         return redirect('index')
 
-    except UserProfile.DoesNotExist:
-        this_profile = None
+    joined = user.date_joined.date()
+    all_answers = Answer.objects.filter(user=user.pk)
+    most_liked_answers = all_answers.order_by('-likes')[:5]
+    number_of_answers = len(all_answers)
+    this_user_email = user.email
+    this_profile = UserProfile.objects.get(user=user)
+    user_permission = this_profile.permission
+    likes = this_profile.likes
+    dislikes = this_profile.dislikes
+
+    if user_permission is not None:
+        # Adding a permission via admin interface causes error here
+        # Permission.objects.filter(pk=user_permission)
+        role = user_permission.title
 
     # select user's profile instance or create a blank one
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
                     'number_of_answers': number_of_answers, 'role': role, 'this_profile': this_profile,
-                    'this_user_email': this_user_email,
-                    'date_joined': joined}
+                    'this_user_email' : this_user_email, 'date_joined': joined}
 
     return render(request, 'ask_students/profile.html', context_dict)
 
@@ -448,6 +476,7 @@ def profile(request, username):
 def my_profile(request):
     try:
         user = User.objects.get(username=request.user)
+
     except User.DoesNotExist:
         return redirect('index')
 
@@ -460,11 +489,10 @@ def my_profile(request):
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
         if form.is_valid():
             form.save(commit=True)
             return redirect('profile', user.username)
-        else:
-            print(form.errors)
 
     return render(request, 'ask_students/my_profile.html',
                   {'user_profile': user_profile, 'selected_user': user, 'form': form})
@@ -533,6 +561,7 @@ def search(request):
         return HttpResponse(data, mt)
 
     else:
+
         search_query = request.GET.get('q')
         context_dict = {}
 
@@ -540,14 +569,13 @@ def search(request):
             search_terms = search_query.split()
             questions = Question.objects.filter(name__icontains=search_terms[0])
             answers = Answer.objects.filter(text__icontains=search_terms[0])
-            # print(answers)
+
             for term in search_terms[1:]:
                 questions = questions & Question.objects.filter(name__icontains=term)
                 answers = answers & Answer.objects.filter(text__icontains=term)
 
             for answer in answers:
                 questions = questions | Question.objects.filter(id=answer.questiontop_id)
-                # print(questions)
 
             results = list(questions)
 
@@ -652,10 +680,10 @@ def vote(request):
 
             response = json.dumps(response)
 
-            print("Hey buddeh, got here!")
             return HttpResponse(response)
 
         except Answer.DoesNotExist:
+            # This is an ASYNC error response
             return HttpResponseNotFound("Specified Answer Not Found")
 
 
@@ -710,7 +738,6 @@ def approve_category(request):
         # Get the submitted form
         form = ApproveCategoryForm(request.POST)
         if form.is_valid():
-            cat_form = form.save(commit=False)
 
             # If it's valid, get the category we wish to approve
             cat = Category.objects.get(pk=request.POST['category'])
@@ -722,8 +749,6 @@ def approve_category(request):
 
             # Safely redirect user back to approve category page and display categories that still need approving
             return HttpResponseRedirect(reverse('approve_category'))
-        else:
-            print(form.errors)
 
     return render(request, 'ask_students/approve_category.html', context_dict)
 
@@ -732,9 +757,8 @@ def approve_category(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def delete_category_request(request, category_id):
+
     category = Category.objects.get(pk=category_id)
-
     category.delete()
-
     return redirect('approve_category')
 
