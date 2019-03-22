@@ -40,7 +40,9 @@
     </div>
 
     <div class="col-md-4">
-        {% if answer.user %}
+        {% if answer.anonymous %}
+            <a>Anonymous <i>(Question Poster)</i></a>
+        {% else %}
             <a href="{% url 'profile' answer.user.user.username %}">
                 {% if answer.user.image %}
                     <img width="25px" height="25px"
@@ -49,8 +51,6 @@
                 {% endif %}
                 {{ answer.user.user.username }}
             </a>
-        {% else %}
-            <a>Anonymous</a>
         {% endif %}
     </div>
 

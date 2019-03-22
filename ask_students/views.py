@@ -137,13 +137,13 @@ def show_question(request, category_name_slug, question_id):
                 answer = form.save(commit=False)
                 answer.category = Category.objects.get(slug=category_name_slug)
                 answer.questiontop = question
+                answer.user = user_profile
 
                 # If question is anonymous and answerer is the original asker
                 # then answer has no user, template will show anonymous
                 if question.anonymous and question.user == user_profile:
-                    answer.user = None
-                else:
-                    answer.user = user_profile
+                    answer.anonymous = True
+                    
 
                 answer.save()
 

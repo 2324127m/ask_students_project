@@ -70,6 +70,7 @@ class UserProfile(models.Model):
 
 class Answer(models.Model):
 	text = models.CharField(max_length=4096)
+	anonymous = models.BooleanField(default=False)
 	likes = models.PositiveIntegerField(default=0)
 	dislikes = models.PositiveIntegerField(default=0)
 	posted = models.DateTimeField(default=timezone.now)
