@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^select_answer/(?P<question_id>[1-9]\d*)/$', views.select_answer, name='select_answer'),
     url(r'^request_category/$', views.request_category, name='request_category'),
     url(r'^approve_category/$', views.approve_category, name='approve_category'),
+    url(r'^delete_category/(?P<category_id>[\w\-]+)/$', views.delete_category_request, name='delete_category_request'),
 
     # DELETE/EDIT QUESTION & ANSWER functionality
     url(r'^delete_question/(?P<question_id>[1-9]\d*)/$', views.delete_question, name='delete_question'),

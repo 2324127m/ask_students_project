@@ -732,3 +732,15 @@ def approve_category(request):
             print(form.errors)
 
     return render(request, 'ask_students/approve_category.html', context_dict)
+
+
+# This view requires a user who is also a member of staff to be logged in
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def delete_category_request(request, category_id):
+    category = Category.objects.get(pk=category_id)
+
+    category.delete()
+
+    return redirect('approve_category')
+
