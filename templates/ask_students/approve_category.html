@@ -14,7 +14,6 @@
   <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
   <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
   <script type="text/javascript" src="{% static 'js/approve-category.js' %}"></script>
-
 {% endblock %}
 
 {% block body_block %}
@@ -34,7 +33,7 @@
                     <input type="hidden" name="category" id="id_category" value="{{ dat.1.id }}"><br/>
                     <button type="Submit" class="approve-category btn btn-info">Approve</button>
                     <a href="{% url 'delete_category_request' dat.1.pk %}">
-                        <button type="button" class="delete_category_request btn btn-info btn-danger" onclick="deleteCategoryRequest()">Delete</button>
+                        <button type="button" class="btn btn-info btn-danger delete_category_request">Decline</button>
                     </a>
                 </form>
 
