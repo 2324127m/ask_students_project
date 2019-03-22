@@ -15,7 +15,7 @@
                 </a>
             {% endif %}
             {% if question.answered.pk == answer.pk %}
-                <strong style="color:green">Selected answer: </strong>
+                <strong>Selected answer </strong>:
             {% endif %}
             {{ answer.text }}
         </p>
@@ -26,7 +26,7 @@
              src="{% if liked %}{% static 'images/active-like.png' %}{% else %}{% static 'images/like.png' %}{% endif %}"/>
         <a id="like-{{ answer.pk }}">{{ answer.likes }}</a>
 
-        <img style="" id="dislike-btn-{{ answer.pk }}" class="dislike-img dislike-btn"
+        <img id="dislike-btn-{{ answer.pk }}" class="dislike-img dislike-btn"
              src="{% if disliked %}{% static 'images/active-dislike.png' %}{% else %}{% static 'images/dislike.png' %}{% endif %}"/>
         <a id="dislike-{{ answer.pk }}">{{ answer.dislikes }}</a>
     </div>

@@ -3,7 +3,7 @@
 
     <div class="card-header crop-text py-2 flex-row flex-wrap">
         {% if not question.answered %}
-            <span class="unanswered-label text-truncate py-1 px-3 ml-auto bg-warning" style="float:right">Unanswered</span>
+            <span class="unanswered-label text-truncate py-1 px-3 ml-auto bg-warning">Unanswered</span>
         {% endif %}
             <span class="mr-auto text-left">{{ question.name|truncatechars:62 }}</span>
     </div>
