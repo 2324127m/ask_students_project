@@ -2,6 +2,7 @@ from django import forms
 from ask_students.models import UserProfile, Category, Question, Answer, PlaceOfStudy, Permission
 
 
+# Form for creating and editing a user profile
 class UserProfileForm(forms.ModelForm):
     bio = forms.CharField(required=False)
     image = forms.ImageField(required=False)
@@ -13,6 +14,7 @@ class UserProfileForm(forms.ModelForm):
         exclude = ('user', 'likes', 'dislikes', 'slug', 'up_votes', 'down_votes')
 
 
+# Form for requesting a category
 class RequestCategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=64)
     description = forms.CharField(max_length=512)
@@ -22,6 +24,7 @@ class RequestCategoryForm(forms.ModelForm):
         exclude = ('slug', 'user', 'approved')
 
 
+# Form used to select your answer
 class SelectAnswerForm(forms.ModelForm):
     answered=forms.ModelChoiceField(required=False, queryset=Answer.objects.all())
 
@@ -30,6 +33,7 @@ class SelectAnswerForm(forms.ModelForm):
         exclude = ('name', 'text', 'anonymous', 'posted', 'edited', 'views', 'user', 'category', 'support_file')
 
 
+# Form for asking questions
 class AskQuestionForm(forms.ModelForm):
     name = forms.CharField(max_length=128)
     text = forms.CharField(max_length=4096)
@@ -42,6 +46,7 @@ class AskQuestionForm(forms.ModelForm):
         exclude = ('posted', 'user', 'answered', 'edited', 'views', )
 
 
+# Form for editing your question
 class EditQuestionForm(forms.ModelForm):
     name = forms.CharField(max_length=128, required=True)
     text = forms.CharField(max_length=4096, required=True)
@@ -53,6 +58,7 @@ class EditQuestionForm(forms.ModelForm):
         exclude = ('posted', 'user', 'answered', 'edited', 'views', 'anonymous')
 
 
+# Form to submit an answer to a question
 class AnswerForm(forms.ModelForm):
     text = forms.CharField(max_length=4096, help_text="Enter you answer here", required=True)
 
@@ -61,6 +67,7 @@ class AnswerForm(forms.ModelForm):
         fields = ('text',)
 
 
+# Form to approve requested categories - for superusers only
 class ApproveCategoryForm(forms.ModelForm):
     category = forms.IntegerField(widget=forms.HiddenInput())
     description = forms.CharField(max_length=512)
