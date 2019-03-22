@@ -64,8 +64,8 @@ def populate():
         else:
             add_user_profile(u, user['bio'], user['likes'], user['dislikes'], user['permission'], user['place_of_study'])
 
-    categories = {
-        'General':
+    categories = [
+
             {'description': 'Ask general questions about any topic you like',
              'approved': True,
              'questions':
@@ -164,7 +164,6 @@ def populate():
                  ]
              },
 
-        'Computing':
             {'description': 'Ask questions about Computing',
              'approved': True,
              'questions':
@@ -223,8 +222,6 @@ def populate():
                 ]
              },
 
-
-        'Student Living General':
             {'description': 'General questions on Student Living',
              'approved': True,
              'questions':
@@ -283,9 +280,10 @@ def populate():
                       },
                  ]
              }
-    }
+    ]
 
-    for cat, cat_data in categories.items():
+    for i, cat in enumerate(['General', 'Computing', 'Student Living General']):
+        cat_data = categories[i]   
         c = add_category(cat, cat_data['description'], cat_data['approved'])
         print("Adding {0}...".format(str(c)))
 

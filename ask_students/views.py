@@ -124,7 +124,7 @@ def category(request, category_name_slug):
 def add_question(request):
     context_dict = {}
 
-    # Fetch All Categories
+    # Fetch all categories
     categories = Category.objects.all()
     form = AskQuestionForm()
 
