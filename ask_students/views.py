@@ -270,18 +270,24 @@ def delete_answer(request, question_id, answer_id):
 def edit_answer(request, answer_id):
     try:
         answer = Answer.objects.get(pk=answer_id)
-    except:
+        form = AnswerForm()
+    except Answer.DoesNotExist:
         return redirect('index')
 
     if request.method == 'POST':
         form = AnswerForm(request.POST, instance=answer)
         if form.is_valid():
-            form.edited = datetime.now()
-            form.save()
+            answer = form.save(commit=False)
+            answer.edited = datetime.now()
+            answer.text = request.POST['text']
+            answer.save()
+
+            return HttpResponseRedirect(reverse('show_question', kwargs={'category_name_slug': answer.category.slug,
+                                                                         'question_id': answer.questiontop_id}))
         else:
             print(form.errors)
 
-    return redirect('show_question', answer.questiontop.category.slug, answer.questiontop.pk)
+    return render(request, 'ask_students/edit_answer.html', {'form': form, 'old_answer': answer.text})
 
 
 @login_required

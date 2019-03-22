@@ -1,0 +1,19 @@
+{% extends 'ask_students/base.html' %}
+{% load static %}
+
+{% block title %}Edit Answer{% endblock %}
+{% block pagetitle %}Edit Answer{% endblock %}
+
+{% block body_block %}
+    <form id="edit-answer-form" role="form" method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+
+		<div class="form-group">
+			<label for="id_text">Edit your answer:</label>
+            <textarea rows="4" cols="50" class="form-control" id="id_text" name="text" form="edit-answer-form">{{ old_answer }}</textarea>
+		</div>
+
+        <button type="submit" class="btn btn-info col-6">Submit</button>
+
+    </form>
+{% endblock %}
