@@ -3,7 +3,16 @@
     border-width: 2px;
 }
 
+.question {
+    margin-bottom:8px;
+    border-width: 3px;
+}
+
 .answer-text {
+    padding: 8px 50px 0px 8px;
+}
+
+.question-text {
     padding: 8px 50px 0px 8px;
 }
 
@@ -17,8 +26,17 @@
 }
 
 .delete-question  {
-    font-size: 60%;
-    margin-left: 15px;
+    position: relative;
+    float: right;
+    margin-right: -35px;
+}
+
+.edit-question {
+    position: relative;
+    float: right;
+    margin-right: -37px;
+    margin-top: 30px;
+    bottom: 0;
 }
 
 .delete-answer {

@@ -42,6 +42,17 @@ class AskQuestionForm(forms.ModelForm):
         exclude = ('posted', 'user', 'answered', 'edited', 'views', )
 
 
+class EditQuestionForm(forms.ModelForm):
+    name = forms.CharField(max_length=128, required=True)
+    text = forms.CharField(max_length=4096, required=True)
+    category = forms.ModelChoiceField(required=True, queryset=Category.objects.filter(approved=True))
+    support_file = forms.ImageField(required=False)
+
+    class Meta:
+        model = Question
+        exclude = ('posted', 'user', 'answered', 'edited', 'views', 'anonymous')
+
+
 class AnswerForm(forms.ModelForm):
     text = forms.CharField(max_length=4096, help_text="Enter you answer here", required=True)
 

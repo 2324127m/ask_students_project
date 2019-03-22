@@ -26,56 +26,67 @@
             <span class="bg-warning unanswered-question">Unanswered</span>
         {% endif %}
         {% if question.user.user == user %}
-            <a class="delete-question" href="{% url 'delete_question' question.pk %}">Delete Question</a>
             <a id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
         {% endif %}
     </h4>
 
-    <div class="container">
-        <div class="row question-info">
-            <!-- left side, show question text -->
-            <div class="col-sm-8 card question-card left-section">
-                <p class="question-text">{{ question.text }}</p>
-            </div>
+    <div class="row question-info no-gutters">
+        <!-- left side, show question text -->
+        <div class="col-sm-12 card question-card question">
+            <p class="question-text">{{ question.text }}
 
-            <!-- Right side, show pic, name and question views  -->
-            <div class="col-sm-4 right-section">
-                {% if question.anonymous %}
-                    <a>Anonymous</a>
-                {% elif question.user == None %}
-                    <a>User Deleted</a>
-                {% else %}
-                    <a href="{% url 'profile' asker_profile.user.username %}">
-                        {% if asker_profile.image %}
-                            <img width="25px" height="25px"
-                                 src="{{ MEDIA_URL }}{{ asker_profile.image }}"
-                                 alt="{{ asker_profile.user.username }} profile image"/>
-                        {% endif %}
-                        {{ asker_profile.user.username }}
+                {% if question.user.user == user %}
+                    <a class="delete-question" href="{% url 'delete_question' question.pk %}">
+                        <img width="20px" height="20px" alt="Delete question" src="{% static 'images/delete.png' %}"/>
+                    </a>
+                    <a class="edit-question" href="{% url 'edit_question' question.pk %}">
+                        <img width="24px" height="24px" alt="Edit question" src="{% static 'images/edit.png' %}"/>
                     </a>
                 {% endif %}
-                <p>View{{ question.views|pluralize }}: {{ question.views }}</p>
-            </div>
-
-            <!-- Supporting file -->
-            <div class="col-xs-8 support-file left-section">
-                {% if question.support_file %}
-                    <a target="_blank" href="{{ MEDIA_URL }}{{ question.support_file }}">View attached support file</a>
-                {% endif %}
-            </div>
-
-
-            <!-- Posted date -->
-            <div class="col-xs-8 date right-section">
-                {% if question.edited %}
-                    {{ question.edited|date:'D d M Y H:i' }} (edit)
-                {% else %}
-                    {{ question.posted|date:'D d M Y H:i' }}
-                {% endif %}
-            </div>
+            </p>
         </div>
 
+        <div class="col-md-3 col-sm-6">
+            View{{ question.views|pluralize }}: {{ question.views }}
+        </div>
+
+
+        <!-- Posted date -->
+        <div class="col-md-5 col-sm-6">
+            {% if question.edited %}
+                {{ question.edited|date:'D d M Y H:i' }} (edit)
+            {% else %}
+                {{ question.posted|date:'D d M Y H:i' }}
+            {% endif %}
+        </div>
+
+        <!-- Right side, show pic, name and question views  -->
+        <div class="col-md-4">
+            {% if question.anonymous %}
+                <a>Anonymous</a>
+            {% elif question.user == None %}
+                <a>User Deleted</a>
+            {% else %}
+                <a href="{% url 'profile' asker_profile.user.username %}">
+                    {% if asker_profile.image %}
+                        <img width="25px" height="25px"
+                             src="{{ MEDIA_URL }}{{ asker_profile.image }}"
+                             alt="{{ asker_profile.user.username }} profile image"/>
+                    {% endif %}
+                    {{ asker_profile.user.username }}
+                </a>
+            {% endif %}
+        </div>
+
+
+        <!-- Supporting file -->
+        <div class="col-md-8">
+            {% if question.support_file %}
+                <a target="_blank" href="{{ MEDIA_URL }}{{ question.support_file }}">View attached support file</a>
+            {% endif %}
+        </div>
     </div>
+
 
     <div class="page-break"></div>
 
@@ -95,8 +106,8 @@
                 {% else %}
                     {% show_answer answer question False False user %}
                 {% endif %}
-            <div class="page-break"></div>
-        {% endif %}
+                <div class="page-break"></div>
+            {% endif %}
         </div>
     {% endfor %}
 

@@ -195,15 +195,6 @@ QUESTION.HTML
   	width: 50%;
 }
 
-.support-file {
-	margin-top: 10px;
-	margin-bottom:-10px;
-}
-.date {
-	text-align: right;
-	margin-bottom:-10px;
-}
-
 .page-break {
 	margin: 25px 15px 25px 15px;
 	border: 1px solid grey;
