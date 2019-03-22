@@ -1,7 +1,8 @@
 from django.contrib import admin
 from ask_students.models import Category, UserProfile, Question, Answer, PlaceOfStudy, Permission
 
-
+# Register all models with admin interface
+# Select which fields can be changed
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     exclude = ('slug',)

@@ -21,11 +21,13 @@ class Permission(models.Model):
 # Define all the entities, attributes, and relationships from our ER diagram
 
 class Category(models.Model):
+	# Category details
 	name = models.CharField(max_length=64, unique=True)
 	description = models.CharField(max_length=512, null=True)
 	approved = models.BooleanField(default=False)
 	slug = models.SlugField(unique=True)
 
+	# Each category has a UserProfile who requested it
 	user = models.ForeignKey("UserProfile", on_delete=models.SET_NULL, null=True)
 
 	def save(self, *args, **kwargs):
@@ -48,12 +50,13 @@ class UserProfile(models.Model):
 	up_votes = models.ManyToManyField('Answer', related_name="up_voters")
 	down_votes = models.ManyToManyField('Answer', related_name="down_voters")
 
+	# User profile details
 	bio = models.CharField(max_length=4096, null=True)
 	likes = models.PositiveIntegerField(default=0)
 	dislikes = models.PositiveIntegerField(default=0)
 
-	location = "profile_images/"
-	image = models.ImageField(upload_to=location, null=True)
+	# Upload profile images to media/profile_imagees/
+	image = models.ImageField(upload_to="profile_images/", null=True)
 
 	slug = models.SlugField(unique=True)
 
@@ -69,6 +72,7 @@ class UserProfile(models.Model):
 
 
 class Answer(models.Model):
+	# Answer details
 	text = models.CharField(max_length=4096)
 	anonymous = models.BooleanField(default=False)
 	likes = models.PositiveIntegerField(default=0)
@@ -76,19 +80,21 @@ class Answer(models.Model):
 	posted = models.DateTimeField(default=timezone.now)
 	edited = models.DateTimeField(default=None, null=True, blank=True)
 
+	# Answer has a UserProfile who posted it
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
+
+	# Answer has a Category it belongs to
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+	# Answer has a Question sitting on top of it that it answers
 	questiontop = models.ForeignKey("Question", on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.text
 
 
-# A question MUST have the following:
-# 1) name
-# 2) posted
-# 2) category
 class Question(models.Model):
+	# Question details
 	name = models.CharField(max_length=128)
 	text = models.CharField(max_length=4096, default="")
 	anonymous = models.BooleanField(default=False)
@@ -96,10 +102,16 @@ class Question(models.Model):
 	edited = models.DateTimeField(default=None, null=True, blank=True)
 	views = models.IntegerField(default=0)
 
+	# Question has an Answer that the poster has marked as the answer
 	answered = models.ForeignKey(Answer, on_delete=models.SET_NULL, null=True, default=None, blank=True)
+
+	# Question has a UserProfile who posted it
 	user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+
+	# Question has a Category that it belongs to
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+	# Support files for questions are uploaded to media/support_files/
 	support_file = models.ImageField(upload_to='support_files', null=True, blank=True)
 
 	def __str__(self):
