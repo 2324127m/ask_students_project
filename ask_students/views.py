@@ -21,7 +21,7 @@ from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestion
     SelectAnswerForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from registration.backends.default.views import RegistrationView
+from registration.backends.default.views import RegistrationView, ActivationView
 from registration import signals
 
 from datetime import datetime, timedelta
@@ -56,6 +56,13 @@ class MyRegistrationView(RegistrationView):
         profile.save()
 
         return new_user
+
+
+class MyActivationView(ActivationView):
+
+    # Override On Success To Take To Edit Profile
+    def get_success_url(self, user):
+        return 'my_profile', (), {}
 
 
 def index(request):
