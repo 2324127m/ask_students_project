@@ -3,25 +3,59 @@ import sys
 from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
-
+from registration.forms import RegistrationFormUniqueEmail
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, InvalidPage
+from django.contrib.auth import get_user_model
+
+UserModel = get_user_model()
 
 import json
 from django.forms.models import model_to_dict
 from django.core import serializers
 
+from django.contrib.auth import authenticate, login
+
 from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
-from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, SelectAnswerForm
+from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, \
+    SelectAnswerForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from registration.backends.simple.views import RegistrationView
+from registration.backends.default.views import RegistrationView
+from registration import signals
 
 from datetime import datetime, timedelta
 
 
 class MyRegistrationView(RegistrationView):
-    def get_success_url(self, user):
-        return reverse('register_profile')
+    form_class = RegistrationFormUniqueEmail
+
+    def register(self, form):
+
+        site = get_current_site(self.request)
+
+        if hasattr(form, 'save'):
+            new_user_instance = form.save()
+        else:
+            new_user_instance = (UserModel().objects
+                                 .create_user(**form.cleaned_data))
+
+        new_user = self.registration_profile.objects.create_inactive_user(
+            new_user=new_user_instance,
+            site=site,
+            send_email=self.SEND_ACTIVATION_EMAIL,
+            request=self.request,
+        )
+        signals.user_registered.send(sender=self.__class__,
+                                     user=new_user,
+                                     request=self.request)
+
+        profile = UserProfile()
+        profile.user = new_user
+        new_user.profile = profile
+        profile.save()
+
+        return new_user
 
 
 def index(request):
@@ -338,6 +372,7 @@ def profile(request, username):
     user_permission = None
     likes = None
     dislikes = None
+    role = "Student"
 
     # Get user, if doesn't exist -> redirect to home page
     try:
@@ -351,9 +386,7 @@ def profile(request, username):
         likes = this_profile.likes
         dislikes = this_profile.dislikes
         #user_permission = user.permission
-        if user_permission == None:
-            role = "Student"
-        else:
+        if user_permission != None:
             # Adding a permission via admin interface causes error here
             # Permission.objects.filter(pk=user_permission)
             role = user_permission.title
