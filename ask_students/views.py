@@ -18,7 +18,7 @@ from django.contrib.auth import authenticate, login
 
 from ask_students.models import Category, Question, Answer, UserProfile, User, Permission
 from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestionForm, AnswerForm, ApproveCategoryForm, \
-    SelectAnswerForm
+    SelectAnswerForm, EditQuestionForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from registration.backends.default.views import RegistrationView
@@ -265,24 +265,6 @@ def delete_question(request, question_id):
 
 
 @login_required
-def edit_question(request, question_id):
-    try:
-        question = Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        return redirect('index')
-
-    if request.method == 'POST':
-        form = QuestionForm(request.POST, request.FILES, instance=question)
-        if form.is_valid():
-            form.edited = datetime.now()
-            form.save(commit=True)
-        else:
-            print(form.errors)
-
-    return redirect('show_question', question.category.slug, question.pk)
-
-
-@login_required
 def delete_answer(request, question_id, answer_id):
     answer = Answer.objects.get(pk=answer_id)
     question = Question.objects.get(pk=question_id)
@@ -301,6 +283,30 @@ def delete_answer(request, question_id, answer_id):
 
 
 @login_required
+def edit_question(request, question_id):
+    try:
+        question = Question.objects.get(pk=question_id)
+        form = EditQuestionForm()
+    except Question.DoesNotExist:
+        return redirect('index')
+
+    if request.method == 'POST':
+        form = EditQuestionForm(request.POST, request.FILES, instance=question)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.edited = timezone.now()
+            question.save()
+
+            return HttpResponseRedirect(reverse('show_question', kwargs={'category_name_slug': question.category.slug,
+                                                                         'question_id': question_id}))
+        else:
+            print(form.errors)
+
+    return render(request, 'ask_students/edit_question.html', {'form': form, 'old_question': question,
+                                                               'categories': Category.objects.all().filter(approved=True)})
+
+
+@login_required
 def edit_answer(request, answer_id):
     try:
         answer = Answer.objects.get(pk=answer_id)
@@ -312,7 +318,7 @@ def edit_answer(request, answer_id):
         form = AnswerForm(request.POST, instance=answer)
         if form.is_valid():
             answer = form.save(commit=False)
-            answer.edited = datetime.now()
+            answer.edited = timezone.now()
             answer.text = request.POST['text']
             answer.save()
 

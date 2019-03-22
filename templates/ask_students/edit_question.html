@@ -1,0 +1,46 @@
+{% extends 'ask_students/base.html' %}
+{% load static %}
+
+{% block title %}Edit Question{% endblock %}
+{% block pagetitle %}Edit Question{% endblock %}
+
+{% block head_block %}
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+  <script src="{% static 'js/support-image.js' %}"></script>
+{% endblock %}
+
+{% block body_block %}
+    <form id="edit-question-form" role="form" method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_name">Name:</label>
+            <input class="form-control" type="text" name="name" maxlength="128" id="id_name" value="{{ old_question.name }}">
+        </div>
+        <div class="form-group">
+            <label for="id_text">Text:</label>
+            <input class="form-control" type="text" name="text" maxlength="4096" id="id_text" value="{{ old_question.text }}">
+        </div>
+        <div class="form-group">
+            <label for="id_category">Category:</label>
+            <select name="category" class="form-control" required id="id_category">
+                {% for category in categories %}
+                    {% if category.id == old_question.category.id %}
+                        <option selected value="{{ category.pk }}" class="form-control">{{ category.name }}</option>
+                    {% else %}
+                        <option value="{{ category.pk }}" class="form-control">{{ category.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="id_support_file">Support file:</label>
+            <input type="file" name="support_file" id="id_support_file" onchange="loadFile(event)"/>
+            <img class="img-fluid" id="image-preview"/>
+        </div>
+
+        <button type="submit" class="btn btn-info col-6">Submit</button>
+
+    </form>
+{% endblock %}

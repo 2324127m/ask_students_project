@@ -10,9 +10,6 @@ urlpatterns = [
     url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name="profile"),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/$', views.category, name='category'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<question_id>[1-9]\d*)/$', views.show_question, name='show_question'),
-    url(r'^delete_question/(?P<question_id>[1-9]\d*)/$', views.delete_question, name='delete_question'),
-    url(r'^delete_answer/(?P<question_id>[1-9]\d*)/(?P<answer_id>[1-9]\d*)/$', views.delete_answer, name='delete_answer'),
-    url(r'^edit_answer/(?P<answer_id>[1-9]\d*)/$', views.edit_answer, name='edit_answer'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/ask_question/$', views.add_question, name='ask_question'),
     url(r'^about_us/$', views.about_us, name="about_us"),
     url(r'^contact_us/$', views.contact_us, name="contact_us"),
@@ -22,6 +19,13 @@ urlpatterns = [
     url(r'^select_answer/(?P<question_id>[1-9]\d*)/$', views.select_answer, name='select_answer'),
     url(r'^request_category/$', views.request_category, name='request_category'),
     url(r'^approve_category/$', views.approve_category, name='approve_category'),
+
+    # DELETE/EDIT QUESTION & ANSWER functionality
+    url(r'^delete_question/(?P<question_id>[1-9]\d*)/$', views.delete_question, name='delete_question'),
+    url(r'^edit_question/(?P<question_id>[1-9]\d*)/$', views.edit_question, name='edit_question'),
+    url(r'^delete_answer/(?P<question_id>[1-9]\d*)/(?P<answer_id>[1-9]\d*)/$', views.delete_answer,
+        name='delete_answer'),
+    url(r'^edit_answer/(?P<answer_id>[1-9]\d*)/$', views.edit_answer, name='edit_answer'),
 
     # AJAX REQUESTS
     url(r'^ajax/search/$', views.search, name='search_ajax'),
