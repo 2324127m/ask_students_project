@@ -60,7 +60,6 @@ class MyRegistrationView(RegistrationView):
 
 
 class MyActivationView(ActivationView):
-
     # Override On Success To Take To Edit Profile
     def get_success_url(self, user):
         return 'my_profile', (), {}
@@ -120,7 +119,7 @@ def add_question(request):
     context_dict = {}
     categories = Category.objects.all()
     form = AskQuestionForm()
-    
+
     if request.method == 'POST':
         form = AskQuestionForm(request.POST)
         if form.is_valid():
@@ -162,7 +161,6 @@ def add_question(request):
             print(question.pk)
             return HttpResponseRedirect(reverse('show_question', kwargs={'category_name_slug': category_slug,
                                                                          'question_id': question.pk}))
-
         else:
             # Display errors if question cannot be added
             print(form.errors)
@@ -209,7 +207,6 @@ def show_question(request, category_name_slug, question_id):
                 # then answer has no user, template will show anonymous
                 if question.anonymous and question.user == user_profile:
                     answer.anonymous = True
-                    
 
                 answer.save()
 
@@ -230,7 +227,6 @@ def show_question(request, category_name_slug, question_id):
 
             context_dict['liked'] = user_liked_answers
             context_dict['disliked'] = user_disliked_answers
-
         else:
             context_dict['liked'] = None
             context_dict['disliked'] = None
@@ -336,7 +332,8 @@ def edit_question(request, question_id):
             print(form.errors)
 
     return render(request, 'ask_students/edit_question.html', {'form': form, 'old_question': question,
-                                                               'categories': Category.objects.all().filter(approved=True)})
+                                                               'categories': Category.objects.all().filter(
+                                                                   approved=True)})
 
 
 @login_required
@@ -382,10 +379,10 @@ def request_category(request):
 
 @login_required
 def select_answer(request, question_id):
-    q=Question.objects.get(pk=question_id)
+    q = Question.objects.get(pk=question_id)
     form = SelectAnswerForm()
-    answers = Answer.objects.filter(questiontop = q)
-    
+    answers = Answer.objects.filter(questiontop=q)
+
     if request.method == 'POST':
         form = SelectAnswerForm(request.POST)
 
@@ -396,11 +393,10 @@ def select_answer(request, question_id):
             return redirect('show_question', category_name_slug=q.category.slug, question_id=q.pk)
         else:
             print(form.errors)
-    return render(request, 'ask_students/select_answer.html', {'form': form, 'question' : q, 'answers': answers,})
+    return render(request, 'ask_students/select_answer.html', {'form': form, 'question': q, 'answers': answers, })
 
 
 def profile(request, username):
-
     # Set Defaults For Context
     user = None
     all_answers = None
@@ -425,7 +421,7 @@ def profile(request, username):
         user_permission = this_profile.permission
         likes = this_profile.likes
         dislikes = this_profile.dislikes
-        #user_permission = user.permission
+        # user_permission = user.permission
         if user_permission != None:
             # Adding a permission via admin interface causes error here
             # Permission.objects.filter(pk=user_permission)
@@ -441,7 +437,8 @@ def profile(request, username):
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
-                    'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email,
+                    'number_of_answers': number_of_answers, 'role': role, 'this_profile': this_profile,
+                    'this_user_email': this_user_email,
                     'date_joined': joined}
 
     return render(request, 'ask_students/profile.html', context_dict)
@@ -453,8 +450,8 @@ def my_profile(request):
         user = User.objects.get(username=request.user)
     except User.DoesNotExist:
         return redirect('index')
-    
-    user_profile = UserProfile.objects.get(user=user)  
+
+    user_profile = UserProfile.objects.get(user=user)
     form = UserProfileForm(initial={'bio': user_profile.bio,
                                     'image': user_profile.image,
                                     'place_of_study': user_profile.place_of_study,
@@ -469,7 +466,8 @@ def my_profile(request):
         else:
             print(form.errors)
 
-    return render(request, 'ask_students/my_profile.html', {'user_profile': user_profile, 'selected_user': user, 'form': form})
+    return render(request, 'ask_students/my_profile.html',
+                  {'user_profile': user_profile, 'selected_user': user, 'form': form})
 
 
 @login_required
@@ -517,7 +515,6 @@ def contact_us(request):
 
 
 def search(request):
-
     if request.is_ajax():
         query = request.GET.get('term', '')
         queryset = Question.objects.filter(name__istartswith=query)
@@ -613,7 +610,7 @@ def vote(request):
                     # Now make me a liker!
                     incr_likes(answer, answerer_profile)
                     answer.up_voters.add(user_profile)
-                    action="like"
+                    action = "like"
 
                 # I currently have a like, but I've changed my mind.
                 else:
@@ -672,7 +669,6 @@ def decr_likes(answer, answerer_profile):
 
 
 def decr_dislikes(answer, answerer_profile):
-
     if answer.dislikes > 0:
         answer.dislikes -= 1
 
@@ -681,15 +677,13 @@ def decr_dislikes(answer, answerer_profile):
 
 
 def incr_likes(answer, answerer_profile):
-
     answer.likes += 1
     answerer_profile.likes += 1
 
 
 def incr_dislikes(answer, answerer_profile):
-
-        answer.dislikes += 1
-        answerer_profile.dislikes += 1
+    answer.dislikes += 1
+    answerer_profile.dislikes += 1
 
 
 # This view requires a user who is also a member of staff to be logged in

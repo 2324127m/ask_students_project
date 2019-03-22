@@ -18,18 +18,19 @@
 
 {% block body_block %}
 
-    <form role="form" method="post" action="." enctype="multipart/form-data">
+    <form id="ask_question_form" role="form" method="post" action="." enctype="multipart/form-data">
         {% csrf_token %}
         {% display_form_error_fields form %}
 
         <div class="form-group">
             <label for="id_name">Question title: </label>
-            <input type="text" name="name" class="form-control" maxlength="128" required id="id_name"/>
+            <input type="text" name="name" class="form-control" id="id_name"/>
+            <small id="errors_name" class="form-text col-sm-12 px-3"></small>
         </div>
         <div class="form-group">
             <label for="id_text">Question text:</label>
-            <input type="text" name="text" class="form-control" maxlength="4096"
-                   required id="id_text">
+            <input type="text" name="text" class="form-control" id="id_text">
+            <small id="errors_text" class="form-text col-sm-12 px-3"></small>
         </div>
 
         <div class="form-group">
@@ -41,14 +42,15 @@
         <div class="form-group">
             <label for="id_category">Select a category - Can't find what you're looking for?
                 <a href="{% url 'request_category' %}">You can Request a Category</a>.</label>
-            <select name="category" class="form-control" required id="id_category">
-                <option value selected class="form-control">----</option>
-                {% for category in categories %}
-                    {% if category.approved %}
-                        <option value="{{ category.pk }}" class="form-control">{{ category.name }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
+                <select name="category" class="form-control" id="id_category">
+                    <option value selected class="form-control">----</option>
+                    {% for category in categories %}
+                        {% if category.approved %}
+                            <option value="{{ category.pk }}" class="form-control">{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <small id="errors_category" class="form-text col-sm-12 px-3"></small>
 
         </div>
 

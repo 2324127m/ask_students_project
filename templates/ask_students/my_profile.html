@@ -33,8 +33,10 @@
             </div>
 
                 <label for="id_image" class="user-info-title">
-                    View your current profile image <a target="_blank" href="{{ MEDIA_URL }}{{ form.image.value }}">here</a>
-                    <br/><br/>Upload a new profile image:</label>
+                    {% if user_profile.image %}
+                    View your current profile image <a target="_blank" href="{{ MEDIA_URL }}{{ form.image.value }}">here</a><br/><br/>
+                    {% endif %}
+                    Upload a new profile image:</label>
                 <input onchange="loadFile(event)" type="file" name="image" id="id_image"><br/>
                 <img class="img-fluid" id="image-preview"/>
 
