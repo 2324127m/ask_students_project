@@ -19,7 +19,7 @@ def populate():
                       'University of the West of Scotland', 'University of the Highlands and Islands']
 
     # Populate permissions with different roles a user can have
-    permission = ['Student', 'Undergraduate', 'Postgraduate']
+    permission = ['Undergraduate', 'Postgraduate', 'Graduate', 'Lecturer', 'Professor']
 
     for place in place_of_study:
         add_place_of_study(place)
@@ -30,10 +30,10 @@ def populate():
     # Populate users with 9 sample users
     users = [{'username': 'YellowPony123', 'first_name': 'Abe', 'last_name': 'MacCabe', 'email': 'yellowpony123@gmail.com',
               'password': 'pigsdontfly', 'bio': 'Lover of ponies and the colour yellow', 'image': 'profile_images/YellowPony123.jpg',
-              'likes': 598, 'dislikes': 82, 'permission': 'Student', 'place_of_study': "University of Glasgow"},
+              'likes': 598, 'dislikes': 82, 'permission': 'Undergraduate', 'place_of_study': "University of Glasgow"},
              {'username': 'AngryTelephonePole87', 'first_name': 'Belle', 'last_name': 'MacKell', 'email': 'angry@theworld.com',
               'password': 'BigF4TW1ndowL3dge', 'bio': 'Hate the world and I resonate with telephone poles :)', 'image': 'profile_images/AngryTelephonePole87.jpg',
-              'likes': 379, 'dislikes': 41, 'permission': 'Student', 'place_of_study': 'University of Glasgow'},
+              'likes': 379, 'dislikes': 41, 'permission': 'Undergraduate', 'place_of_study': 'University of Glasgow'},
              {'username': 'ooeeooahahtingtang', 'first_name': 'Charlie', 'last_name': 'MacFarley', 'email': 'qwertyuip@yahoo.co.uk',
               'password': 'wallawallabingbang', 'bio': 'Oo ee oo ah ah ting tang walla walla bing bang',
               'likes': 91, 'dislikes': 37, 'permission': 'Undergraduate', 'place_of_study': 'Glasgow Caledonian University'},
@@ -45,13 +45,13 @@ def populate():
               'likes': 20, 'dislikes': 44, 'permission': 'Postgraduate', 'place_of_study': 'University of the Highlands and Islands'},
              {'username': 'SeriousFred', 'first_name': 'Fred', 'last_name': 'MacSuede', 'email': 'fred_mascsuede@hotmail.com',
               'password': '18gsa35ds68', 'bio': 'Get real.',
-              'likes': 830, 'dislikes': 66, 'permission': 'Student', 'place_of_study': 'Edinburgh Napier University'},
+              'likes': 830, 'dislikes': 66, 'permission': 'Undergraduate', 'place_of_study': 'Edinburgh Napier University'},
              {'username': 'GustySeagull1942', 'first_name': 'Gill', 'last_name': 'MacMill', 'email': 'mrsmacmill@gmail.com',
               'password': 'TROONBEACH', 'bio': 'Seagulls and seaweed is all that this gal needs', 'image': 'profile_images/GustySeagull1942.jpg',
               'likes': 111, 'dislikes': 105, 'permission': 'Undergraduate', 'place_of_study': 'Robert Gordon University'},
              {'username': 'HealthyBeing', 'first_name': 'Harriot', 'last_name': 'MacTarrot', 'email': 'harriot_mactarrot@yahoo.co.uk',
               'password': 'carrot', 'bio': '#fitlife',
-              'likes': 176, 'dislikes': 86, 'permission': 'Student', 'place_of_study': 'University of Glasgow'},
+              'likes': 176, 'dislikes': 86, 'permission': 'Undergraduate', 'place_of_study': 'University of Glasgow'},
              {'username': 'AintGotNoMoney', 'first_name': 'Isabelle', 'last_name': 'MacDinnerBell', 'email': 'dinner_bell@gmail.com',
               'password': 'hahaha', 'bio': 'I only play the games that I win at', 'image': 'profile_images/AintGotNoMoney.png',
               'likes': 119, 'dislikes': 26, 'permission': 'Undergraduate', 'place_of_study': 'University of the West of Scotland'},
@@ -64,7 +64,6 @@ def populate():
         else:
             add_user_profile(u, user['bio'], user['likes'], user['dislikes'], user['permission'], user['place_of_study'])
 
-    
     categories = {
         'General':
             {'description': 'Ask general questions about any topic you like',
@@ -387,6 +386,7 @@ def add_answer(cat, answer, likes, dislikes, user, questiontop):
     a.save()
     return a
 
+
 def mark_as_answer(answer):
     question = answer.questiontop
     question.answered = answer
@@ -414,7 +414,7 @@ def create_super_user():
         u.is_staff = True
         u.save()
 
-        add_user_profile(u, "Site Administrator", 0, 0, "Student", "University of Glasgow", "profile_images/admin.jpg")
+        add_user_profile(u, "Site Administrator", 0, 0, "Lecturer", "University of Glasgow", "profile_images/admin.jpg")
 
 
 def run_server():
@@ -433,4 +433,3 @@ if __name__ == '__main__':
 
     create_super_user()
     run_server()
-
