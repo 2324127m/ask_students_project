@@ -6,6 +6,9 @@ $(document).ready(function() {
         source: "/ajax/search/",
         minLength: 2,
         delay: 300,
+        create:function (e, ui) {
+            ui.attr('autocomplete', 'nope')
+        },
         select:function (e, ui) {
             location.href = ui.item.url;
         }
