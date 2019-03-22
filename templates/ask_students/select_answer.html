@@ -5,6 +5,12 @@
 {% block title %}Select Answer{% endblock %}
 {% block pagetitle %}Select Answer{% endblock %}
 
+{% block head_block %}
+ <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
+  <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
+  <script src="{% static 'js/ask_question_form_validation.js' %}"></script>
+ {% endblock %}
+
 {% block body_block %}
     <form role="form" method="post" action=".">
         {% csrf_token %}

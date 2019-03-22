@@ -21,7 +21,7 @@ from ask_students.forms import UserProfileForm, RequestCategoryForm, AskQuestion
     SelectAnswerForm, EditQuestionForm
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from registration.backends.default.views import RegistrationView
+from registration.backends.default.views import RegistrationView, ActivationView
 from registration import signals
 
 from datetime import datetime, timedelta
@@ -56,6 +56,13 @@ class MyRegistrationView(RegistrationView):
         profile.save()
 
         return new_user
+
+
+class MyActivationView(ActivationView):
+
+    # Override On Success To Take To Edit Profile
+    def get_success_url(self, user):
+        return 'my_profile', (), {}
 
 
 def index(request):
@@ -383,6 +390,7 @@ def profile(request, username):
     # Get user, if doesn't exist -> redirect to home page
     try:
         user = User.objects.get(username=username)
+        joined = user.date_joined.date()
         all_answers = Answer.objects.filter(user=user.pk)
         most_liked_answers = all_answers.order_by('-likes')[:5]
         number_of_answers = len(all_answers)
@@ -407,7 +415,8 @@ def profile(request, username):
     # users_profile = UserProfile.objects.get_or_create(user=user)[0]
 
     context_dict = {'this_user': user, 'top_five_answers': most_liked_answers, 'likes': likes, 'dislikes': dislikes,
-                    'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email }
+                    'number_of_answers': number_of_answers, 'role' : role, 'this_profile' : this_profile, 'this_user_email' : this_user_email,
+                    'date_joined': joined}
 
     return render(request, 'ask_students/profile.html', context_dict)
 
