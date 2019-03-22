@@ -1,26 +1,29 @@
 {% extends 'ask_students/base.html' %}
 {% load ask_students_templatetags %}
 {% load static %}
-{% block head_block %}
-{% endblock %}
+
+{% block title %}Select Answer{% endblock %}
+{% block pagetitle %}Select Answer{% endblock %}
+
 {% block body_block %}
-    <form role="form" class="p-4 p-lg-5" method="post" action=".">
+    <form role="form" method="post" action=".">
         {% csrf_token %}
 
         {% display_form_error_fields form %}
 
-		
-        <h3>Choose your favourite answer!</h3>
+        <h3>Choose your favourite answer from {{ answers|length }} answer{{ answers|length|pluralize }}!</h3>
 		<div class="form-group">
-			<label for="id_answered">Choose the answer that's right for you</label>
-			<select name="answered" class="form-control" required id="id_answered">
-			<option value selected class="form-control">decisions, decisions...</option>
-			{% for answer in answers %}
-			<option value="{{ answer.pk }}" class="form-control">{{ answer.text }}</option>
-			{% endfor %}
+			<label for="id_answered">Choose the answer that's right for you. This answer will be pinned as the main answer to your question!</label>
+
+            <select name="answered" class="form-control" required id="id_answered">
+			<option value selected class="form-control">----</option>
+            {% for answer in answers %}
+                <option value="{{ answer.pk }}" class="form-control">{{ answer.text }}</option>
+            {% endfor %}
 			</select>
 		</div>
-        <button type="submit" class="btn btn-info col-12">Submit</button>
+
+        <button type="submit" class="btn btn-info col-6">Submit</button>
 
     </form>
 {% endblock %}

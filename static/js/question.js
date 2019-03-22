@@ -25,13 +25,13 @@ $(document).ready(function () {
 // User must confirm they want to delete question
 $(function() {
     $('.delete-question').click(function() {
-        return window.confirm("Are you sure you want to delete your question?");
+        return window.confirm("Are you 100% sure you want to delete your question? This cannot be undone!");
     });
 });
 
 // User must confirm they want to delete answer
 $(function() {
     $('.delete-answer').click(function() {
-        return window.confirm("Are you sure you want to delete your answer?");
+        return window.confirm("Are you 100% sure you want to delete your answer? This cannot be undone!");
     });
 });

@@ -1,18 +1,25 @@
 {% load static %}
-{% load staticfiles %}
 {% load ask_students_templatetags %}
-<div class="row question-info no-gutters clearfix">
-    <!-- left side, show question text -->
 
 
-    <div class="col-sm-12 card question-card answer-card">
-        {% if question.answered.pk == answer.pk %}
-            <p class="question-text"><strong style="color:green">Selected answer: </strong>{{ answer.text }}</p>
-        {% else %}
-            <p class="question-text">{{ answer.text }}</p>
-        {% endif %}
+<div class="row question-info no-gutters">
+
+    <div class="col-sm-12 card question-card answer-card {% if question.answered.pk == answer.pk %}selected-answer{% endif %}">
+        <p class="answer-text">
+            {% if answer.user.user.username == user.username %}
+                <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">
+                    <img width="20px" height="20px" alt="Delete answer" src="{% static 'images/delete.png' %}"/>
+                </a>
+                <a class="edit-answer" href="">
+                    <img width="24px" height="24px" alt="Delete answer" src="{% static 'images/edit.png' %}"/>
+                </a>
+            {% endif %}
+            {% if question.answered.pk == answer.pk %}
+                <strong style="color:green">Selected answer: </strong>
+            {% endif %}
+            {{ answer.text }}
+        </p>
     </div>
-
 
     <div class="col-md-3 col-sm-6">
         <img id="like-btn-{{ answer.pk }}" class="like-img like-btn"
@@ -23,6 +30,7 @@
              src="{% if disliked %}{% static 'images/active-dislike.png' %}{% else %}{% static 'images/dislike.png' %}{% endif %}"/>
         <a id="dislike-{{ answer.pk }}">{{ answer.dislikes }}</a>
     </div>
+
     <div class="col-md-5 col-sm-6">
         {% if answer.edited %}
             {{ answer.edited|date:'D d M Y H:i' }} (edit)
@@ -30,6 +38,7 @@
             {{ answer.posted|date:'D d M Y H:i' }}
         {% endif %}
     </div>
+
     <div class="col-md-4">
         {% if answer.user %}
             <a href="{% url 'profile' answer.user.user.username %}">

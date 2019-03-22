@@ -15,18 +15,19 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
     <script src="http://ajax.microsoft.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
     <script src="{% static 'js/question.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/question-template.css' %}"/>
 {% endblock %}
 
 {% block body_block %}
 
-    <h4>{{ question.name }} -
+    <h4>{{ question.name }}
         <!-- Functions specific to user who posted question -->
-        {% if question.answered != None %}
-            (Answered)
+        {% if question.answered == None %}
+            <span class="bg-warning unanswered-question">Unanswered</span>
         {% endif %}
         {% if question.user.user == user %}
-            <a style="font-size: 60%; margin-left: 15px;" class="delete-question" href="{% url 'delete_question' question.pk %}">Delete</a>
-            <a style="font-size: 60%; margin-left: 10px;" id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
+            <a class="delete-question" href="{% url 'delete_question' question.pk %}">Delete Question</a>
+            <a id="select-answer" href="{% url 'select_answer' question.pk %}">Select Answer</a>
         {% endif %}
     </h4>
 
@@ -78,21 +79,20 @@
 
     <h4>{{ number_of_answers }} Answer{{ number_of_answers|pluralize }}</h4>
 
+    {% if number_of_answers == 0 %}
+        <div class="page-break"></div>
+    {% endif %}
 
     {% for answer in answers_list %}
         <div class="answer-number-{{ forloop.counter }}">
             {% if answer != selected_answer %}
                 {% if answer.pk in liked %}
-                    {% show_answer answer question True False %}
+                    {% show_answer answer question True False user %}
                 {% elif answer.pk in disliked %}
-                    {% show_answer answer question False True %}
+                    {% show_answer answer question False True user %}
                 {% else %}
-                    {% show_answer answer question False False %}
+                    {% show_answer answer question False False user %}
                 {% endif %}
-            {% if answer.user.user == user %}
-                <a class="delete-answer" href="{% url 'delete_answer' question.pk answer.pk %}">Delete</a>
-                <a onclick="myFunction()" href="" class="">Edit</a>
-            {% endif %}
             <div class="page-break"></div>
         {% endif %}
         </div>
